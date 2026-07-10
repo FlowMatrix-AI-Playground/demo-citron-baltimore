@@ -1,0 +1,1513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <title>Citron Baltimore | Lakeside Dining &amp; Events</title>
+<meta name="description" content="An evening on the water at Quarry Lake. Seasonal dining, a full sushi bar, and private spaces for 10 to 500 guests at Citron Baltimore.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&amp;family=Hind:wght@400;500;700&amp;display=swap" rel="stylesheet">
+<style>
+  /* ============================================
+     0. RESET & ROOT
+     ============================================ */
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  :root {
+    --ink: #141414;
+    --surface: #1A1A1A;
+    --slate: #1F2A33;
+    --slate-deep: #172029;
+    --gold: #B08D3E;
+    --gold-light: #CDA959;
+    --gold-dim: rgba(176, 141, 62, 0.22);
+    --text: #F4F2EC;
+    --text-muted: #C9C6BC;
+    --hairline: rgba(244, 242, 236, 0.14);
+    --font-head: "Montserrat", "Helvetica Neue", Arial, sans-serif;
+    --font-body: "Hind", "Helvetica Neue", Arial, sans-serif;
+    --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+    --nav-h: 84px;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+
+  body {
+    background: var(--ink);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  img { max-width: 100%; display: block; }
+
+  a { color: inherit; text-decoration: none; }
+
+  ul { list-style: none; }
+
+  button {
+    font-family: inherit;
+    border: none;
+    background: none;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-head);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: 0.01em;
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .skip-link {
+    position: absolute;
+    top: -60px;
+    left: 16px;
+    background: var(--gold);
+    color: var(--ink);
+    padding: 12px 20px;
+    font-family: var(--font-head);
+    font-weight: 700;
+    z-index: 999;
+    transition: top 200ms var(--ease);
+    border-radius: 2px;
+  }
+  .skip-link:focus { top: 16px; }
+
+  :focus-visible {
+    outline: 2px solid var(--gold-light);
+    outline-offset: 3px;
+  }
+
+  .eyebrow {
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+  }
+
+  .section-heading {
+    font-size: clamp(2rem, 4vw, 2.9rem);
+    color: var(--text);
+    margin-top: 14px;
+  }
+
+  .section-pad {
+    padding: 108px 24px;
+  }
+
+  .container {
+    max-width: 1180px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 48px;
+    padding: 14px 32px;
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background 220ms var(--ease), color 220ms var(--ease), border-color 220ms var(--ease), transform 220ms var(--ease);
+  }
+  .btn:active { transform: translateY(1px); }
+
+  .btn-gold {
+    background: var(--gold);
+    color: var(--ink);
+    border: 1px solid var(--gold);
+  }
+  .btn-gold:hover { background: var(--gold-light); border-color: var(--gold-light); }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid rgba(244, 242, 236, 0.45);
+  }
+  .btn-outline:hover { border-color: var(--gold-light); color: var(--gold-light); }
+
+  .btn-dark {
+    background: var(--ink);
+    color: var(--gold-light);
+    border: 1px solid var(--ink);
+  }
+  .btn-dark:hover { background: var(--slate-deep); }
+
+  /* ============================================
+     1. REVEAL-ON-SCROLL
+     ============================================ */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 800ms var(--ease), transform 800ms var(--ease);
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+
+  /* ============================================
+     2. NAV
+     ============================================ */
+  .site-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 500;
+    height: var(--nav-h);
+    display: flex;
+    align-items: center;
+    background: transparent;
+    border-bottom: 1px solid transparent;
+    transition: background 320ms var(--ease), border-color 320ms var(--ease), height 320ms var(--ease);
+  }
+
+  .site-nav.is-solid {
+    background: rgba(20, 20, 20, 0.94);
+    border-bottom: 1px solid var(--hairline);
+    backdrop-filter: blur(6px);
+    height: 72px;
+  }
+
+  .nav-inner {
+    width: 100%;
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 0 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .nav-logo img {
+    height: 34px;
+    width: auto;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 38px;
+  }
+
+  .nav-links > li {
+    position: relative;
+  }
+
+  .nav-link {
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text);
+    padding: 8px 2px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    border-bottom: 1px solid transparent;
+    transition: color 200ms var(--ease), border-color 200ms var(--ease);
+  }
+  .nav-link:hover,
+  .nav-link:focus-visible { color: var(--gold-light); }
+
+  .nav-link .caret {
+    width: 9px;
+    height: 9px;
+    transition: transform 220ms var(--ease);
+  }
+  .has-mega:focus-within .caret,
+  .has-mega:hover .caret,
+  .has-mega.is-open .caret {
+    transform: rotate(180deg);
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 46px;
+    height: 46px;
+    gap: 5px;
+    cursor: pointer;
+  }
+  .hamburger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--text);
+    transition: transform 260ms var(--ease), opacity 260ms var(--ease);
+  }
+  .hamburger[aria-expanded="true"] span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  .hamburger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+  .hamburger[aria-expanded="true"] span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  /* Mega menu (desktop) */
+  .mega-panel {
+    position: absolute;
+    top: calc(100% + 22px);
+    left: 50%;
+    transform: translateX(-50%) translateY(8px);
+    width: 620px;
+    background: var(--slate-deep);
+    border: 1px solid var(--hairline);
+    border-top: 2px solid var(--gold);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+    padding: 36px 40px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 36px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 240ms var(--ease), transform 240ms var(--ease), visibility 240ms;
+  }
+  .has-mega:hover .mega-panel,
+  .has-mega:focus-within .mega-panel,
+  .has-mega.is-open .mega-panel {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .mega-col-title {
+    font-family: var(--font-head);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .mega-col ul li { margin-bottom: 4px; }
+
+  .mega-col a {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+    padding: 8px 4px;
+    font-size: 14.5px;
+    color: var(--text-muted);
+    border-radius: 2px;
+    transition: color 180ms var(--ease), padding-left 180ms var(--ease);
+  }
+  .mega-col a:hover,
+  .mega-col a:focus-visible {
+    color: var(--text);
+    padding-left: 10px;
+  }
+  .mega-col a .cap {
+    font-size: 11.5px;
+    color: var(--gold-light);
+    white-space: nowrap;
+    letter-spacing: 0.04em;
+  }
+
+  /* Mobile drawer */
+  .mobile-drawer {
+    position: fixed;
+    inset: 0;
+    top: var(--nav-h);
+    background: var(--ink);
+    z-index: 480;
+    padding: 28px 26px 60px;
+    overflow-y: auto;
+    transform: translateX(100%);
+    transition: transform 320ms var(--ease);
+  }
+  .mobile-drawer.is-open { transform: translateX(0); }
+
+  .mobile-drawer .nav-link-mobile {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 4px;
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text);
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .accordion-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .accordion-toggle .caret {
+    width: 11px;
+    height: 11px;
+    transition: transform 240ms var(--ease);
+    flex-shrink: 0;
+  }
+  .accordion-toggle[aria-expanded="true"] .caret { transform: rotate(180deg); }
+
+  .accordion-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 320ms var(--ease);
+  }
+  .accordion-body.is-open { max-height: 900px; }
+
+  .accordion-body .mega-col { padding: 18px 4px 8px; }
+  .accordion-body .mega-col-title { color: var(--gold-light); }
+  .accordion-body .mega-col a { color: var(--text-muted); padding: 10px 4px; }
+
+  .mobile-cta { margin-top: 30px; }
+  .mobile-cta .btn { width: 100%; }
+
+  /* ============================================
+     3. HERO
+     ============================================ */
+  .hero {
+    position: relative;
+    height: 100svh;
+    min-height: 560px;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero-media {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    will-change: transform;
+  }
+
+  .hero-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 62%;
+    animation: kenBurns 22s ease-in-out infinite alternate;
+  }
+
+  @keyframes kenBurns {
+    from { transform: scale(1); }
+    to { transform: scale(1.08); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-media img { animation: none; transform: scale(1); }
+  }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background:
+      linear-gradient(180deg, rgba(15,17,15,0.72) 0%, rgba(17,17,15,0.32) 32%, rgba(14,15,13,0.55) 68%, rgba(10,10,9,0.92) 100%),
+      radial-gradient(ellipse at center, rgba(0,0,0,0) 38%, rgba(8,8,7,0.72) 100%);
+  }
+
+  .hero-particles {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .particle {
+    position: absolute;
+    bottom: -20px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(205,169,89,0.9) 0%, rgba(205,169,89,0) 70%);
+    opacity: 0;
+    animation: floatUp linear infinite;
+  }
+
+  @keyframes floatUp {
+    0% { opacity: 0; transform: translate(0, 0); }
+    10% { opacity: 0.75; }
+    90% { opacity: 0.35; }
+    100% { opacity: 0; transform: translate(var(--drift, 30px), -110vh); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-particles { display: none; }
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 4;
+    text-align: center;
+    max-width: 780px;
+    padding: 0 24px;
+    margin-top: 20px;
+  }
+
+  .hero-content .eyebrow {
+    display: inline-block;
+    margin-bottom: 22px;
+  }
+
+  .hero-content h1 {
+    font-size: clamp(2.5rem, 6.6vw, 5rem);
+    color: var(--text);
+    text-shadow: 0 4px 30px rgba(0,0,0,0.5);
+  }
+
+  .hero-sub {
+    margin: 26px auto 0;
+    max-width: 520px;
+    font-size: 18px;
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+
+  .hero-actions {
+    margin-top: 42px;
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 34px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-muted);
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+  }
+
+  .hero-scroll .line {
+    width: 1px;
+    height: 42px;
+    background: linear-gradient(180deg, var(--gold-light), transparent);
+    animation: scrollPulse 2.2s ease-in-out infinite;
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.35; }
+    50% { opacity: 1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-scroll .line { animation: none; opacity: 0.6; }
+  }
+
+  /* ============================================
+     4. MEDIA FULL-BLEED
+     ============================================ */
+  .media-section {
+    position: relative;
+    height: 78vh;
+    min-height: 420px;
+    max-height: 780px;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .media-frame {
+    position: absolute;
+    inset: -6% 0;
+    will-change: transform;
+  }
+
+  .media-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .media-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(15,15,14,0.55) 0%, rgba(15,15,14,0.05) 30%, rgba(15,15,14,0.05) 70%, rgba(15,15,14,0.7) 100%),
+      radial-gradient(ellipse at center, rgba(0,0,0,0) 45%, rgba(6,6,6,0.6) 100%);
+  }
+
+  .media-caption {
+    background: var(--surface);
+    text-align: center;
+    padding: 26px 24px;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .media-caption p {
+    font-family: var(--font-head);
+    font-size: 12.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  /* ============================================
+     5. FEATURES
+     ============================================ */
+  .features {
+    background: var(--slate);
+    position: relative;
+  }
+
+  .features-head {
+    text-align: center;
+    max-width: 620px;
+    margin: 0 auto 72px;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+  }
+
+  .feature-card {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+  }
+
+  .feature-icon {
+    flex-shrink: 0;
+    width: 62px;
+    height: 62px;
+    border-radius: 50%;
+    border: 1px solid var(--gold-dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .feature-icon svg {
+    width: 30px;
+    height: 30px;
+    stroke: var(--gold-light);
+    fill: none;
+    stroke-width: 1.4;
+  }
+
+  .feature-card h3 {
+    font-size: 21px;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+
+  .feature-card p {
+    color: var(--text-muted);
+    font-size: 15.5px;
+  }
+
+  /* ============================================
+     6. SPACES / VENDORS
+     ============================================ */
+  .spaces-section {
+    background: var(--ink);
+  }
+
+  .spaces-intro {
+    max-width: 640px;
+    margin: 0 auto 64px;
+    text-align: center;
+  }
+
+  .spaces-table {
+    width: 100%;
+    border-top: 1px solid var(--hairline);
+  }
+
+  .space-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 22px 6px;
+    border-bottom: 1px solid var(--hairline);
+    transition: background 200ms var(--ease), padding-left 200ms var(--ease);
+  }
+  .space-row:hover {
+    background: rgba(176,141,62,0.06);
+    padding-left: 14px;
+  }
+
+  .space-row .space-name {
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: 17px;
+    letter-spacing: 0.01em;
+    color: var(--text);
+  }
+
+  .space-row .space-cap {
+    font-family: var(--font-head);
+    font-size: 12.5px;
+    letter-spacing: 0.1em;
+    color: var(--gold-light);
+    white-space: nowrap;
+    text-transform: uppercase;
+  }
+
+  .vendors-block {
+    margin-top: 92px;
+  }
+
+  .vendors-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--hairline);
+    border: 1px solid var(--hairline);
+  }
+
+  .vendor-cell {
+    background: var(--ink);
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .vendor-cell .v-icon svg {
+    width: 26px;
+    height: 26px;
+    stroke: var(--gold-light);
+    fill: none;
+    stroke-width: 1.5;
+  }
+
+  .vendor-cell h4 {
+    font-size: 15.5px;
+    font-family: var(--font-head);
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  /* ============================================
+     7. TESTIMONIAL
+     ============================================ */
+  .testimonial {
+    background: var(--slate-deep);
+    position: relative;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .testimonial::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 30%, rgba(176,141,62,0.09), transparent 60%);
+  }
+
+  .testimonial-mark {
+    font-family: var(--font-head);
+    font-size: 90px;
+    color: var(--gold);
+    opacity: 0.5;
+    line-height: 1;
+  }
+
+  .testimonial blockquote {
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: clamp(1.6rem, 3.6vw, 2.7rem);
+    line-height: 1.35;
+    color: var(--text);
+  }
+
+  .testimonial cite {
+    position: relative;
+    display: block;
+    margin-top: 34px;
+    font-style: normal;
+    font-family: var(--font-head);
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+  }
+
+  /* ============================================
+     8. CTA
+     ============================================ */
+  .cta-section {
+    background: var(--ink);
+    padding: 0 24px 108px;
+  }
+
+  .cta-panel {
+    max-width: 1000px;
+    margin: 0 auto;
+    border: 1px solid var(--gold);
+    background: linear-gradient(135deg, rgba(176,141,62,0.14), rgba(176,141,62,0.02));
+    padding: 76px 40px;
+    text-align: center;
+    position: relative;
+  }
+
+  .cta-panel::before,
+  .cta-panel::after {
+    content: "";
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    border: 1px solid var(--gold);
+  }
+  .cta-panel::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+  .cta-panel::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+  .cta-panel h2 {
+    font-size: clamp(1.9rem, 4vw, 2.6rem);
+    color: var(--text);
+  }
+
+  .cta-panel p {
+    max-width: 460px;
+    margin: 18px auto 38px;
+    color: var(--text-muted);
+    font-size: 16px;
+  }
+
+  /* ============================================
+     9. FOOTER
+     ============================================ */
+  .site-footer {
+    background: var(--surface);
+    border-top: 1px solid var(--hairline);
+    padding: 88px 24px 34px;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 48px;
+    padding-bottom: 56px;
+  }
+
+  .footer-brand img {
+    height: 30px;
+    margin-bottom: 18px;
+  }
+
+  .footer-brand p {
+    color: var(--text-muted);
+    font-size: 14.5px;
+    max-width: 280px;
+    margin-bottom: 22px;
+  }
+
+  .footer-award {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-head);
+    font-size: 11.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    border: 1px solid var(--gold-dim);
+    padding: 9px 14px;
+  }
+
+  .footer-award svg {
+    width: 14px;
+    height: 14px;
+    stroke: var(--gold-light);
+    fill: none;
+    stroke-width: 1.5;
+    flex-shrink: 0;
+  }
+
+  .footer-col h5 {
+    font-family: var(--font-head);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+
+  .footer-col li { margin-bottom: 13px; }
+
+  .footer-col a,
+  .footer-col address {
+    font-style: normal;
+    font-size: 14.5px;
+    color: var(--text-muted);
+    transition: color 180ms var(--ease);
+  }
+  .footer-col a:hover,
+  .footer-col a:focus-visible { color: var(--gold-light); }
+
+  .footer-social {
+    display: flex;
+    gap: 14px;
+    margin-top: 22px;
+  }
+
+  .footer-social a {
+    width: 38px;
+    height: 38px;
+    border: 1px solid var(--hairline);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 200ms var(--ease), background 200ms var(--ease);
+  }
+  .footer-social a:hover { border-color: var(--gold); background: rgba(176,141,62,0.1); }
+
+  .footer-social svg {
+    width: 16px;
+    height: 16px;
+    stroke: var(--text-muted);
+    fill: none;
+    stroke-width: 1.5;
+  }
+
+  .footer-bottom {
+    border-top: 1px solid var(--hairline);
+    padding-top: 26px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  /* ============================================
+     10. RESPONSIVE
+     ============================================ */
+  @media (max-width: 1024px) {
+    .footer-grid { grid-template-columns: 1.2fr 1fr 1fr; }
+    .footer-col.footer-hours { grid-column: span 2; }
+    .features-grid { gap: 40px; }
+  }
+
+  @media (max-width: 900px) {
+    .nav-links { display: none; }
+    .nav-actions .btn-gold.desktop-only { display: none; }
+    .hamburger { display: flex; }
+    .features-grid { grid-template-columns: 1fr; gap: 44px; }
+    .vendors-grid { grid-template-columns: repeat(2, 1fr); }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 640px) {
+    .section-pad { padding: 76px 20px; }
+    .hero-actions { flex-direction: column; align-items: stretch; }
+    .hero-actions .btn { width: 100%; }
+    .space-row { flex-direction: column; gap: 4px; }
+    .vendors-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr; gap: 36px; }
+    .footer-bottom { flex-direction: column; align-items: flex-start; }
+    .testimonial-mark { font-size: 64px; }
+    .cta-panel { padding: 54px 24px; }
+    .media-section { height: 52vh; min-height: 320px; }
+  }
+
+  @media (max-width: 400px) {
+    .hero-content h1 { font-size: 2.1rem; }
+    .nav-inner { padding: 0 16px; }
+  }
+
+    html, body { overflow-x: clip; }
+  </style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- ============================================
+     NAV
+     ============================================ -->
+<header class="site-nav" id="siteNav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#home" aria-label="Citron Baltimore, home">
+      <img src="./logo-light.png" alt="Citron Baltimore" width="613" height="177">
+    </a>
+
+    <nav aria-label="Primary">
+      <ul class="nav-links">
+        <li><a class="nav-link" href="#home">Home</a></li>
+        <li><a class="nav-link" href="https://citronbaltimore.com">Menus</a></li>
+        <li class="has-mega" id="megaWrap">
+          <button class="nav-link" id="megaToggle" aria-expanded="false" aria-controls="megaPanel">
+            Private Events
+            <svg class="caret" viewBox="0 0 12 8" aria-hidden="true"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>
+          </button>
+          <div class="mega-panel" id="megaPanel">
+            <div class="mega-col">
+              <p class="mega-col-title">Spaces</p>
+              <ul>
+                <li><a href="#spaces">Fireplace Room <span class="cap">20 guests</span></a></li>
+                <li><a href="#spaces">Mirror Room <span class="cap">26 guests</span></a></li>
+                <li><a href="#spaces">Club Room <span class="cap">50 guests</span></a></li>
+                <li><a href="#spaces">Waterfront Terrace <span class="cap">50 guests</span></a></li>
+                <li><a href="#spaces">Citron Bar <span class="cap">125 guests</span></a></li>
+                <li><a href="#spaces">Waterfront Courtyard <span class="cap">200 guests</span></a></li>
+                <li><a href="#spaces">The COVE <span class="cap">200 guests</span></a></li>
+                <li><a href="#spaces">Entire Venue <span class="cap">500 guests</span></a></li>
+                <li><a href="#spaces">Off-Premise Catering <span class="cap">Unlimited</span></a></li>
+              </ul>
+            </div>
+            <div class="mega-col">
+              <p class="mega-col-title">Vendors &amp; Services</p>
+              <ul>
+                <li><a href="#vendors">Floral &amp; Decor</a></li>
+                <li><a href="#vendors">Linens &amp; Tabletop</a></li>
+                <li><a href="#vendors">AV &amp; Production</a></li>
+                <li><a href="#vendors">Event Planning</a></li>
+                <li><a href="#vendors">Photography Partners</a></li>
+                <li><a href="#vendors">Entertainment &amp; Music</a></li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li><a class="nav-link" href="#our-story">Our Story</a></li>
+        <li><a class="nav-link" href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+
+    <div class="nav-actions">
+      <a class="btn btn-gold desktop-only" href="https://citronbaltimore.com">Reserve a Table</a>
+      <button class="hamburger" id="hamburger" aria-expanded="false" aria-controls="mobileDrawer" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="mobile-drawer" id="mobileDrawer">
+    <ul>
+      <li><a class="nav-link-mobile" href="#home">Home</a></li>
+      <li><a class="nav-link-mobile" href="https://citronbaltimore.com">Menus</a></li>
+      <li>
+        <button class="nav-link-mobile accordion-toggle" id="accordionToggle" aria-expanded="false" aria-controls="accordionBody">
+          Private Events
+          <svg class="caret" viewBox="0 0 12 8" aria-hidden="true"><path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>
+        </button>
+        <div class="accordion-body" id="accordionBody">
+          <div class="mega-col">
+            <p class="mega-col-title">Spaces</p>
+            <ul>
+              <li><a href="#spaces">Fireplace Room <span class="cap">20 guests</span></a></li>
+              <li><a href="#spaces">Mirror Room <span class="cap">26 guests</span></a></li>
+              <li><a href="#spaces">Club Room <span class="cap">50 guests</span></a></li>
+              <li><a href="#spaces">Waterfront Terrace <span class="cap">50 guests</span></a></li>
+              <li><a href="#spaces">Citron Bar <span class="cap">125 guests</span></a></li>
+              <li><a href="#spaces">Waterfront Courtyard <span class="cap">200 guests</span></a></li>
+              <li><a href="#spaces">The COVE <span class="cap">200 guests</span></a></li>
+              <li><a href="#spaces">Entire Venue <span class="cap">500 guests</span></a></li>
+              <li><a href="#spaces">Off-Premise Catering <span class="cap">Unlimited</span></a></li>
+            </ul>
+          </div>
+          <div class="mega-col">
+            <p class="mega-col-title">Vendors &amp; Services</p>
+            <ul>
+              <li><a href="#vendors">Floral &amp; Decor</a></li>
+              <li><a href="#vendors">Linens &amp; Tabletop</a></li>
+              <li><a href="#vendors">AV &amp; Production</a></li>
+              <li><a href="#vendors">Event Planning</a></li>
+              <li><a href="#vendors">Photography Partners</a></li>
+              <li><a href="#vendors">Entertainment &amp; Music</a></li>
+            </ul>
+          </div>
+        </div>
+      </li>
+      <li><a class="nav-link-mobile" href="#our-story">Our Story</a></li>
+      <li><a class="nav-link-mobile" href="#contact">Contact</a></li>
+    </ul>
+    <div class="mobile-cta">
+      <a class="btn btn-gold" href="https://citronbaltimore.com">Reserve a Table</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============================================
+       1. HERO
+       ============================================ -->
+  <section class="hero" id="home">
+    <div class="hero-media" id="heroMedia">
+      <img src="./hero.jpg" alt="The waterfront terrace at Citron Baltimore glowing at dusk, overlooking Quarry Lake">
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-particles" id="heroParticles" aria-hidden="true"></div>
+
+    <div class="hero-content">
+      <span class="eyebrow">Quarry Lake, Baltimore</span>
+      <h1>Where Baltimore celebrates.</h1>
+      <p class="hero-sub">Waterfront dining, a legendary wine list, and private spaces for 10 to 500 guests.</p>
+      <div class="hero-actions">
+        <a class="btn btn-gold" href="https://citronbaltimore.com">Reserve a Table</a>
+        <a class="btn btn-outline" href="#spaces">Plan an Event</a>
+      </div>
+    </div>
+
+    <div class="hero-scroll" aria-hidden="true">
+      <span>Scroll</span>
+      <span class="line"></span>
+    </div>
+  </section>
+
+  <!-- ============================================
+       2. MEDIA FULL-BLEED
+       ============================================ -->
+  <section class="media-section" aria-label="The dining room at Citron Baltimore">
+    <div class="media-frame" id="mediaFrame">
+      <img src="./media.jpg" alt="The dining room at Citron Baltimore, set for an evening service">
+    </div>
+    <div class="media-overlay"></div>
+  </section>
+  <div class="media-caption">
+    <p>The Dining Room, Quarry Lake</p>
+  </div>
+
+  <!-- ============================================
+       3. FEATURES
+       ============================================ -->
+  <section class="features section-pad" id="our-story">
+    <div class="container">
+      <div class="features-head reveal">
+        <span class="eyebrow">Our Story</span>
+        <h2 class="section-heading">A decade on the water.</h2>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21c1.5-4 2-7 2-11a6 6 0 0112 0c0 4 .5 7 2 11" stroke-linecap="round"/><path d="M12 4v17" stroke-linecap="round"/></svg>
+          </div>
+          <div>
+            <h3>Seasonal, Scratch-Made</h3>
+            <p>Executive Chef Mary Hersh leads a kitchen built on day-boat seafood, center-cut steaks, house-made pastas, and a full sushi bar that changes with the season.</p>
+          </div>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="1"/><path d="M8 7V5a4 4 0 018 0v2" stroke-linecap="round"/></svg>
+          </div>
+          <div>
+            <h3>Private Events, Seven Days</h3>
+            <p>Heated waterfront terraces and nine distinct spaces host private events every day of the week, from intimate dinners to a full 500-guest takeover.</p>
+          </div>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.4 6.8L21 11l-6.6 2.2L12 20l-2.4-6.8L3 11l6.6-2.2z" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <h3>An Award-Winning Cellar</h3>
+            <p>Recognized by Wine Spectator every year since 2019, our list pairs deep vintage selections with a menu built to match them, glass by glass.</p>
+          </div>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v4H4z"/><path d="M6 8v12h12V8" stroke-linecap="round"/><path d="M10 12h4" stroke-linecap="round"/></svg>
+          </div>
+          <div>
+            <h3>Forty Years of Catering</h3>
+            <p>Charles Levine has produced nearly 14,000 events for clients including five U.S. presidents, the NFL, the Rolling Stones, and Oprah, now under one roof at Citron.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       4. SPACES + VENDORS
+       ============================================ -->
+  <section class="spaces-section section-pad" id="spaces">
+    <div class="container">
+      <div class="spaces-intro reveal">
+        <span class="eyebrow">Private Events</span>
+        <h2 class="section-heading">Nine spaces. One waterfront.</h2>
+      </div>
+
+      <div class="spaces-table reveal">
+        <div class="space-row">
+          <span class="space-name">Fireplace Room</span>
+          <span class="space-cap">20 Guests</span>
+        </div>
+        <div class="space-row">
+          <span class="space-name">Mirror Room</span>
+          <span class="space-cap">26 Guests</span>
+        </div>
+        <div class="space-row">
+          <span class="space-name">Club Room</span>
+          <span class="space-cap">50 Guests</span>
+        </div>
+        <div class="space-row">
+          <span class="space-name">Waterfront Terrace</span>
+          <span class="space-cap">50 Guests</span>
+        </div>
+        <div class="space-row">
+          <span class="space-name">Citron Bar</span>
+          <span class="space-cap">125 Guests</span>
+        </div>
+        <div class="space-row">
+          <span class="space-name">Waterfront Courtyard</span>
+          <span class="space-cap">200 Guests</span>
+        </div>
+        <div class="space-row">
+          <span class="space-name">The COVE</span>
+          <span class="space-cap">200 Guests</span>
+        </div>
+        <div class="space-row">
+          <span class="space-name">Entire Venue</span>
+          <span class="space-cap">500 Guests</span>
+        </div>
+        <div class="space-row">
+          <span class="space-name">Off-Premise Catering</span>
+          <span class="space-cap">Unlimited</span>
+        </div>
+      </div>
+
+      <div class="vendors-block" id="vendors">
+        <div class="spaces-intro reveal">
+          <span class="eyebrow">Trusted Partners</span>
+          <h2 class="section-heading">Vendors &amp; services.</h2>
+        </div>
+
+        <div class="vendors-grid reveal">
+          <div class="vendor-cell">
+            <div class="v-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c1.5 2 1.5 4 0 6-1.5-2-1.5-4 0-6z"/><path d="M12 9c2.5.5 4 2 4.5 4.5-2.5-.5-4-2-4.5-4.5z"/><path d="M12 9c-2.5.5-4 2-4.5 4.5 2.5-.5 4-2 4.5-4.5z"/><path d="M12 13v8" stroke-linecap="round"/></svg></div>
+            <h4>Floral &amp; Decor</h4>
+          </div>
+          <div class="vendor-cell">
+            <div class="v-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="1"/><path d="M4 9h16" /></svg></div>
+            <h4>Linens &amp; Tabletop</h4>
+          </div>
+          <div class="vendor-cell">
+            <div class="v-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="14" height="10" rx="1"/><path d="M17 10l4-2v8l-4-2z" stroke-linejoin="round"/></svg></div>
+            <h4>AV &amp; Production</h4>
+          </div>
+          <div class="vendor-cell">
+            <div class="v-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10l8-6 8 6v10" stroke-linejoin="round"/><path d="M9 20v-6h6v6" /></svg></div>
+            <h4>Event Planning</h4>
+          </div>
+          <div class="vendor-cell">
+            <div class="v-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="1"/><circle cx="12" cy="12.5" r="3.5"/></svg></div>
+            <h4>Photography Partners</h4>
+          </div>
+          <div class="vendor-cell">
+            <div class="v-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="7" cy="17" r="2.5"/><circle cx="17" cy="15" r="2.5"/><path d="M9.5 17V5l10-2v12" stroke-linejoin="round"/></svg></div>
+            <h4>Entertainment &amp; Music</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       5. TESTIMONIAL
+       ============================================ -->
+  <section class="testimonial section-pad">
+    <div class="container reveal">
+      <p class="testimonial-mark" aria-hidden="true">&ldquo;</p>
+      <blockquote>
+        We walked our guests onto the terrace as the sun dropped over the lake and the whole room went quiet. That single moment made the entire evening feel like it belonged in a film.
+      </blockquote>
+      <cite>Rachel D., Wedding Reception</cite>
+    </div>
+  </section>
+
+  <!-- ============================================
+       6. CTA
+       ============================================ -->
+  <section class="cta-section">
+    <div class="cta-panel reveal">
+      <span class="eyebrow">Book Your Event</span>
+      <h2>Your evening, on the water.</h2>
+      <p>From an intimate fireplace dinner to a 500-guest celebration, our events team will help you build it.</p>
+      <a class="btn btn-gold" href="https://citronbaltimore.com">Book Your Event</a>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============================================
+     FOOTER
+     ============================================ -->
+<footer class="site-footer" id="contact">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img src="./logo-light.png" alt="Citron Baltimore" width="613" height="177">
+        <p>An upscale waterfront restaurant and private event venue at Quarry Lake, family owned by Charles and Susan Levine since 2016.</p>
+        <span class="footer-award">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.4 6.8L21 11l-6.6 2.2L12 20l-2.4-6.8L3 11l6.6-2.2z" stroke-linejoin="round"/></svg>
+          Wine Spectator Award of Excellence, 2019-2025
+        </span>
+      </div>
+
+      <div class="footer-col">
+        <h5>Visit</h5>
+        <ul>
+          <li><address>2605 Quarry Lake Drive<br>Baltimore, MD 21209</address></li>
+          <li><a href="tel:14103630900">410-363-0900</a></li>
+          <li><a href="mailto:events@citronbaltimore.com">events@citronbaltimore.com</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-hours">
+        <h5>Hours</h5>
+        <ul>
+          <li><span>Dinner, Wed-Sun from 4 PM</span></li>
+          <li><span>Happy Hour, 4-6:30 PM</span></li>
+          <li><span>Private Events, Seven Days</span></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h5>Quick Links</h5>
+        <ul>
+          <li><a href="#spaces">Private Events</a></li>
+          <li><a href="#vendors">Vendors &amp; Services</a></li>
+          <li><a href="#our-story">Our Story</a></li>
+          <li><a href="https://citronbaltimore.com">Menus</a></li>
+        </ul>
+        <div class="footer-social">
+          <a href="#" aria-label="Citron Baltimore on Instagram">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+          </a>
+          <a href="#" aria-label="Citron Baltimore on Facebook">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 8h2V4h-2a4 4 0 00-4 4v2H9v4h2v6h4v-6h2.5l.5-4H15V8z" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>&copy; 2026 Citron Baltimore. All rights reserved.</span>
+      <span>Citron Caterers, 30+ Years of Off-Premise Catering</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- Nav solid-on-scroll ---------- */
+  var nav = document.getElementById("siteNav");
+  function onScrollNav() {
+    if (window.scrollY > 40) {
+      nav.classList.add("is-solid");
+    } else {
+      nav.classList.remove("is-solid");
+    }
+  }
+  onScrollNav();
+  window.addEventListener("scroll", onScrollNav, { passive: true });
+
+  /* ---------- Mega menu (desktop, click toggle for touch/keyboard) ---------- */
+  var megaWrap = document.getElementById("megaWrap");
+  var megaToggle = document.getElementById("megaToggle");
+
+  megaToggle.addEventListener("click", function () {
+    var open = megaWrap.classList.toggle("is-open");
+    megaToggle.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+
+  document.addEventListener("click", function (e) {
+    if (!megaWrap.contains(e.target)) {
+      megaWrap.classList.remove("is-open");
+      megaToggle.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") {
+      megaWrap.classList.remove("is-open");
+      megaToggle.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  /* ---------- Mobile hamburger drawer ---------- */
+  var hamburger = document.getElementById("hamburger");
+  var drawer = document.getElementById("mobileDrawer");
+
+  hamburger.addEventListener("click", function () {
+    var open = drawer.classList.toggle("is-open");
+    hamburger.setAttribute("aria-expanded", open ? "true" : "false");
+    document.body.style.overflow = open ? "hidden" : "";
+  });
+
+  /* Close mobile drawer after choosing a real anchor link */
+  drawer.querySelectorAll("a[href^='#']").forEach(function (link) {
+    link.addEventListener("click", function () {
+      drawer.classList.remove("is-open");
+      hamburger.setAttribute("aria-expanded", "false");
+      document.body.style.overflow = "";
+    });
+  });
+
+  /* ---------- Mobile accordion: Private Events ---------- */
+  var accToggle = document.getElementById("accordionToggle");
+  var accBody = document.getElementById("accordionBody");
+
+  accToggle.addEventListener("click", function () {
+    var open = accBody.classList.toggle("is-open");
+    accToggle.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+
+  /* ---------- Ambient hero particles ---------- */
+  var particleField = document.getElementById("heroParticles");
+  if (particleField && !reduceMotion) {
+    var count = 16;
+    for (var i = 0; i < count; i++) {
+      var p = document.createElement("span");
+      p.className = "particle";
+      var left = Math.random() * 100;
+      var duration = 9 + Math.random() * 9;
+      var delay = Math.random() * 12;
+      var drift = (Math.random() * 70 - 35) + "px";
+      p.style.left = left + "%";
+      p.style.animationDuration = duration + "s";
+      p.style.animationDelay = delay + "s";
+      p.style.setProperty("--drift", drift);
+      particleField.appendChild(p);
+    }
+  }
+
+  /* ---------- Parallax on hero + media (transform-based) ---------- */
+  var heroMedia = document.getElementById("heroMedia");
+  var mediaFrame = document.getElementById("mediaFrame");
+  var ticking = false;
+
+  function updateParallax() {
+    var y = window.scrollY;
+
+    if (heroMedia) {
+      var heroOffset = Math.min(y * 0.28, 160);
+      heroMedia.style.transform = "translate3d(0," + heroOffset + "px,0)";
+    }
+
+    if (mediaFrame) {
+      var rect = mediaFrame.parentElement.getBoundingClientRect();
+      var vh = window.innerHeight;
+      if (rect.top < vh && rect.bottom > 0) {
+        var progress = (vh - rect.top) / (vh + rect.height);
+        var mediaOffset = (progress - 0.5) * 60;
+        mediaFrame.style.transform = "translate3d(0," + mediaOffset + "px,0)";
+      }
+    }
+
+    ticking = false;
+  }
+
+  function onScrollParallax() {
+    if (!ticking && !reduceMotion) {
+      window.requestAnimationFrame(updateParallax);
+      ticking = true;
+    }
+  }
+
+  if (!reduceMotion) {
+    window.addEventListener("scroll", onScrollParallax, { passive: true });
+    updateParallax();
+  }
+
+  /* ---------- Reveal-on-scroll via IntersectionObserver ---------- */
+  var revealEls = document.querySelectorAll(".reveal");
+  if ("IntersectionObserver" in window && !reduceMotion) {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: "0px 0px -60px 0px" });
+
+    revealEls.forEach(function (el) { observer.observe(el); });
+  } else {
+    revealEls.forEach(function (el) { el.classList.add("is-visible"); });
+  }
+})();
+</script>
+</body>
+</html>

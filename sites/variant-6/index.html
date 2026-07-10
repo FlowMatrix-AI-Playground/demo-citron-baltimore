@@ -1,0 +1,1622 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <title>Citron Baltimore | Find Your Room | Private Events at Quarry Lake</title>
+<meta name="description" content="Explore nine private event spaces, a waterfront restaurant, and full off-premise catering at Citron Baltimore, Quarry Lake. Find the room that fits your celebration.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --charcoal:#1A1A1A;
+    --cream:#FAF9F5;
+    --cream-muted:#F4F2EC;
+    --citron:#C4D809;
+    --olive:#6B7A00;
+    --body-gray:#4F4F4F;
+    --light-text:#F4F2EC;
+    --sidebar-w:280px;
+    --border-soft:#E4E1D6;
+    --shadow-1:0 4px 18px rgba(0,0,0,0.08);
+    --shadow-2:0 12px 34px rgba(0,0,0,0.14);
+    --ease:cubic-bezier(.4,0,.2,1);
+  }
+
+  *,*::before,*::after{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:'Lato',sans-serif;
+    color:var(--body-gray);
+    background:var(--cream);
+    -webkit-font-smoothing:antialiased;
+  }
+  img{max-width:100%;display:block;}
+  h1,h2,h3,h4{
+    font-family:'Josefin Sans',sans-serif;
+    color:var(--charcoal);
+    margin:0 0 .5em 0;
+    line-height:1.15;
+    font-weight:700;
+  }
+  p{margin:0 0 1em 0;}
+  a{color:inherit;text-decoration:none;}
+  ul{margin:0;padding:0;list-style:none;}
+  button{font-family:inherit;}
+
+  .visually-hidden{
+    position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+    overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;
+  }
+
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  summary:focus-visible{
+    outline:3px solid var(--citron);
+    outline-offset:2px;
+    border-radius:2px;
+  }
+
+  /* ===== Skip link ===== */
+  .skip-link{
+    position:absolute;
+    left:-9999px;
+    top:0;
+    background:var(--citron);
+    color:var(--charcoal);
+    padding:.75rem 1.25rem;
+    z-index:2000;
+    font-weight:700;
+  }
+  .skip-link:focus{left:1rem;top:1rem;}
+
+  /* ===================== SIDEBAR ===================== */
+  .sidebar{
+    background:var(--charcoal);
+    color:var(--light-text);
+    width:var(--sidebar-w);
+    display:flex;
+    flex-direction:column;
+    position:fixed;
+    top:0;
+    left:0;
+    height:100vh;
+    padding:1.75rem 1.25rem 1.5rem;
+    z-index:1000;
+    overflow-y:auto;
+  }
+  .sidebar-brand{
+    display:block;
+    margin-bottom:1.5rem;
+    padding-bottom:1.25rem;
+    border-bottom:1px solid rgba(244,242,236,0.12);
+  }
+  .sidebar-brand img{
+    height:34px;
+    width:auto;
+  }
+  .sidebar-nav{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    gap:.15rem;
+  }
+  .sidebar-link{
+    display:flex;
+    align-items:center;
+    min-height:44px;
+    padding:.55rem .85rem;
+    font-family:'Josefin Sans',sans-serif;
+    font-weight:600;
+    font-size:.95rem;
+    letter-spacing:.02em;
+    color:var(--light-text);
+    border-left:3px solid transparent;
+    border-radius:0 6px 6px 0;
+    cursor:pointer;
+    transition:background-color 200ms var(--ease), border-color 200ms var(--ease), color 200ms var(--ease);
+  }
+  .sidebar-link:hover{
+    background:rgba(196,216,9,0.08);
+    border-left-color:rgba(196,216,9,0.5);
+  }
+  .sidebar-link.is-active{
+    background:rgba(196,216,9,0.14);
+    border-left-color:var(--citron);
+    color:#FFFFFF;
+  }
+
+  .sidebar-group{
+    margin-top:.35rem;
+  }
+  .sidebar-group-label{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    min-height:44px;
+    padding:.55rem .85rem;
+    font-family:'Josefin Sans',sans-serif;
+    font-weight:700;
+    font-size:.8rem;
+    text-transform:uppercase;
+    letter-spacing:.09em;
+    color:#9A9689;
+  }
+  .sidebar-sublist{
+    display:flex;
+    flex-direction:column;
+    gap:.05rem;
+    padding-left:.4rem;
+    border-left:1px solid rgba(244,242,236,0.1);
+    margin-left:1rem;
+  }
+  .sidebar-sublink{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:.5rem;
+    min-height:40px;
+    padding:.4rem .75rem;
+    font-size:.85rem;
+    color:#CFCBBD;
+    border-left:3px solid transparent;
+    border-radius:0 6px 6px 0;
+    cursor:pointer;
+    transition:background-color 200ms var(--ease), border-color 200ms var(--ease), color 200ms var(--ease);
+  }
+  .sidebar-sublink:hover{
+    background:rgba(196,216,9,0.08);
+    border-left-color:rgba(196,216,9,0.5);
+    color:var(--light-text);
+  }
+  .sidebar-sublink.is-active{
+    background:rgba(196,216,9,0.14);
+    border-left-color:var(--citron);
+    color:#FFFFFF;
+  }
+  .sidebar-sublink .cap{
+    font-size:.72rem;
+    color:#8B8778;
+    white-space:nowrap;
+  }
+  .sidebar-sublink.is-active .cap,
+  .sidebar-sublink:hover .cap{
+    color:var(--citron);
+  }
+  .sidebar-vendors-link{
+    margin-top:.35rem;
+    font-style:italic;
+  }
+
+  .sidebar-cta{
+    margin-top:1.5rem;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:48px;
+    padding:.75rem 1rem;
+    background:var(--citron);
+    color:var(--charcoal);
+    font-family:'Josefin Sans',sans-serif;
+    font-weight:700;
+    font-size:.95rem;
+    border-radius:6px;
+    cursor:pointer;
+    border:2px solid var(--citron);
+    transition:background-color 200ms var(--ease), color 200ms var(--ease), transform 200ms var(--ease);
+  }
+  .sidebar-cta:hover{
+    background:transparent;
+    color:var(--citron);
+    transform:translateY(-1px);
+  }
+
+  /* mobile topbar + hamburger */
+  .mobile-topbar{
+    display:none;
+    position:fixed;
+    top:0;left:0;right:0;
+    height:64px;
+    background:var(--charcoal);
+    align-items:center;
+    justify-content:space-between;
+    padding:0 1rem;
+    z-index:1100;
+  }
+  .mobile-topbar img{height:26px;width:auto;}
+  .hamburger-btn{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:5px;
+    width:44px;
+    height:44px;
+    background:transparent;
+    border:1px solid rgba(244,242,236,0.25);
+    border-radius:6px;
+    cursor:pointer;
+  }
+  .hamburger-btn span{
+    display:block;
+    width:20px;
+    height:2px;
+    background:var(--light-text);
+    transition:transform 200ms var(--ease), opacity 200ms var(--ease);
+  }
+  .hamburger-btn[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .hamburger-btn[aria-expanded="true"] span:nth-child(2){opacity:0;}
+  .hamburger-btn[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+  .sidebar-backdrop{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.5);
+    z-index:999;
+    opacity:0;
+    transition:opacity 250ms var(--ease);
+  }
+  .sidebar-backdrop.is-visible{opacity:1;}
+
+  /* ===================== MAIN CONTENT ===================== */
+  .content{
+    margin-left:var(--sidebar-w);
+  }
+  .section{
+    padding:5.5rem clamp(1.5rem,5vw,5rem);
+    scroll-margin-top:1.5rem;
+  }
+  .section-bg-default{background:var(--cream);}
+  .section-bg-muted{background:var(--cream-muted);}
+  .section-inner{
+    max-width:1100px;
+    margin:0 auto;
+  }
+  .eyebrow{
+    display:inline-block;
+    font-family:'Josefin Sans',sans-serif;
+    font-weight:700;
+    font-size:.8rem;
+    text-transform:uppercase;
+    letter-spacing:.14em;
+    color:var(--olive);
+    margin-bottom:.9rem;
+  }
+
+  .reveal{
+    opacity:0;
+    transform:translateY(22px);
+    transition:opacity 650ms var(--ease), transform 650ms var(--ease);
+  }
+  .reveal.is-visible{
+    opacity:1;
+    transform:translateY(0);
+  }
+
+  /* ===== HERO ===== */
+  .hero{
+    position:relative;
+    padding:0;
+    min-height:92vh;
+    display:flex;
+    align-items:stretch;
+    overflow:hidden;
+  }
+  .hero-media{
+    position:absolute;
+    inset:0;
+    z-index:0;
+  }
+  .hero-media img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+  }
+  .hero-media::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+      linear-gradient(115deg, rgba(26,26,26,0.94) 0%, rgba(26,26,26,0.82) 32%, rgba(26,26,26,0.55) 58%, rgba(107,122,0,0.35) 100%);
+  }
+  .hero-content{
+    position:relative;
+    z-index:1;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:8rem clamp(1.5rem,6vw,6rem) 6rem;
+    max-width:720px;
+  }
+  .hero .eyebrow{color:var(--citron);}
+  .hero h1{
+    color:#FFFFFF;
+    font-size:clamp(2.4rem,5.4vw,4.1rem);
+    margin-bottom:1rem;
+  }
+  .hero-sub{
+    color:#EDEBE1;
+    font-size:1.15rem;
+    max-width:520px;
+    margin-bottom:2rem;
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:.5rem;
+    min-height:48px;
+    padding:.9rem 1.9rem;
+    font-family:'Josefin Sans',sans-serif;
+    font-weight:700;
+    font-size:.98rem;
+    border-radius:6px;
+    cursor:pointer;
+    border:2px solid transparent;
+    transition:background-color 220ms var(--ease), color 220ms var(--ease), border-color 220ms var(--ease), transform 220ms var(--ease);
+  }
+  .btn-primary{
+    background:var(--citron);
+    color:var(--charcoal);
+    border-color:var(--citron);
+  }
+  .btn-primary:hover{
+    background:transparent;
+    color:var(--citron);
+    transform:translateY(-2px);
+  }
+  .btn-outline-light{
+    background:transparent;
+    color:#FFFFFF;
+    border-color:rgba(255,255,255,0.55);
+  }
+  .btn-outline-light:hover{
+    background:#FFFFFF;
+    color:var(--charcoal);
+    border-color:#FFFFFF;
+  }
+  .btn-outline-dark{
+    background:transparent;
+    color:var(--charcoal);
+    border-color:var(--charcoal);
+  }
+  .btn-outline-dark:hover{
+    background:var(--charcoal);
+    color:var(--cream);
+  }
+
+  /* ===== SECTION HEADS ===== */
+  .section-head{
+    max-width:680px;
+    margin-bottom:2.75rem;
+  }
+  .section-head h2{
+    font-size:clamp(1.8rem,3.4vw,2.6rem);
+  }
+  .section-head p{
+    font-size:1.05rem;
+  }
+
+  /* ===== ACCORDION ===== */
+  .accordion{
+    display:flex;
+    flex-direction:column;
+    gap:.85rem;
+  }
+  .accordion-item{
+    background:#FFFFFF;
+    border:1px solid var(--border-soft);
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:var(--shadow-1);
+  }
+  .accordion-trigger{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:1rem;
+    background:transparent;
+    border:none;
+    text-align:left;
+    padding:1.35rem 1.5rem;
+    cursor:pointer;
+    min-height:44px;
+  }
+  .accordion-trigger-text h3{
+    font-size:1.2rem;
+    margin-bottom:.2rem;
+  }
+  .accordion-teaser{
+    font-size:.92rem;
+    color:var(--body-gray);
+    margin:0;
+  }
+  .accordion-icon{
+    flex-shrink:0;
+    width:32px;
+    height:32px;
+    border-radius:50%;
+    border:2px solid var(--border-soft);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:transform 300ms var(--ease), border-color 300ms var(--ease), background-color 300ms var(--ease);
+  }
+  .accordion-icon svg{
+    width:14px;height:14px;
+    stroke:var(--charcoal);
+    transition:stroke 300ms var(--ease);
+  }
+  .accordion-item.is-open .accordion-icon{
+    transform:rotate(45deg);
+    background:var(--citron);
+    border-color:var(--citron);
+  }
+  .accordion-item.is-open .accordion-icon svg{stroke:var(--charcoal);}
+  .accordion-panel{
+    display:grid;
+    grid-template-rows:0fr;
+    transition:grid-template-rows 320ms var(--ease);
+  }
+  .accordion-item.is-open .accordion-panel{
+    grid-template-rows:1fr;
+  }
+  .accordion-panel-inner{
+    overflow:hidden;
+  }
+  .accordion-panel-content{
+    padding:0 1.5rem 1.5rem;
+    font-size:.98rem;
+    border-top:1px solid var(--border-soft);
+    padding-top:1rem;
+  }
+  .accordion-note{
+    display:inline-block;
+    margin-top:.5rem;
+    font-size:.85rem;
+    color:var(--olive);
+    font-weight:700;
+  }
+
+  /* ===== ABOUT ===== */
+  .about-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:3rem;
+    align-items:start;
+  }
+  .about-stats{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:1.25rem;
+    margin-top:1.5rem;
+  }
+  .stat{
+    background:#FFFFFF;
+    border:1px solid var(--border-soft);
+    border-radius:10px;
+    padding:1.25rem;
+  }
+  .stat strong{
+    display:block;
+    font-family:'Josefin Sans',sans-serif;
+    font-size:1.9rem;
+    color:var(--charcoal);
+  }
+  .stat span{
+    font-size:.85rem;
+    color:var(--body-gray);
+  }
+  .about-quote{
+    font-family:'Josefin Sans',sans-serif;
+    font-size:1.3rem;
+    font-weight:600;
+    color:var(--charcoal);
+    border-left:4px solid var(--citron);
+    padding-left:1.25rem;
+    margin-bottom:1.25rem;
+  }
+
+  /* ===== SPACES / PORTFOLIO ===== */
+  .spaces-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+    gap:1.5rem;
+  }
+  .space-card{
+    background:#FFFFFF;
+    border:1px solid var(--border-soft);
+    border-radius:12px;
+    padding:1.5rem;
+    cursor:pointer;
+    box-shadow:var(--shadow-1);
+    transition:box-shadow 240ms var(--ease), transform 240ms var(--ease);
+    scroll-margin-top:6rem;
+  }
+  .space-card:hover{
+    box-shadow:var(--shadow-2);
+    transform:translateY(-3px);
+  }
+  .space-card-top{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:1rem;
+    margin-bottom:.6rem;
+  }
+  .space-card h3{
+    font-size:1.25rem;
+    margin-bottom:.15rem;
+  }
+  .space-capacity{
+    flex-shrink:0;
+    font-family:'Josefin Sans',sans-serif;
+    font-size:.78rem;
+    font-weight:700;
+    color:var(--olive);
+    background:rgba(196,216,9,0.16);
+    border-radius:999px;
+    padding:.3rem .7rem;
+    white-space:nowrap;
+  }
+  .space-desc{
+    font-size:.95rem;
+    margin-bottom:0;
+  }
+  .space-toggle{
+    display:flex;
+    align-items:center;
+    gap:.4rem;
+    margin-top:1rem;
+    font-family:'Josefin Sans',sans-serif;
+    font-weight:700;
+    font-size:.85rem;
+    color:var(--olive);
+    background:none;
+    border:none;
+    padding:0;
+    cursor:pointer;
+    min-height:44px;
+  }
+  .space-toggle svg{
+    width:12px;height:12px;
+    transition:transform 260ms var(--ease);
+  }
+  .space-card.is-expanded .space-toggle svg{transform:rotate(180deg);}
+  .space-more{
+    display:grid;
+    grid-template-rows:0fr;
+    transition:grid-template-rows 320ms var(--ease);
+  }
+  .space-card.is-expanded .space-more{grid-template-rows:1fr;}
+  .space-more-inner{overflow:hidden;}
+  .space-more-content{
+    padding-top:.9rem;
+    margin-top:.4rem;
+    border-top:1px solid var(--border-soft);
+    font-size:.9rem;
+  }
+  .space-more-content .ideal{
+    font-weight:700;
+    color:var(--charcoal);
+    display:block;
+    margin-bottom:.35rem;
+  }
+
+  .vendors-wrap{
+    margin-top:4rem;
+  }
+  .vendors-head{
+    max-width:680px;
+    margin-bottom:1.75rem;
+  }
+  .vendors-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+    gap:1.25rem;
+  }
+  .vendor-card{
+    background:#FFFFFF;
+    border:1px solid var(--border-soft);
+    border-radius:10px;
+    padding:1.25rem;
+    display:flex;
+    gap:.9rem;
+    align-items:flex-start;
+  }
+  .vendor-icon{
+    flex-shrink:0;
+    width:42px;height:42px;
+    border-radius:8px;
+    background:rgba(196,216,9,0.16);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .vendor-icon svg{
+    width:22px;height:22px;
+    stroke:var(--olive);
+  }
+  .vendor-card h3{
+    font-size:1.02rem;
+    margin-bottom:.25rem;
+  }
+  .vendor-card p{
+    font-size:.88rem;
+    margin:0;
+  }
+
+  /* ===== CONTACT ===== */
+  .contact-grid{
+    display:grid;
+    grid-template-columns:1.1fr .9fr;
+    gap:3rem;
+    align-items:start;
+  }
+  .contact-form{
+    background:#FFFFFF;
+    border:1px solid var(--border-soft);
+    border-radius:12px;
+    padding:2rem;
+    box-shadow:var(--shadow-1);
+  }
+  .form-row{
+    margin-bottom:1.1rem;
+    display:flex;
+    flex-direction:column;
+    gap:.4rem;
+  }
+  .form-row label{
+    font-family:'Josefin Sans',sans-serif;
+    font-weight:700;
+    font-size:.85rem;
+    color:var(--charcoal);
+  }
+  .form-row input,
+  .form-row select,
+  .form-row textarea{
+    font-family:'Lato',sans-serif;
+    font-size:.98rem;
+    padding:.75rem .9rem;
+    border:1px solid var(--border-soft);
+    border-radius:6px;
+    background:var(--cream);
+    color:var(--charcoal);
+    min-height:44px;
+  }
+  .form-row textarea{
+    min-height:110px;
+    resize:vertical;
+  }
+  .form-submit{
+    width:100%;
+  }
+  .form-success{
+    display:none;
+    align-items:center;
+    gap:.75rem;
+    background:rgba(196,216,9,0.16);
+    border:1px solid var(--citron);
+    border-radius:10px;
+    padding:1.25rem;
+    font-weight:700;
+    color:var(--charcoal);
+  }
+  .form-success.is-visible{display:flex;}
+  .form-success svg{
+    flex-shrink:0;
+    width:22px;height:22px;
+    stroke:var(--olive);
+  }
+  .contact-form.is-hidden{display:none;}
+
+  .contact-details{
+    display:flex;
+    flex-direction:column;
+    gap:1.5rem;
+  }
+  .contact-block h3{
+    font-size:1.05rem;
+    margin-bottom:.4rem;
+  }
+  .contact-block p{
+    font-size:.98rem;
+    margin-bottom:.15rem;
+  }
+  .contact-block a{
+    color:var(--olive);
+    font-weight:700;
+    transition:color 200ms var(--ease);
+  }
+  .contact-block a:hover{color:var(--charcoal);text-decoration:underline;}
+
+  /* ===== FOOTER ===== */
+  .site-footer{
+    background:var(--charcoal);
+    color:var(--light-text);
+    padding:4rem clamp(1.5rem,5vw,5rem) 2rem;
+  }
+  .footer-grid{
+    max-width:1100px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:1.3fr 1fr 1fr;
+    gap:2.5rem;
+    padding-bottom:2.5rem;
+    border-bottom:1px solid rgba(244,242,236,0.14);
+  }
+  .footer-brand img{height:30px;width:auto;margin-bottom:1rem;}
+  .footer-brand p{
+    color:#B9B6A8;
+    font-size:.9rem;
+    max-width:320px;
+  }
+  .footer-award{
+    display:inline-flex;
+    align-items:center;
+    gap:.5rem;
+    margin-top:.75rem;
+    font-size:.82rem;
+    color:var(--citron);
+    font-weight:700;
+  }
+  .footer-award svg{width:16px;height:16px;stroke:var(--citron);}
+  .footer-col h4{
+    font-family:'Josefin Sans',sans-serif;
+    color:var(--light-text);
+    font-size:.9rem;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    margin-bottom:1rem;
+  }
+  .footer-col ul{
+    display:flex;
+    flex-direction:column;
+    gap:.6rem;
+  }
+  .footer-col a{
+    color:#CFCBBD;
+    font-size:.92rem;
+    transition:color 200ms var(--ease);
+  }
+  .footer-col a:hover{color:var(--citron);}
+  .footer-bottom{
+    max-width:1100px;
+    margin:0 auto;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:space-between;
+    gap:1rem;
+    padding-top:1.75rem;
+  }
+  .footer-copy{
+    font-size:.82rem;
+    color:#8B8778;
+  }
+  .footer-social{
+    display:flex;
+    gap:.75rem;
+  }
+  .footer-social a{
+    width:38px;height:38px;
+    border-radius:50%;
+    border:1px solid rgba(244,242,236,0.25);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:border-color 200ms var(--ease), background-color 200ms var(--ease);
+  }
+  .footer-social a:hover{
+    border-color:var(--citron);
+    background:rgba(196,216,9,0.12);
+  }
+  .footer-social svg{width:16px;height:16px;stroke:var(--light-text);}
+
+  /* ===== Menu teaser (small in-page anchor target) ===== */
+  .menu-teaser{
+    margin-top:2.5rem;
+    padding:1.5rem;
+    background:rgba(196,216,9,0.08);
+    border:1px dashed rgba(107,122,0,0.4);
+    border-radius:10px;
+  }
+  .menu-teaser p{margin-bottom:.75rem;}
+
+  /* ===================== RESPONSIVE ===================== */
+  @media (max-width:1023px){
+    .sidebar{
+      transform:translateX(-100%);
+      transition:transform 280ms var(--ease);
+      top:64px;
+      height:calc(100vh - 64px);
+      box-shadow:var(--shadow-2);
+    }
+    .sidebar.is-open{transform:translateX(0);}
+    .mobile-topbar{display:flex;}
+    .sidebar-backdrop.is-open{display:block;}
+    .content{margin-left:0;padding-top:64px;}
+    .about-grid{grid-template-columns:1fr;}
+    .contact-grid{grid-template-columns:1fr;}
+  }
+
+  @media (max-width:767px){
+    .section{padding:3.5rem 1.25rem;}
+    .hero-content{padding:6rem 1.5rem 3.5rem;}
+    .hero{min-height:80vh;}
+    .about-stats{grid-template-columns:1fr 1fr;}
+    .footer-grid{grid-template-columns:1fr;gap:2rem;}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{
+      animation-duration:0.001ms !important;
+      transition-duration:0.001ms !important;
+      scroll-behavior:auto !important;
+    }
+    .reveal{opacity:1;transform:none;}
+  }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
+<!-- ===================== MOBILE TOPBAR ===================== -->
+<div class="mobile-topbar">
+  <img src="./logo-light.png" alt="Citron Baltimore">
+  <button type="button" class="hamburger-btn" id="hamburgerBtn" aria-expanded="false" aria-controls="sidebar" aria-label="Open navigation menu">
+    <span></span><span></span><span></span>
+  </button>
+</div>
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+<!-- ===================== SIDEBAR ===================== -->
+<nav class="sidebar" id="sidebar" aria-label="Primary">
+  <a class="sidebar-brand" href="#hero" data-nav-link data-target="hero">
+    <img src="./logo-light.png" alt="Citron Baltimore">
+  </a>
+
+  <div class="sidebar-nav">
+    <a class="sidebar-link" href="#hero" data-nav-link data-target="hero">Home</a>
+    <a class="sidebar-link" href="#menus" data-nav-link data-target="menus">Menus</a>
+
+    <div class="sidebar-group">
+      <div class="sidebar-group-label">Private Events</div>
+      <div class="sidebar-sublist">
+        <a class="sidebar-sublink" href="#space-fireplace-room" data-nav-link data-target="spaces">
+          <span>Fireplace Room</span><span class="cap">20</span>
+        </a>
+        <a class="sidebar-sublink" href="#space-mirror-room" data-nav-link data-target="spaces">
+          <span>Mirror Room</span><span class="cap">26</span>
+        </a>
+        <a class="sidebar-sublink" href="#space-club-room" data-nav-link data-target="spaces">
+          <span>Club Room</span><span class="cap">50</span>
+        </a>
+        <a class="sidebar-sublink" href="#space-waterfront-terrace" data-nav-link data-target="spaces">
+          <span>Waterfront Terrace</span><span class="cap">50</span>
+        </a>
+        <a class="sidebar-sublink" href="#space-citron-bar" data-nav-link data-target="spaces">
+          <span>Citron Bar</span><span class="cap">125</span>
+        </a>
+        <a class="sidebar-sublink" href="#space-waterfront-courtyard" data-nav-link data-target="spaces">
+          <span>Waterfront Courtyard</span><span class="cap">200</span>
+        </a>
+        <a class="sidebar-sublink" href="#space-the-cove" data-nav-link data-target="spaces">
+          <span>The COVE</span><span class="cap">200</span>
+        </a>
+        <a class="sidebar-sublink" href="#space-entire-venue" data-nav-link data-target="spaces">
+          <span>Entire Venue</span><span class="cap">500</span>
+        </a>
+        <a class="sidebar-sublink" href="#space-off-premise-catering" data-nav-link data-target="spaces">
+          <span>Off-Premise Catering</span><span class="cap">Unlimited</span>
+        </a>
+        <a class="sidebar-sublink sidebar-vendors-link" href="#vendors" data-nav-link data-target="vendors">
+          <span>Vendors &amp; Services</span>
+        </a>
+      </div>
+    </div>
+
+    <a class="sidebar-link" href="#about" data-nav-link data-target="about">Our Story</a>
+    <a class="sidebar-link" href="#contact" data-nav-link data-target="contact">Contact</a>
+  </div>
+
+  <a class="sidebar-cta" href="https://citronbaltimore.com">Reserve a Table</a>
+</nav>
+
+<!-- ===================== MAIN CONTENT ===================== -->
+<main class="content" id="main-content">
+
+  <!-- ============ HERO ============ -->
+  <section class="section hero" id="hero">
+    <div class="hero-media">
+      <img src="./hero.jpg" alt="Guests gathered in Citron Baltimore's gala ballroom for a formal private event">
+    </div>
+    <div class="hero-content">
+      <span class="eyebrow">Quarry Lake, Baltimore</span>
+      <h1>Find your room.</h1>
+      <p class="hero-sub">Nine private spaces, a waterfront restaurant, and thirty years of off-premise catering. Citron Baltimore holds the celebration you're picturing, from an intimate fireside dinner to a five-hundred-guest gala.</p>
+      <a class="btn btn-primary" href="#spaces">Explore the Spaces</a>
+    </div>
+  </section>
+
+  <!-- ============ MENU TEASER (anchor target for sidebar "Menus") ============ -->
+  <section class="section section-bg-default" id="menus">
+    <div class="section-inner reveal">
+      <span class="eyebrow">In the Dining Room</span>
+      <h2>A seasonal, scratch-built menu</h2>
+      <p style="max-width:680px;font-size:1.05rem;">Executive Chef Mary Hersh runs a kitchen built on center-cut steaks, day-boat seafood, house-made pastas, and a full sushi bar, paired with a wine list honored by Wine Spectator every year since 2019. Dinner service runs Wednesday through Sunday from 4 PM, with Happy Hour from 4 to 6:30.</p>
+      <div class="menu-teaser">
+        <p>Full seasonal menus, wine list, and sushi bar offerings are available on request or on our main site.</p>
+        <a class="btn btn-outline-dark" href="https://citronbaltimore.com">View Full Menus</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FEATURES ACCORDION ============ -->
+  <section class="section section-bg-default" id="events-types">
+    <div class="section-inner">
+      <div class="section-head reveal">
+        <span class="eyebrow">What We Host</span>
+        <h2>Every kind of gathering, one waterfront address</h2>
+        <p>Click any category to see how we tailor the room, the menu, and the service to the occasion.</p>
+      </div>
+
+      <div class="accordion reveal" id="accordion">
+        <div class="accordion-item">
+          <button class="accordion-trigger" type="button" aria-expanded="false">
+            <span class="accordion-trigger-text">
+              <h3>Corporate Events</h3>
+              <p class="accordion-teaser">Board dinners, product launches, and off-sites with AV built in.</p>
+            </span>
+            <span class="accordion-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            </span>
+          </button>
+          <div class="accordion-panel">
+            <div class="accordion-panel-inner">
+              <div class="accordion-panel-content">
+                <p>From quarterly board dinners to full product launches, our private rooms come wired with Savant-powered AV and flexible seating so your presentation and your plating both land. The Club Room and Citron Bar are our most-requested corporate spaces, and we work directly with your planning team on timing, branding, and dietary needs.</p>
+                <p class="accordion-note">Pharma-compliant menu options available for corporate and pharma clients.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-trigger" type="button" aria-expanded="false">
+            <span class="accordion-trigger-text">
+              <h3>Weddings</h3>
+              <p class="accordion-teaser">Ceremony, cocktail hour, and reception on the water, start to finish.</p>
+            </span>
+            <span class="accordion-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            </span>
+          </button>
+          <div class="accordion-panel">
+            <div class="accordion-panel-inner">
+              <div class="accordion-panel-content">
+                <p>The Waterfront Terrace and Courtyard were built for ceremonies at golden hour, and The COVE carries the celebration through dinner and dancing without ever leaving the property. Our catering team, with roots in Citron Caterers' thirty-plus years of off-premise event work, handles everything from tastings to the last toast.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-trigger" type="button" aria-expanded="false">
+            <span class="accordion-trigger-text">
+              <h3>Lifecycle Celebrations</h3>
+              <p class="accordion-teaser">Bar and bat mitzvahs, milestone birthdays, and anniversaries.</p>
+            </span>
+            <span class="accordion-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            </span>
+          </button>
+          <div class="accordion-panel">
+            <div class="accordion-panel-inner">
+              <div class="accordion-panel-content">
+                <p>These are the events where family history matters, and Charles Levine's forty-plus years in the events business shows in the details, from the Mirror Room's intimate scale for a milestone birthday dinner to the full venue buyout for a bar mitzvah with a live band and a dance floor.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-trigger" type="button" aria-expanded="false">
+            <span class="accordion-trigger-text">
+              <h3>Nonprofit Galas &amp; Fundraisers</h3>
+              <p class="accordion-teaser">Large-format events with the logistics handled for you.</p>
+            </span>
+            <span class="accordion-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            </span>
+          </button>
+          <div class="accordion-panel">
+            <div class="accordion-panel-inner">
+              <div class="accordion-panel-content">
+                <p>The Entire Venue configuration seats up to 500 and gives fundraising committees a single waterfront address for cocktail reception, seated dinner, live auction, and after-party. Corporate and pharma-affiliated foundations can request pharma-compliant menu options where required.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="section section-bg-muted" id="about">
+    <div class="section-inner">
+      <div class="section-head reveal">
+        <span class="eyebrow">Our Story</span>
+        <h2>Family owned, ten years on the water</h2>
+      </div>
+      <div class="about-grid reveal">
+        <div>
+          <p class="about-quote">"We've catered for five presidents, the NFL, the Rolling Stones, and Oprah, and we still taste every dish before it leaves the kitchen."</p>
+          <p>Charles and Susan Levine opened Citron Baltimore at Quarry Lake in November 2016, and this November marks ten years on the waterfront. Charles brings more than forty years in the events industry and roughly fourteen thousand catered events to the table, built through Citron Caterers, the family's off-premise catering operation, now in its fourth decade of serving Maryland, DC, and Northern Virginia.</p>
+          <p>In the kitchen, Executive Chef Mary Hersh leads a scratch-built, seasonal program: center-cut steaks, day-boat seafood, house-made pastas, and a full sushi bar, backed by a wine list Wine Spectator has honored with the Award of Excellence every year since 2019, plus FINE WINE's World's Best recognition in 2025.</p>
+        </div>
+        <div class="about-stats">
+          <div class="stat">
+            <strong>10</strong>
+            <span>Years at Quarry Lake, since Nov. 2016</span>
+          </div>
+          <div class="stat">
+            <strong>40+</strong>
+            <span>Years in the events business, Charles Levine</span>
+          </div>
+          <div class="stat">
+            <strong>~14,000</strong>
+            <span>Catered events produced</span>
+          </div>
+          <div class="stat">
+            <strong>30+</strong>
+            <span>Years of Citron Caterers off-premise heritage</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PORTFOLIO / SPACES ============ -->
+  <section class="section section-bg-default" id="spaces">
+    <div class="section-inner">
+      <div class="section-head reveal">
+        <span class="eyebrow">Nine Rooms, One Address</span>
+        <h2>Explore every event space</h2>
+        <p>Click a card to see who each room is built for. Capacities are for seated or reception-style events depending on layout.</p>
+      </div>
+
+      <div class="spaces-grid reveal" id="spacesGrid">
+
+        <article class="space-card" id="space-fireplace-room" tabindex="0">
+          <div class="space-card-top">
+            <h3>Fireplace Room</h3>
+            <span class="space-capacity">Up to 20</span>
+          </div>
+          <p class="space-desc">A warm, wood-paneled private dining room built around a working fireplace.</p>
+          <button class="space-toggle" type="button" aria-expanded="false">
+            <span class="toggle-label">More detail</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="space-more">
+            <div class="space-more-inner">
+              <div class="space-more-content">
+                <span class="ideal">Ideal for: intimate dinners, small board meetings, anniversary parties</span>
+                <p>Our smallest and most intimate room, the Fireplace Room seats up to twenty around a live-fire hearth. It's the first room we recommend for a milestone birthday dinner or a small family celebration that wants a bit of ceremony without a lot of scale.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="space-card" id="space-mirror-room" tabindex="0">
+          <div class="space-card-top">
+            <h3>Mirror Room</h3>
+            <span class="space-capacity">Up to 26</span>
+          </div>
+          <p class="space-desc">A bright, mirrored private room suited to seated dinners with a formal edge.</p>
+          <button class="space-toggle" type="button" aria-expanded="false">
+            <span class="toggle-label">More detail</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="space-more">
+            <div class="space-more-inner">
+              <div class="space-more-content">
+                <span class="ideal">Ideal for: rehearsal dinners, engagement parties, executive lunches</span>
+                <p>Floor-to-ceiling mirrored walls make this twenty-six-seat room feel larger and brighter than its footprint, which is exactly why it's a favorite for rehearsal dinners and engagement celebrations that want a formal, photograph-ready setting.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="space-card" id="space-club-room" tabindex="0">
+          <div class="space-card-top">
+            <h3>Club Room</h3>
+            <span class="space-capacity">Up to 50</span>
+          </div>
+          <p class="space-desc">A flexible mid-size room for corporate dinners and milestone celebrations.</p>
+          <button class="space-toggle" type="button" aria-expanded="false">
+            <span class="toggle-label">More detail</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="space-more">
+            <div class="space-more-inner">
+              <div class="space-more-content">
+                <span class="ideal">Ideal for: corporate dinners, bar and bat mitzvahs, milestone birthdays</span>
+                <p>The Club Room seats up to fifty and reconfigures easily between boardroom-style corporate dinners and a dance-floor-ready lifecycle celebration. Savant-powered AV is built into the room for presentations or a DJ setup.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="space-card" id="space-waterfront-terrace" tabindex="0">
+          <div class="space-card-top">
+            <h3>Waterfront Terrace</h3>
+            <span class="space-capacity">Up to 50</span>
+          </div>
+          <p class="space-desc">A heated, open-air terrace with direct views over Quarry Lake.</p>
+          <button class="space-toggle" type="button" aria-expanded="false">
+            <span class="toggle-label">More detail</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="space-more">
+            <div class="space-more-inner">
+              <div class="space-more-content">
+                <span class="ideal">Ideal for: cocktail-hour ceremonies, sunset dinners, engagement parties</span>
+                <p>Heated for three-season comfort, the Waterfront Terrace puts fifty guests directly on the water for a ceremony, a cocktail hour, or a seated dinner under the open sky, with the main dining room as an easy indoor backup.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="space-card" id="space-citron-bar" tabindex="0">
+          <div class="space-card-top">
+            <h3>Citron Bar</h3>
+            <span class="space-capacity">Up to 125</span>
+          </div>
+          <p class="space-desc">A lively buyout of our bar and lounge for cocktail-style receptions.</p>
+          <button class="space-toggle" type="button" aria-expanded="false">
+            <span class="toggle-label">More detail</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="space-more">
+            <div class="space-more-inner">
+              <div class="space-more-content">
+                <span class="ideal">Ideal for: happy-hour buyouts, holiday parties, product launches</span>
+                <p>A full buyout of our handcrafted-cocktail bar and lounge, built for standing receptions up to one hundred twenty-five. It's our go-to recommendation for a corporate holiday party or a launch event that wants energy over formality.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="space-card" id="space-waterfront-courtyard" tabindex="0">
+          <div class="space-card-top">
+            <h3>Waterfront Courtyard</h3>
+            <span class="space-capacity">Up to 200</span>
+          </div>
+          <p class="space-desc">An open-air courtyard on the water, ideal for ceremonies and receptions.</p>
+          <button class="space-toggle" type="button" aria-expanded="false">
+            <span class="toggle-label">More detail</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="space-more">
+            <div class="space-more-inner">
+              <div class="space-more-content">
+                <span class="ideal">Ideal for: wedding ceremonies, large cocktail receptions, outdoor galas</span>
+                <p>Our largest outdoor footprint, the Waterfront Courtyard holds up to two hundred guests for a ceremony or standing reception with Quarry Lake as the backdrop, and connects directly into The COVE for a seamless move indoors.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="space-card" id="space-the-cove" tabindex="0">
+          <div class="space-card-top">
+            <h3>The COVE</h3>
+            <span class="space-capacity">Up to 200</span>
+          </div>
+          <p class="space-desc">Our dedicated event ballroom, built for seated dinners and dancing.</p>
+          <button class="space-toggle" type="button" aria-expanded="false">
+            <span class="toggle-label">More detail</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="space-more">
+            <div class="space-more-inner">
+              <div class="space-more-content">
+                <span class="ideal">Ideal for: weddings, galas, large corporate dinners</span>
+                <p>The COVE is our purpose-built event ballroom, seating up to two hundred with a dedicated dance floor, staging, and Savant-powered AV and lighting. It's the room behind most of the weddings and galas we host each year.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="space-card" id="space-entire-venue" tabindex="0">
+          <div class="space-card-top">
+            <h3>Entire Venue</h3>
+            <span class="space-capacity">Up to 500</span>
+          </div>
+          <p class="space-desc">A full buyout of Citron Baltimore, indoors and out, for your largest event.</p>
+          <button class="space-toggle" type="button" aria-expanded="false">
+            <span class="toggle-label">More detail</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="space-more">
+            <div class="space-more-inner">
+              <div class="space-more-content">
+                <span class="ideal">Ideal for: galas, festivals, multi-room corporate summits</span>
+                <p>Combine the dining room, The COVE, Citron Bar, and both waterfront outdoor spaces for a single event of up to five hundred guests. This configuration is reserved well in advance for our largest fundraising galas and corporate summits.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="space-card" id="space-off-premise-catering" tabindex="0">
+          <div class="space-card-top">
+            <h3>Off-Premise Catering</h3>
+            <span class="space-capacity">Unlimited</span>
+          </div>
+          <p class="space-desc">Citron Caterers brings our kitchen to your venue, anywhere in the region.</p>
+          <button class="space-toggle" type="button" aria-expanded="false">
+            <span class="toggle-label">More detail</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="space-more">
+            <div class="space-more-inner">
+              <div class="space-more-content">
+                <span class="ideal">Ideal for: home events, corporate offices, outdoor tented weddings, any venue you already have</span>
+                <p>With more than thirty years of off-premise experience across Maryland, DC, and Northern Virginia, Citron Caterers can produce full-service catering at a venue of your choosing, at any scale, drawing on the same kitchen and team behind Quarry Lake.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- ============ VENDORS & SERVICES ============ -->
+      <div class="vendors-wrap" id="vendors">
+        <div class="vendors-head reveal">
+          <span class="eyebrow">Trusted Partners</span>
+          <h2>Vendors &amp; Services</h2>
+          <p>We work with a short list of preferred partners who already know our rooms, our timelines, and our standards.</p>
+        </div>
+        <div class="vendors-grid reveal">
+
+          <div class="vendor-card">
+            <span class="vendor-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1.5 2 1.5 4-1 6 2.5-1 4.5.5 4 3-1 3-4 3-5 1-1 2-4 2-5-1-.5-2.5 1.5-4 4-3-2.5-2-2.5-4-1-6z"/><path d="M12 22v-8"/></svg>
+            </span>
+            <div>
+              <h3>Floral &amp; Decor</h3>
+              <p>Seasonal arrangements and full room styling for any capacity.</p>
+            </div>
+          </div>
+
+          <div class="vendor-card">
+            <span class="vendor-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="12" rx="1"/><path d="M3 11h18M8 7V5a1 1 0 011-1h6a1 1 0 011 1v2"/></svg>
+            </span>
+            <div>
+              <h3>Linens &amp; Tabletop</h3>
+              <p>Custom linens, chargers, and tabletop rentals to match your palette.</p>
+            </div>
+          </div>
+
+          <div class="vendor-card">
+            <span class="vendor-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="12" rx="1"/><path d="M16 10l6-3v10l-6-3"/></svg>
+            </span>
+            <div>
+              <h3>AV &amp; Production</h3>
+              <p>Savant-powered sound, lighting, and staging built into our rooms.</p>
+            </div>
+          </div>
+
+          <div class="vendor-card">
+            <span class="vendor-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h11"/></svg>
+            </span>
+            <div>
+              <h3>Event Planning</h3>
+              <p>Independent planners who coordinate directly with our events team.</p>
+            </div>
+          </div>
+
+          <div class="vendor-card">
+            <span class="vendor-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            </span>
+            <div>
+              <h3>Photography Partners</h3>
+              <p>Local photographers and videographers who know every room's light.</p>
+            </div>
+          </div>
+
+          <div class="vendor-card">
+            <span class="vendor-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+            </span>
+            <div>
+              <h3>Entertainment &amp; Music</h3>
+              <p>DJs, live bands, and musicians sized to each room's capacity.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section class="section section-bg-muted" id="contact">
+    <div class="section-inner">
+      <div class="section-head reveal">
+        <span class="eyebrow">Let's Plan</span>
+        <h2>Tell us about your event</h2>
+        <p>Reach our events team directly, or send a note below and we'll follow up within one business day.</p>
+      </div>
+
+      <div class="contact-grid reveal">
+        <div>
+          <form class="contact-form" id="contactForm" novalidate>
+            <div class="form-row">
+              <label for="name">Full name</label>
+              <input type="text" id="name" name="name" required autocomplete="name">
+            </div>
+            <div class="form-row">
+              <label for="email">Email address</label>
+              <input type="email" id="email" name="email" required autocomplete="email">
+            </div>
+            <div class="form-row">
+              <label for="eventType">Event type</label>
+              <select id="eventType" name="eventType">
+                <option value="general">General inquiry</option>
+                <option value="corporate">Corporate event</option>
+                <option value="wedding">Wedding</option>
+                <option value="lifecycle">Lifecycle celebration</option>
+                <option value="gala">Nonprofit gala or fundraiser</option>
+                <option value="catering">Off-premise catering</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" required></textarea>
+            </div>
+            <button class="btn btn-primary form-submit" type="submit">Send Inquiry</button>
+          </form>
+          <div class="form-success" id="formSuccess" role="status">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            <span>Thanks! We'll be in touch shortly to start planning.</span>
+          </div>
+        </div>
+
+        <div class="contact-details">
+          <div class="contact-block">
+            <h3>Address</h3>
+            <p>2605 Quarry Lake Drive<br>Baltimore, MD 21209</p>
+          </div>
+          <div class="contact-block">
+            <h3>Phone</h3>
+            <p><a href="tel:+14103630900">410-363-0900</a></p>
+            <p>Events: ext. 2 &middot; <a href="mailto:events@citronbaltimore.com">events@citronbaltimore.com</a></p>
+          </div>
+          <div class="contact-block">
+            <h3>Hours</h3>
+            <p>Dinner: Wednesday, Sunday from 4 PM</p>
+            <p>Happy Hour: 4-6:30 PM</p>
+            <p>Private events: 7 days a week</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <img src="./logo-light.png" alt="Citron Baltimore">
+      <p>An upscale waterfront restaurant and private event venue at Quarry Lake, Baltimore County, family owned since November 2016.</p>
+      <span class="footer-award">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M8.5 13.5L7 22l5-3 5 3-1.5-8.5"/></svg>
+        Wine Spectator Award of Excellence, 2019-2025
+      </span>
+    </div>
+    <div class="footer-col">
+      <h4>Explore</h4>
+      <ul>
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#menus">Menus</a></li>
+        <li><a href="#spaces">Private Events</a></li>
+        <li><a href="#about">Our Story</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Visit</h4>
+      <ul>
+        <li>2605 Quarry Lake Drive</li>
+        <li>Baltimore, MD 21209</li>
+        <li><a href="tel:+14103630900">410-363-0900</a></li>
+        <li><a href="mailto:events@citronbaltimore.com">events@citronbaltimore.com</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">&copy; 2026 Citron Baltimore. All rights reserved.</span>
+    <div class="footer-social">
+      <a href="#" aria-label="Citron Baltimore on Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+      </a>
+      <a href="#" aria-label="Citron Baltimore on Facebook">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+      </a>
+      <a href="#" aria-label="Citron Baltimore on LinkedIn">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/><path d="M10 9h4v2a4 4 0 018 0v9h-4v-8a2 2 0 00-4 0v8h-4z"/></svg>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ================= MOBILE SIDEBAR TOGGLE ================= */
+  var sidebar = document.getElementById('sidebar');
+  var hamburgerBtn = document.getElementById('hamburgerBtn');
+  var backdrop = document.getElementById('sidebarBackdrop');
+
+  function openSidebar(){
+    sidebar.classList.add('is-open');
+    backdrop.classList.add('is-open');
+    requestAnimationFrame(function(){ backdrop.classList.add('is-visible'); });
+    hamburgerBtn.setAttribute('aria-expanded','true');
+    hamburgerBtn.setAttribute('aria-label','Close navigation menu');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeSidebar(){
+    sidebar.classList.remove('is-open');
+    backdrop.classList.remove('is-visible');
+    hamburgerBtn.setAttribute('aria-expanded','false');
+    hamburgerBtn.setAttribute('aria-label','Open navigation menu');
+    document.body.style.overflow = '';
+    setTimeout(function(){ backdrop.classList.remove('is-open'); }, 280);
+  }
+  hamburgerBtn.addEventListener('click', function(){
+    if(sidebar.classList.contains('is-open')){ closeSidebar(); } else { openSidebar(); }
+  });
+  backdrop.addEventListener('click', closeSidebar);
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && sidebar.classList.contains('is-open')){ closeSidebar(); }
+  });
+
+  /* ================= SIDEBAR LINK SMOOTH SCROLL ================= */
+  var navLinks = document.querySelectorAll('[data-nav-link]');
+  navLinks.forEach(function(link){
+    link.addEventListener('click', function(e){
+      var href = link.getAttribute('href');
+      if(href && href.charAt(0) === '#'){
+        var target = document.querySelector(href);
+        if(target){
+          e.preventDefault();
+          target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+          if(window.innerWidth < 1024 && sidebar.classList.contains('is-open')){
+            closeSidebar();
+          }
+        }
+      }
+    });
+  });
+
+  /* ================= ACTIVE SECTION HIGHLIGHTING ================= */
+  var watchedIds = ['hero','menus','events-types','about','spaces','vendors','contact'];
+  var sectionEls = watchedIds
+    .map(function(id){ return document.getElementById(id); })
+    .filter(Boolean);
+
+  var linksByTarget = {};
+  navLinks.forEach(function(link){
+    var t = link.getAttribute('data-target');
+    if(!linksByTarget[t]) linksByTarget[t] = [];
+    linksByTarget[t].push(link);
+  });
+
+  function setActive(targetId){
+    Object.keys(linksByTarget).forEach(function(t){
+      linksByTarget[t].forEach(function(link){
+        link.classList.toggle('is-active', t === targetId);
+      });
+    });
+  }
+
+  if('IntersectionObserver' in window){
+    var sectionObserver = new IntersectionObserver(function(entries){
+      var visible = entries.filter(function(en){ return en.isIntersecting; });
+      if(visible.length > 0){
+        visible.sort(function(a,b){ return b.intersectionRatio - a.intersectionRatio; });
+        setActive(visible[0].target.id);
+      }
+    }, { root: null, rootMargin: '-15% 0px -55% 0px', threshold: [0, .1, .25, .5, .75, 1] });
+
+    sectionEls.forEach(function(sec){ sectionObserver.observe(sec); });
+  }
+
+  /* ================= REVEAL ON SCROLL ================= */
+  var revealEls = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window && !reduceMotion){
+    var revealObserver = new IntersectionObserver(function(entries, obs){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('is-visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    revealEls.forEach(function(el){ revealObserver.observe(el); });
+  } else {
+    revealEls.forEach(function(el){ el.classList.add('is-visible'); });
+  }
+
+  /* ================= ACCORDION ================= */
+  var accordionItems = document.querySelectorAll('.accordion-item');
+  accordionItems.forEach(function(item){
+    var trigger = item.querySelector('.accordion-trigger');
+    trigger.addEventListener('click', function(){
+      var isOpen = item.classList.contains('is-open');
+      accordionItems.forEach(function(other){
+        other.classList.remove('is-open');
+        other.querySelector('.accordion-trigger').setAttribute('aria-expanded','false');
+      });
+      if(!isOpen){
+        item.classList.add('is-open');
+        trigger.setAttribute('aria-expanded','true');
+      }
+    });
+  });
+
+  /* ================= SPACE CARDS EXPAND ================= */
+  var spaceCards = document.querySelectorAll('.space-card');
+  spaceCards.forEach(function(card){
+    var toggleBtn = card.querySelector('.space-toggle');
+    function toggleCard(e){
+      if(e){ e.stopPropagation(); }
+      var isExpanded = card.classList.contains('is-expanded');
+      card.classList.toggle('is-expanded');
+      toggleBtn.setAttribute('aria-expanded', String(!isExpanded));
+      var label = toggleBtn.querySelector('.toggle-label');
+      label.textContent = !isExpanded ? 'Less detail' : 'More detail';
+    }
+    toggleBtn.addEventListener('click', toggleCard);
+    card.addEventListener('keydown', function(e){
+      if((e.key === 'Enter' || e.key === ' ') && e.target === card){
+        e.preventDefault();
+        toggleCard();
+      }
+    });
+  });
+
+  /* ================= CONTACT FORM ================= */
+  var contactForm = document.getElementById('contactForm');
+  var formSuccess = document.getElementById('formSuccess');
+  contactForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    contactForm.classList.add('is-hidden');
+    formSuccess.classList.add('is-visible');
+  });
+
+})();
+</script>
+
+</body>
+</html>

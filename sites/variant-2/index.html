@@ -1,0 +1,1363 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <title>Citron Baltimore | Waterfront Restaurant &amp; Events</title>
+<meta name="description" content="Upscale waterfront restaurant and event venue at Quarry Lake. 14,000 events catered, nine spaces for 10 to 500 guests. Book your event.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* ============ RESET ============ */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; color: inherit; background: none; border: none; }
+  ul { list-style: none; }
+
+  /* ============ TOKENS ============ */
+  :root {
+    --black: #1A1A1A;
+    --black-deep: #141414;
+    --white: #FFFFFF;
+    --cream: #F5F5F0;
+    --citron: #C4D809;
+    --border-thick: 4px;
+    --border-thin: 3px;
+    --mono: 'IBM Plex Mono', monospace;
+    --display: 'Bebas Neue', sans-serif;
+    --transition-fast: 200ms ease;
+  }
+
+  html, body {
+    background: var(--white);
+    color: var(--black);
+    overflow-x: hidden;
+    max-width: 100%;
+  }
+
+  body {
+    font-family: var(--mono);
+    font-size: 16px;
+    line-height: 1.6;
+    scroll-behavior: auto; /* deliberately NOT smooth (jarring by design) */
+  }
+
+  section { position: relative; }
+
+  h1, h2, h3, h4 {
+    font-family: var(--display);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    line-height: 0.95;
+    text-transform: uppercase;
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px; height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  /* Global focus state */
+  a:focus-visible,
+  button:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 4px solid var(--citron);
+    outline-offset: 2px;
+  }
+
+  /* Global clickable cursor */
+  a, button, [role="button"], summary { cursor: pointer; }
+
+  .wrap {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 clamp(1.25rem, 4vw, 4rem);
+  }
+
+  /* ============ BUTTONS ============ */
+  .btn {
+    display: inline-block;
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 1rem 1.75rem;
+    border: var(--border-thin) solid var(--black);
+    border-radius: 0;
+    transition: background-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+    min-height: 44px;
+    line-height: 1.2;
+  }
+  .btn-primary {
+    background: var(--citron);
+    color: var(--black);
+    border-color: var(--black);
+  }
+  .btn-primary:hover, .btn-primary:focus-visible {
+    background: var(--black);
+    color: var(--citron);
+  }
+  .btn-outline-dark {
+    background: transparent;
+    color: var(--black);
+    border-color: var(--black);
+  }
+  .btn-outline-dark:hover, .btn-outline-dark:focus-visible {
+    background: var(--black);
+    color: var(--white);
+  }
+  .btn-outline-light {
+    background: transparent;
+    color: var(--white);
+    border-color: var(--white);
+  }
+  .btn-outline-light:hover, .btn-outline-light:focus-visible {
+    background: var(--citron);
+    color: var(--black);
+    border-color: var(--citron);
+  }
+
+  /* ============ NAV ============ */
+  .site-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--white);
+    border-bottom: var(--border-thick) solid var(--black);
+  }
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.85rem clamp(1.25rem, 4vw, 4rem);
+    gap: 1rem;
+  }
+  .nav-logo img {
+    height: 32px;
+    width: auto;
+  }
+  .nav-links {
+    display: none;
+    align-items: center;
+    gap: 2rem;
+  }
+  .nav-link-item { position: relative; }
+  .nav-link {
+    font-family: var(--display);
+    font-size: 1.15rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.35rem 0.1rem;
+    position: relative;
+    display: inline-block;
+  }
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 100%;
+    height: 3px;
+    background: var(--citron);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 220ms ease;
+  }
+  .nav-link:hover::after,
+  .nav-link:focus-visible::after,
+  .nav-trigger[aria-expanded="true"] ~ .nav-link::after {
+    transform: scaleX(1);
+  }
+  .nav-trigger {
+    font-family: var(--display);
+    font-size: 1.15rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.1rem;
+    position: relative;
+    min-height: 44px;
+  }
+  .nav-trigger::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 100%;
+    height: 3px;
+    background: var(--citron);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 220ms ease;
+  }
+  .nav-trigger:hover::after,
+  .nav-trigger:focus-visible::after,
+  .nav-trigger[aria-expanded="true"]::after {
+    transform: scaleX(1);
+  }
+  .nav-trigger .caret {
+    width: 10px;
+    height: 10px;
+    transition: transform var(--transition-fast);
+  }
+  .nav-trigger[aria-expanded="true"] .caret { transform: rotate(180deg); }
+
+  .nav-cta { display: none; }
+  .nav-cta .btn { padding: 0.75rem 1.25rem; }
+
+  .hamburger-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: var(--border-thin) solid var(--black);
+  }
+  .hamburger-btn svg { width: 22px; height: 22px; }
+
+  /* Mega menu */
+  .mega-menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    background: var(--white);
+    border: var(--border-thick) solid var(--black);
+    box-shadow: 8px 8px 0 var(--black);
+    padding: 2rem;
+    display: none;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+    width: min(640px, 90vw);
+    z-index: 50;
+  }
+  .mega-menu.is-open { display: grid; }
+  .mega-col h3 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    border-bottom: var(--border-thin) solid var(--black);
+    padding-bottom: 0.5rem;
+  }
+  .mega-col ul li { margin-bottom: 0.6rem; }
+  .mega-col a {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    padding: 0.3rem 0.2rem;
+    border-bottom: 1px solid transparent;
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+  }
+  .mega-col a:hover, .mega-col a:focus-visible {
+    background: var(--black);
+    color: var(--citron);
+  }
+  .mega-col a .cap {
+    font-weight: 700;
+    opacity: 0.65;
+  }
+  .mega-col a:hover .cap, .mega-col a:focus-visible .cap { opacity: 1; }
+
+  @media (min-width: 1024px) {
+    .nav-links { display: flex; }
+    .nav-cta { display: block; }
+    .hamburger-btn { display: none; }
+  }
+
+  /* Mobile panel */
+  .mobile-panel {
+    position: fixed;
+    inset: 0;
+    top: 0;
+    background: var(--black);
+    color: var(--white);
+    z-index: 200;
+    display: none;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+  .mobile-panel.is-open { display: flex; }
+  .mobile-panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.85rem clamp(1.25rem, 4vw, 4rem);
+    border-bottom: var(--border-thick) solid var(--citron);
+  }
+  .mobile-panel-head img { height: 30px; }
+  .mobile-close {
+    width: 44px; height: 44px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: var(--border-thin) solid var(--white);
+  }
+  .mobile-close svg { width: 20px; height: 20px; stroke: var(--white); }
+  .mobile-nav-list { padding: 1.5rem clamp(1.25rem, 4vw, 4rem) 3rem; }
+  .mobile-nav-list > li { border-bottom: var(--border-thin) solid #3a3a33; }
+  .mobile-nav-list a, .mobile-accordion-trigger {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    text-align: left;
+    font-family: var(--display);
+    font-size: 1.8rem;
+    letter-spacing: 0.03em;
+    padding: 1rem 0.1rem;
+    min-height: 44px;
+  }
+  .mobile-accordion-trigger .plus {
+    width: 20px; height: 20px;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .mobile-accordion-trigger .plus::before,
+  .mobile-accordion-trigger .plus::after {
+    content: "";
+    position: absolute;
+    background: var(--citron);
+  }
+  .mobile-accordion-trigger .plus::before { width: 100%; height: 3px; top: 50%; left: 0; transform: translateY(-50%); }
+  .mobile-accordion-trigger .plus::after { height: 100%; width: 3px; left: 50%; top: 0; transform: translateX(-50%); transition: transform var(--transition-fast); }
+  .mobile-accordion-trigger[aria-expanded="true"] .plus::after { transform: translateX(-50%) rotate(90deg); opacity: 0; }
+
+  .mobile-accordion-panel {
+    display: none;
+    padding: 0 0.1rem 1.5rem;
+  }
+  .mobile-accordion-panel.is-open { display: block; }
+  .mobile-accordion-panel h4 {
+    font-size: 0.9rem;
+    color: var(--citron);
+    margin: 1rem 0 0.6rem;
+    letter-spacing: 0.1em;
+  }
+  .mobile-accordion-panel ul li a {
+    font-family: var(--mono);
+    font-size: 0.95rem;
+    text-transform: none;
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #3a3a33;
+  }
+  .mobile-nav-list .mobile-cta { padding: 1.5rem 0 0.5rem; }
+  .mobile-nav-list .mobile-cta .btn { width: 100%; text-align: center; }
+
+  /* ============ HERO ============ */
+  .hero {
+    background: var(--black);
+    color: var(--cream);
+    overflow: hidden;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .hero-text {
+    padding: clamp(3rem, 8vw, 6rem) clamp(1.25rem, 4vw, 4rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--citron);
+  }
+  .hero-title {
+    font-size: clamp(4rem, 16vw, 8rem);
+    color: var(--white);
+    letter-spacing: 0.01em;
+  }
+  .hero-tagline {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: clamp(1rem, 2.4vw, 1.4rem);
+    letter-spacing: 0.04em;
+    color: var(--cream);
+    border-left: var(--border-thick) solid var(--citron);
+    padding-left: 1rem;
+    max-width: 32ch;
+  }
+  .hero-sub {
+    font-size: 1rem;
+    color: #cfcfc2;
+    max-width: 46ch;
+  }
+  .hero-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+  .hero-media {
+    position: relative;
+    background-color: #141414;
+    min-height: 320px;
+  }
+  .hero-media img {
+    width: 100%;
+    height: 100%;
+    min-height: 320px;
+    object-fit: cover;
+    display: block;
+  }
+
+  @media (min-width: 900px) {
+    .hero-grid {
+      grid-template-columns: 1fr 1fr;
+      min-height: 88vh;
+    }
+    .hero-media { min-height: 100%; }
+    .hero-media img { position: absolute; inset: 0; min-height: 0; }
+  }
+
+  /* ============ FEATURES ============ */
+  .features {
+    border-top: var(--border-thick) solid var(--black);
+  }
+  .features-head {
+    padding: clamp(2.5rem, 6vw, 4rem) clamp(1.25rem, 4vw, 4rem) 0;
+  }
+  .features-head h2 {
+    font-size: clamp(2.4rem, 6vw, 4rem);
+  }
+  .features-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    margin-top: 2.5rem;
+    border-top: var(--border-thin) solid var(--black);
+  }
+  @media (min-width: 700px) {
+    .features-grid { grid-template-columns: 1fr 1fr; }
+  }
+  .feature-item {
+    padding: clamp(1.75rem, 4vw, 2.75rem) clamp(1.25rem, 4vw, 4rem);
+    border-bottom: var(--border-thin) solid var(--black);
+    border-right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transition: transform var(--transition-fast), background-color var(--transition-fast), color var(--transition-fast);
+  }
+  @media (min-width: 700px) {
+    .feature-item:nth-child(odd) { border-right: var(--border-thin) solid var(--black); }
+  }
+  .feature-item:hover {
+    background: var(--black);
+    color: var(--white);
+    transform: translateX(6px);
+  }
+  .feature-item:hover .feature-icon svg { stroke: var(--citron); }
+  .feature-icon svg {
+    width: 42px;
+    height: 42px;
+    stroke: var(--black);
+    fill: none;
+    stroke-width: 1.5;
+    transition: stroke var(--transition-fast);
+  }
+  .feature-label {
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--citron-text, inherit);
+  }
+  .feature-item .feature-label { color: #6b7500; }
+  .feature-item:hover .feature-label { color: var(--citron); }
+  .feature-title { font-family: var(--display); font-size: 1.7rem; letter-spacing: 0.02em; }
+  .feature-copy { font-size: 0.92rem; opacity: 0.85; max-width: 42ch; }
+
+  /* ============ STATS ============ */
+  .stats {
+    background: var(--citron);
+    color: var(--black);
+    border-top: var(--border-thick) solid var(--black);
+    border-bottom: var(--border-thick) solid var(--black);
+    padding: clamp(3rem, 6vw, 5rem) clamp(1.25rem, 4vw, 4rem);
+  }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  @media (min-width: 700px) {
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+  }
+  .stat-block { border-bottom: var(--border-thin) solid var(--black); padding-bottom: 1.5rem; }
+  .stat-number {
+    font-family: var(--display);
+    font-size: clamp(3.5rem, 9vw, 7rem);
+    line-height: 0.9;
+  }
+  .stat-label {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-top: 0.5rem;
+  }
+
+  /* ============ TESTIMONIAL ============ */
+  .testimonial {
+    padding: clamp(4rem, 9vw, 7rem) clamp(1.25rem, 4vw, 4rem);
+    border-bottom: var(--border-thick) solid var(--black);
+  }
+  .testimonial-inner { max-width: 900px; margin: 0 auto; text-align: left; }
+  .testimonial-mark {
+    width: 70px;
+    height: 56px;
+    fill: var(--citron);
+    stroke: var(--black);
+    stroke-width: 4;
+  }
+  .testimonial-quote {
+    font-family: var(--display);
+    font-size: clamp(1.8rem, 4.4vw, 3rem);
+    letter-spacing: 0.01em;
+    margin-top: 1rem;
+    line-height: 1.05;
+    text-transform: none;
+  }
+  .testimonial-credit {
+    margin-top: 1.75rem;
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-top: var(--border-thin) solid var(--black);
+    padding-top: 1rem;
+    display: inline-block;
+  }
+
+  /* ============ MEDIA SECTION ============ */
+  .media-section {
+    position: relative;
+    background-color: #141414;
+    min-height: 60vh;
+    overflow: hidden;
+  }
+  .media-section img {
+    width: 100%;
+    height: 100%;
+    min-height: 60vh;
+    object-fit: cover;
+    position: absolute;
+    inset: 0;
+  }
+  .media-scrim {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background: var(--black);
+    color: var(--white);
+    padding: 1.75rem clamp(1.25rem, 4vw, 3rem);
+    max-width: 640px;
+    border-top: var(--border-thick) solid var(--citron);
+  }
+  .media-scrim h2 {
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    color: var(--white);
+  }
+  .media-scrim p {
+    margin-top: 0.75rem;
+    font-size: 0.95rem;
+    color: #d8d8cd;
+    max-width: 48ch;
+  }
+  .media-section-content {
+    position: relative;
+    min-height: 60vh;
+    display: flex;
+    align-items: flex-end;
+  }
+
+  /* ============ GRID SECTIONS (spaces / vendors) ============ */
+  .grid-section {
+    border-bottom: var(--border-thick) solid var(--black);
+    padding: clamp(2.5rem, 6vw, 4rem) 0 0;
+  }
+  .grid-section-head { padding: 0 clamp(1.25rem, 4vw, 4rem); }
+  .grid-section-head h2 {
+    font-size: clamp(2.4rem, 6.5vw, 4.2rem);
+  }
+  .grid-section-head p {
+    margin-top: 0.75rem;
+    max-width: 56ch;
+    font-size: 0.95rem;
+    opacity: 0.85;
+  }
+  .cell-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    margin-top: 2.5rem;
+    border-top: var(--border-thin) solid var(--black);
+  }
+  @media (min-width: 640px) {
+    .cell-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 1000px) {
+    .cell-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  .cell {
+    border-bottom: var(--border-thin) solid var(--black);
+    border-right: var(--border-thin) solid var(--black);
+    padding: clamp(1.75rem, 3vw, 2.25rem) clamp(1.25rem, 3vw, 2rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.5rem;
+    min-height: 160px;
+    transition: transform 250ms ease, box-shadow 250ms ease;
+    transform-style: preserve-3d;
+    perspective: 600px;
+  }
+  .cell:hover {
+    transform: rotate(-2deg) scale(1.02);
+    box-shadow: 6px 6px 0 var(--black);
+    position: relative;
+    z-index: 2;
+    background: var(--cream);
+  }
+  .cell-name {
+    font-family: var(--display);
+    font-size: 1.9rem;
+    letter-spacing: 0.01em;
+  }
+  .cell-cap {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #555;
+  }
+  .cell-cap .num { color: var(--black); font-weight: 700; }
+  .grid-section-cta {
+    padding: 2.25rem clamp(1.25rem, 4vw, 4rem) 2.75rem;
+  }
+
+  /* ============ STEPS ============ */
+  .steps {
+    padding: clamp(3rem, 7vw, 5rem) clamp(1.25rem, 4vw, 4rem);
+    border-bottom: var(--border-thick) solid var(--black);
+  }
+  .steps-head h2 {
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    max-width: 16ch;
+  }
+  .steps-list { margin-top: 3rem; display: flex; flex-direction: column; }
+  .step-row {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.5rem;
+    align-items: start;
+    padding: 1.75rem 0;
+    border-top: 1px solid #ccc;
+  }
+  .step-row:last-child { border-bottom: 1px solid #ccc; }
+  .step-num {
+    font-family: var(--display);
+    font-size: clamp(3rem, 8vw, 5.5rem);
+    line-height: 0.85;
+    border-bottom: var(--border-thick) solid var(--citron);
+    padding-bottom: 0.15rem;
+    min-width: 1.4ch;
+  }
+  .step-body h3 {
+    font-size: 1.6rem;
+    letter-spacing: 0.02em;
+  }
+  .step-body p {
+    margin-top: 0.5rem;
+    font-size: 0.92rem;
+    max-width: 50ch;
+    opacity: 0.85;
+  }
+  @media (min-width: 640px) {
+    .step-row { grid-template-columns: 140px 1fr; }
+  }
+
+  /* ============ CTA BLOCK ============ */
+  .cta-block {
+    display: block;
+    background: var(--black);
+    color: var(--white);
+    padding: clamp(4rem, 12vw, 8rem) clamp(1.25rem, 4vw, 4rem);
+    text-align: center;
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+    border-bottom: var(--border-thick) solid var(--black);
+  }
+  .cta-block:hover, .cta-block:focus-visible {
+    background: var(--citron);
+    color: var(--black);
+  }
+  .cta-block h2 {
+    font-size: clamp(3rem, 11vw, 7.5rem);
+    line-height: 0.92;
+  }
+  .cta-block .cta-sub {
+    margin-top: 1.25rem;
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .cta-block .cta-sub::after {
+    content: " →";
+  }
+
+  /* ============ FOOTER ============ */
+  .site-footer {
+    background: var(--black);
+    color: #d8d8cd;
+    border-top: var(--border-thick) solid var(--citron);
+    padding: clamp(2.5rem, 6vw, 4rem) clamp(1.25rem, 4vw, 4rem) 2rem;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  @media (min-width: 800px) {
+    .footer-grid { grid-template-columns: 1.2fr 1fr 1fr 1fr; }
+  }
+  .footer-logo img { height: 34px; margin-bottom: 1rem; }
+  .footer-col h4 {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--citron);
+    margin-bottom: 0.85rem;
+  }
+  .footer-col p, .footer-col a {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    display: block;
+  }
+  .footer-col a {
+    border-bottom: 1px solid transparent;
+    transition: border-color var(--transition-fast), color var(--transition-fast);
+    width: fit-content;
+  }
+  .footer-col a:hover, .footer-col a:focus-visible {
+    color: var(--citron);
+    border-color: var(--citron);
+  }
+  .footer-bottom {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #3a3a33;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.75rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.03em;
+    color: #8a8a7c;
+  }
+
+  /* ============ REDUCED MOTION ============ */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+    .cell:hover { transform: none; }
+    .feature-item:hover { transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header class="site-nav">
+  <div class="nav-inner">
+    <a href="#top" class="nav-logo" aria-label="Citron Baltimore home">
+      <img src="./logo-dark.png" alt="Citron Baltimore">
+    </a>
+
+    <nav class="nav-links" aria-label="Primary">
+      <div class="nav-link-item"><a class="nav-link" href="#top">Home</a></div>
+      <div class="nav-link-item"><a class="nav-link" href="#menus">Menus</a></div>
+      <div class="nav-link-item">
+        <button class="nav-trigger" id="megaTrigger" aria-expanded="false" aria-controls="megaMenu">
+          Private Events
+          <svg class="caret" viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M1 3l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+        </button>
+        <div class="mega-menu" id="megaMenu" role="menu">
+          <div class="mega-col">
+            <h3>Spaces</h3>
+            <ul role="none">
+              <li role="none"><a role="menuitem" href="#spaces"><span>Fireplace Room</span><span class="cap">20</span></a></li>
+              <li role="none"><a role="menuitem" href="#spaces"><span>Mirror Room</span><span class="cap">26</span></a></li>
+              <li role="none"><a role="menuitem" href="#spaces"><span>Club Room</span><span class="cap">50</span></a></li>
+              <li role="none"><a role="menuitem" href="#spaces"><span>Waterfront Terrace</span><span class="cap">50</span></a></li>
+              <li role="none"><a role="menuitem" href="#spaces"><span>Citron Bar</span><span class="cap">125</span></a></li>
+              <li role="none"><a role="menuitem" href="#spaces"><span>Waterfront Courtyard</span><span class="cap">200</span></a></li>
+              <li role="none"><a role="menuitem" href="#spaces"><span>The COVE</span><span class="cap">200</span></a></li>
+              <li role="none"><a role="menuitem" href="#spaces"><span>Entire Venue</span><span class="cap">500</span></a></li>
+              <li role="none"><a role="menuitem" href="#spaces"><span>Off-Premise Catering</span><span class="cap">Unlimited</span></a></li>
+            </ul>
+          </div>
+          <div class="mega-col">
+            <h3>Vendors &amp; Services</h3>
+            <ul role="none">
+              <li role="none"><a role="menuitem" href="#vendors">Floral &amp; Decor</a></li>
+              <li role="none"><a role="menuitem" href="#vendors">Linens &amp; Tabletop</a></li>
+              <li role="none"><a role="menuitem" href="#vendors">AV &amp; Production</a></li>
+              <li role="none"><a role="menuitem" href="#vendors">Event Planning</a></li>
+              <li role="none"><a role="menuitem" href="#vendors">Photography Partners</a></li>
+              <li role="none"><a role="menuitem" href="#vendors">Entertainment &amp; Music</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="nav-link-item"><a class="nav-link" href="#story">Our Story</a></div>
+      <div class="nav-link-item"><a class="nav-link" href="#contact">Contact</a></div>
+    </nav>
+
+    <div class="nav-cta">
+      <a class="btn btn-primary" href="https://citronbaltimore.com">Reserve a Table</a>
+    </div>
+
+    <button class="hamburger-btn" id="hamburgerBtn" aria-expanded="false" aria-controls="mobilePanel" aria-label="Open menu">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M2 5h20M2 12h20M2 19h20" stroke="currentColor" stroke-width="2" stroke-linecap="square"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<!-- ============ MOBILE PANEL ============ -->
+<div class="mobile-panel" id="mobilePanel">
+  <div class="mobile-panel-head">
+    <img src="./logo-light.png" alt="Citron Baltimore">
+    <button class="mobile-close" id="mobileCloseBtn" aria-label="Close menu">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M4 4l16 16M20 4L4 20" stroke="currentColor" stroke-width="2" stroke-linecap="square"/>
+      </svg>
+    </button>
+  </div>
+  <ul class="mobile-nav-list">
+    <li><a href="#top">Home</a></li>
+    <li><a href="#menus">Menus</a></li>
+    <li>
+      <button class="mobile-accordion-trigger" id="mobileAccordionTrigger" aria-expanded="false" aria-controls="mobileAccordionPanel">
+        Private Events
+        <span class="plus" aria-hidden="true"></span>
+      </button>
+      <div class="mobile-accordion-panel" id="mobileAccordionPanel">
+        <h4>Spaces</h4>
+        <ul>
+          <li><a href="#spaces"><span>Fireplace Room</span><span>20</span></a></li>
+          <li><a href="#spaces"><span>Mirror Room</span><span>26</span></a></li>
+          <li><a href="#spaces"><span>Club Room</span><span>50</span></a></li>
+          <li><a href="#spaces"><span>Waterfront Terrace</span><span>50</span></a></li>
+          <li><a href="#spaces"><span>Citron Bar</span><span>125</span></a></li>
+          <li><a href="#spaces"><span>Waterfront Courtyard</span><span>200</span></a></li>
+          <li><a href="#spaces"><span>The COVE</span><span>200</span></a></li>
+          <li><a href="#spaces"><span>Entire Venue</span><span>500</span></a></li>
+          <li><a href="#spaces"><span>Off-Premise Catering</span><span>Unlimited</span></a></li>
+        </ul>
+        <h4>Vendors &amp; Services</h4>
+        <ul>
+          <li><a href="#vendors">Floral &amp; Decor</a></li>
+          <li><a href="#vendors">Linens &amp; Tabletop</a></li>
+          <li><a href="#vendors">AV &amp; Production</a></li>
+          <li><a href="#vendors">Event Planning</a></li>
+          <li><a href="#vendors">Photography Partners</a></li>
+          <li><a href="#vendors">Entertainment &amp; Music</a></li>
+        </ul>
+      </div>
+    </li>
+    <li><a href="#story">Our Story</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="mobile-nav-list mobile-cta">
+    <a class="btn btn-primary" href="https://citronbaltimore.com">Reserve a Table</a>
+  </div>
+</div>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" aria-label="Introduction">
+    <div class="hero-grid">
+      <div class="hero-text">
+        <p class="hero-eyebrow">Quarry Lake, Baltimore County</p>
+        <h1 class="hero-title" id="scrambleTarget" data-final="CITRON">CITRON</h1>
+        <p class="hero-tagline">14,000 EVENTS. FIVE PRESIDENTS. ONE LAKE.</p>
+        <p class="hero-sub">An upscale waterfront restaurant and private event venue where a scratch kitchen, a full sushi bar, and a forty-year catering legacy share the same address.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-primary" href="https://citronbaltimore.com">Reserve a Table</a>
+          <a class="btn btn-outline-light" href="#spaces">Explore Private Events</a>
+        </div>
+      </div>
+      <div class="hero-media">
+        <img src="./hero.jpg" alt="Sushi platter at Citron Baltimore">
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FEATURES ============ -->
+  <section class="features" id="menus" aria-label="Features">
+    <div class="features-head">
+      <h2>Four reasons regulars never leave.</h2>
+    </div>
+    <div class="features-grid">
+
+      <div class="feature-item">
+        <div class="feature-icon">
+          <svg viewBox="0 0 48 48" aria-hidden="true">
+            <path d="M12 6v16a6 6 0 0012 0V6M18 6v14M24 6v10" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M36 6c-4 4-4 10 0 14v22M36 20c4 0 6-2 6-6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <p class="feature-label">The Kitchen</p>
+        <h3 class="feature-title">Seasonal Modern American</h3>
+        <p class="feature-copy">Executive Chef Mary Hersh runs a scratch kitchen built on center-cut steaks, day-boat seafood, and house-made pastas that change with the season.</p>
+      </div>
+
+      <div class="feature-item">
+        <div class="feature-icon">
+          <svg viewBox="0 0 48 48" aria-hidden="true">
+            <rect x="8" y="14" width="32" height="22" stroke-linejoin="round"/>
+            <path d="M8 22h32M16 14v22M24 14v22M32 14v22" />
+          </svg>
+        </div>
+        <p class="feature-label">Raw Bar</p>
+        <h3 class="feature-title">Full Sushi Program</h3>
+        <p class="feature-copy">A dedicated sushi bar turning out precision cuts and bold rolls alongside the dining room menu, every night it's open.</p>
+      </div>
+
+      <div class="feature-item">
+        <div class="feature-icon">
+          <svg viewBox="0 0 48 48" aria-hidden="true">
+            <path d="M4 30c6-8 8 8 14 0s8 8 14 0 8 8 12 0" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M24 6v14M18 12l6-6 6 6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <p class="feature-label">The View</p>
+        <h3 class="feature-title">Heated Waterfront Terraces</h3>
+        <p class="feature-copy">Three hundred seats between the dining room and the lake-facing terraces, warmed for cool nights so the view never closes.</p>
+      </div>
+
+      <div class="feature-item">
+        <div class="feature-icon">
+          <svg viewBox="0 0 48 48" aria-hidden="true">
+            <path d="M24 6c6 6 10 12 10 18a10 10 0 01-20 0c0-6 4-12 10-18z" stroke-linejoin="round"/>
+            <path d="M14 40h20M24 32v8" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <p class="feature-label">The Cellar</p>
+        <h3 class="feature-title">Award-Winning Wine</h3>
+        <p class="feature-copy">Wine Spectator Award of Excellence, seven years running, 2019 through 2025, plus a 2025 FINE WINE World's Best nod.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ STATS ============ -->
+  <section class="stats" aria-label="By the numbers">
+    <div class="stats-grid">
+      <div class="stat-block">
+        <div class="stat-number" data-count-to="14000" data-suffix="+">0</div>
+        <p class="stat-label">Events Catered</p>
+      </div>
+      <div class="stat-block">
+        <div class="stat-number" data-count-to="300">0</div>
+        <p class="stat-label">Dining Seats</p>
+      </div>
+      <div class="stat-block">
+        <div class="stat-number" data-count-to="7">0</div>
+        <p class="stat-label">Consecutive Wine Spectator Awards, 2019-2025</p>
+      </div>
+      <div class="stat-block">
+        <div class="stat-number" data-count-to="500">0</div>
+        <p class="stat-label">Max Guest Capacity</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TESTIMONIAL ============ -->
+  <section class="testimonial" aria-label="Testimonial">
+    <div class="testimonial-inner">
+      <svg class="testimonial-mark" viewBox="0 0 64 48" aria-hidden="true">
+        <path d="M0 48V28C0 12 9 2 24 0v10c-8 2-13 8-13 16h13v22H0zm34 0V28c0-16 9-26 24-28v10c-8 2-13 8-13 16h13v22H34z"/>
+      </svg>
+      <p class="testimonial-quote">Forty years, five presidents, and one restaurant that still shows up at your table like it's the first party they've ever thrown.</p>
+      <p class="testimonial-credit">Charles Levine, Owner, Citron Baltimore &amp; Citron Caterers</p>
+    </div>
+  </section>
+
+  <!-- ============ MEDIA ============ -->
+  <section class="media-section" aria-label="Waterfront terrace at dusk">
+    <div class="media-section-content">
+      <img src="./media.jpg" alt="Citron Baltimore terrace at dusk" loading="lazy">
+      <div class="media-scrim">
+        <h2>The lake doesn't close at sundown.</h2>
+        <p>Heated terraces and handcrafted cocktails keep the waterfront running long after the sun drops behind Quarry Lake.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SPACES ============ -->
+  <section class="grid-section" id="spaces" aria-label="Event spaces">
+    <div class="grid-section-head">
+      <h2>Nine spaces. Zero compromise.</h2>
+      <p>From a 20-person fireside dinner to a 500-guest full-venue takeover, or catering that leaves the building entirely.</p>
+    </div>
+    <div class="cell-grid">
+      <div class="cell">
+        <span class="cell-name">Fireplace Room</span>
+        <span class="cell-cap"><span class="num">20</span> guests</span>
+      </div>
+      <div class="cell">
+        <span class="cell-name">Mirror Room</span>
+        <span class="cell-cap"><span class="num">26</span> guests</span>
+      </div>
+      <div class="cell">
+        <span class="cell-name">Club Room</span>
+        <span class="cell-cap"><span class="num">50</span> guests</span>
+      </div>
+      <div class="cell">
+        <span class="cell-name">Waterfront Terrace</span>
+        <span class="cell-cap"><span class="num">50</span> guests</span>
+      </div>
+      <div class="cell">
+        <span class="cell-name">Citron Bar</span>
+        <span class="cell-cap"><span class="num">125</span> guests</span>
+      </div>
+      <div class="cell">
+        <span class="cell-name">Waterfront Courtyard</span>
+        <span class="cell-cap"><span class="num">200</span> guests</span>
+      </div>
+      <div class="cell">
+        <span class="cell-name">The COVE</span>
+        <span class="cell-cap"><span class="num">200</span> guests</span>
+      </div>
+      <div class="cell">
+        <span class="cell-name">Entire Venue</span>
+        <span class="cell-cap"><span class="num">500</span> guests</span>
+      </div>
+      <div class="cell">
+        <span class="cell-name">Off-Premise Catering</span>
+        <span class="cell-cap">Unlimited</span>
+      </div>
+    </div>
+    <div class="grid-section-cta">
+      <a class="btn btn-outline-dark" href="https://citronbaltimore.com">Book Your Event</a>
+    </div>
+  </section>
+
+  <!-- ============ VENDORS ============ -->
+  <section class="grid-section" id="vendors" aria-label="Vendors and services">
+    <div class="grid-section-head">
+      <h2>Vendors we already trust.</h2>
+      <p>A vetted bench of partners who already know the room, the load-in, and the lake light at golden hour.</p>
+    </div>
+    <div class="cell-grid">
+      <div class="cell">
+        <span class="cell-name">Floral &amp; Decor</span>
+        <span class="cell-cap">Full service</span>
+      </div>
+      <div class="cell">
+        <span class="cell-name">Linens &amp; Tabletop</span>
+        <span class="cell-cap">Full service</span>
+      </div>
+      <div class="cell">
+        <span class="cell-name">AV &amp; Production</span>
+        <span class="cell-cap">Savant-powered</span>
+      </div>
+      <div class="cell">
+        <span class="cell-name">Event Planning</span>
+        <span class="cell-cap">Full service</span>
+      </div>
+      <div class="cell">
+        <span class="cell-name">Photography Partners</span>
+        <span class="cell-cap">Preferred list</span>
+      </div>
+      <div class="cell">
+        <span class="cell-name">Entertainment &amp; Music</span>
+        <span class="cell-cap">Preferred list</span>
+      </div>
+    </div>
+    <div class="grid-section-cta">
+      <a class="btn btn-outline-dark" href="https://citronbaltimore.com">Plan Your Celebration</a>
+    </div>
+  </section>
+
+  <!-- ============ STEPS ============ -->
+  <section class="steps" id="story" aria-label="How private events work">
+    <div class="steps-head">
+      <h2>How private events work.</h2>
+    </div>
+    <div class="steps-list">
+      <div class="step-row">
+        <div class="step-num">01</div>
+        <div class="step-body">
+          <h3>Tour the space</h3>
+          <p>Walk all nine rooms and terraces on the water, from the Fireplace Room to the full COVE, and see the room your event actually needs.</p>
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">02</div>
+        <div class="step-body">
+          <h3>Build your menu</h3>
+          <p>Chef Mary Hersh's kitchen builds around your event, from a passed-app cocktail hour to a full sushi bar buildout.</p>
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">03</div>
+        <div class="step-body">
+          <h3>Confirm vendors</h3>
+          <p>Florals, linens, AV, planning, photography, entertainment: pull from our preferred list or bring your own crew.</p>
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">04</div>
+        <div class="step-body">
+          <h3>Celebrate</h3>
+          <p>Forty years and 14,000 events in, the team runs the room so you don't have to. Presidents included.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CTA ============ -->
+  <a class="cta-block" href="https://citronbaltimore.com" aria-label="Book your event at Citron Baltimore">
+    <h2>Book Your<br>Event</h2>
+    <p class="cta-sub">Start the conversation</p>
+  </a>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer" id="contact">
+  <div class="footer-grid">
+    <div class="footer-col footer-logo">
+      <img src="./logo-light.png" alt="Citron Baltimore">
+      <p>Waterfront dining and private events at Quarry Lake. Family owned by Charles &amp; Susan Levine since November 2016.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Visit</h4>
+      <p>2605 Quarry Lake Dr<br>Baltimore, MD 21209</p>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <a href="tel:4103630900">410-363-0900</a>
+      <a href="tel:4103630900">Events: ext. 2</a>
+      <a href="mailto:events@citronbaltimore.com">events@citronbaltimore.com</a>
+    </div>
+    <div class="footer-col">
+      <h4>Hours</h4>
+      <p>Dinner: Wed-Sun from 4 PM<br>Happy Hour: 4-6:30 PM<br>Private Events: 7 days a week</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 Citron Baltimore. Tenth anniversary, November 2026.</span>
+    <span>Quarry Lake, Baltimore County, MD</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ============ MEGA MENU (desktop) ============ */
+  var megaTrigger = document.getElementById('megaTrigger');
+  var megaMenu = document.getElementById('megaMenu');
+
+  function openMega() {
+    megaMenu.classList.add('is-open');
+    megaTrigger.setAttribute('aria-expanded', 'true');
+  }
+  function closeMega() {
+    megaMenu.classList.remove('is-open');
+    megaTrigger.setAttribute('aria-expanded', 'false');
+  }
+  function toggleMega() {
+    if (megaMenu.classList.contains('is-open')) { closeMega(); }
+    else { openMega(); }
+  }
+
+  megaTrigger.addEventListener('click', function (e) {
+    e.stopPropagation();
+    toggleMega();
+  });
+
+  document.addEventListener('click', function (e) {
+    if (!megaMenu.contains(e.target) && e.target !== megaTrigger) {
+      closeMega();
+    }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      closeMega();
+      closeMobileAccordion();
+    }
+  });
+
+  /* ============ MOBILE PANEL ============ */
+  var hamburgerBtn = document.getElementById('hamburgerBtn');
+  var mobileCloseBtn = document.getElementById('mobileCloseBtn');
+  var mobilePanel = document.getElementById('mobilePanel');
+
+  function openMobilePanel() {
+    mobilePanel.classList.add('is-open');
+    hamburgerBtn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMobilePanel() {
+    mobilePanel.classList.remove('is-open');
+    hamburgerBtn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  hamburgerBtn.addEventListener('click', openMobilePanel);
+  mobileCloseBtn.addEventListener('click', closeMobilePanel);
+
+  /* Close mobile panel when a nav link within it is clicked (anchor jump) */
+  mobilePanel.querySelectorAll('.mobile-nav-list > li > a').forEach(function (link) {
+    link.addEventListener('click', closeMobilePanel);
+  });
+  document.querySelectorAll('.mobile-accordion-panel a').forEach(function (link) {
+    link.addEventListener('click', closeMobilePanel);
+  });
+
+  /* ============ MOBILE ACCORDION ============ */
+  var mobileAccordionTrigger = document.getElementById('mobileAccordionTrigger');
+  var mobileAccordionPanel = document.getElementById('mobileAccordionPanel');
+
+  function closeMobileAccordion() {
+    mobileAccordionPanel.classList.remove('is-open');
+    mobileAccordionTrigger.setAttribute('aria-expanded', 'false');
+  }
+  function toggleMobileAccordion() {
+    var isOpen = mobileAccordionPanel.classList.contains('is-open');
+    if (isOpen) { closeMobileAccordion(); }
+    else {
+      mobileAccordionPanel.classList.add('is-open');
+      mobileAccordionTrigger.setAttribute('aria-expanded', 'true');
+    }
+  }
+  mobileAccordionTrigger.addEventListener('click', toggleMobileAccordion);
+
+  /* ============ TEXT SCRAMBLE ON HERO HEADLINE ============ */
+  var scrambleEl = document.getElementById('scrambleTarget');
+  var finalText = scrambleEl.getAttribute('data-final') || scrambleEl.textContent;
+  var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+  function randomChar() {
+    return chars[Math.floor(Math.random() * chars.length)];
+  }
+
+  function runScramble() {
+    var frame = 0;
+    var totalFrames = 18;
+    var revealEvery = Math.ceil(totalFrames / finalText.length);
+    var interval = setInterval(function () {
+      var revealedCount = Math.min(finalText.length, Math.floor(frame / revealEvery));
+      var out = '';
+      for (var i = 0; i < finalText.length; i++) {
+        if (i < revealedCount) {
+          out += finalText[i];
+        } else if (finalText[i] === ' ') {
+          out += ' ';
+        } else {
+          out += randomChar();
+        }
+      }
+      scrambleEl.textContent = out;
+      frame++;
+      if (revealedCount >= finalText.length) {
+        clearInterval(interval);
+        scrambleEl.textContent = finalText;
+      }
+    }, 45);
+  }
+
+  if (!prefersReducedMotion) {
+    scrambleEl.textContent = finalText;
+    runScramble();
+  } else {
+    scrambleEl.textContent = finalText;
+  }
+
+  /* ============ COUNTER ANIMATION ON STATS ============ */
+  var statNumbers = document.querySelectorAll('.stat-number');
+
+  function animateCount(el) {
+    var target = parseInt(el.getAttribute('data-count-to'), 10) || 0;
+    var suffix = el.getAttribute('data-suffix') || '';
+
+    if (prefersReducedMotion) {
+      el.textContent = target.toLocaleString('en-US') + suffix;
+      return;
+    }
+
+    var duration = 1400;
+    var startTime = null;
+
+    function step(timestamp) {
+      if (startTime === null) { startTime = timestamp; }
+      var progress = Math.min((timestamp - startTime) / duration, 1);
+      var eased = 1 - Math.pow(1 - progress, 3);
+      var current = Math.floor(eased * target);
+      el.textContent = current.toLocaleString('en-US') + suffix;
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        el.textContent = target.toLocaleString('en-US') + suffix;
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
+  if ('IntersectionObserver' in window) {
+    var statObserver = new IntersectionObserver(function (entries, observer) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          animateCount(entry.target);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    statNumbers.forEach(function (el) {
+      statObserver.observe(el);
+    });
+  } else {
+    statNumbers.forEach(animateCount);
+  }
+
+})();
+</script>
+
+</body>
+</html>

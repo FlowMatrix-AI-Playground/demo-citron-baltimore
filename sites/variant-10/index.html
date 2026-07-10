@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <title>Ten Years at the Quarry | Citron Baltimore</title>
+<meta name="description" content="Ten years on the water: the story of Charles and Susan Levine, Citron Caterers, and the waterfront restaurant and event venue they built at Quarry Lake, Baltimore.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cool-navy:#1F2A33;
+    --cool-navy-deep:#141C23;
+    --silver:#C7D0D6;
+    --amber:#C79A4B;
+    --terracotta:#C06E52;
+    --gold:#B08D3E;
+    --citron:#C4D809;
+    --citron-dark:#6B7A00;
+    --cream:#FAF9F5;
+    --paper:#F4F2EC;
+    --ink:#1A1A1A;
+    --body-gray:#4F4F4F;
+    --border:#E2E0D8;
+    --radius:6px;
+    --shadow-md:0 10px 30px rgba(20,20,20,0.16);
+    --maxw:1180px;
+  }
+  *,*::before,*::after{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *,*::before,*::after{animation-duration:0.01ms !important;animation-iteration-count:1 !important;transition-duration:0.01ms !important;scroll-behavior:auto !important;}
+  }
+  body{
+    margin:0;font-family:'Atkinson Hyperlegible',sans-serif;color:var(--ink);background:var(--cream);
+    line-height:1.65;-webkit-font-smoothing:antialiased;opacity:0;
+  }
+  body.page-ready{opacity:1;transition:opacity 320ms ease;}
+  h1,h2,h3,h4{font-family:'Crimson Pro',serif;font-weight:700;line-height:1.2;margin:0 0 0.5em;}
+  h1{font-size:clamp(2.4rem,6vw,4.4rem);}
+  h2{font-size:clamp(1.8rem,3.6vw,2.8rem);}
+  h3{font-size:1.35rem;}
+  p{margin:0 0 1em;}
+  a{color:inherit;text-decoration:none;cursor:pointer;}
+  img{max-width:100%;display:block;}
+  ul,ol{margin:0;padding:0;list-style:none;}
+  button{font-family:inherit;cursor:pointer;}
+  .container{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+  .eyebrow{display:inline-block;font-family:'Atkinson Hyperlegible',sans-serif;font-size:0.78rem;letter-spacing:0.16em;text-transform:uppercase;font-weight:700;margin-bottom:1em;}
+  section{padding:100px 0;position:relative;}
+  .skip-link{position:absolute;left:-9999px;top:0;background:var(--gold);color:#fff;padding:12px 20px;z-index:1000;}
+  .skip-link:focus{left:12px;top:12px;}
+  a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+
+  /* Chapter tone backgrounds */
+  .chapter-inverted{background:var(--cool-navy-deep);color:var(--silver);}
+  .chapter-inverted h1,.chapter-inverted h2,.chapter-inverted h3{color:#fff;}
+  .chapter-inverted p{color:rgba(255,255,255,0.78);}
+  .chapter-default{background:var(--cream);color:var(--ink);}
+  .chapter-default h2,.chapter-default h3{color:var(--cool-navy);}
+  .chapter-default p{color:var(--body-gray);}
+  .chapter-muted{background:var(--paper);color:var(--ink);}
+  .chapter-muted h2,.chapter-muted h3{color:#8a4a37;}
+  .chapter-muted p{color:var(--body-gray);}
+  .chapter-accent{background:linear-gradient(135deg,#2b3a40,#1F2A33 60%);color:#fff;}
+  .chapter-accent h2{color:#fff;}
+  .chapter-accent p{color:rgba(255,255,255,0.8);}
+
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    padding:14px 28px;border-radius:var(--radius);font-weight:700;font-size:1rem;
+    border:1.5px solid transparent;transition:background 200ms ease,color 200ms ease,border-color 200ms ease,transform 200ms ease;
+    min-height:44px;
+  }
+  .btn-gold{background:var(--gold);color:#fff;}
+  .btn-gold:hover,.btn-gold:focus-visible{background:#8f7130;transform:translateY(-1px);}
+  .btn-outline-light{background:transparent;color:#fff;border-color:rgba(255,255,255,0.55);}
+  .btn-outline-light:hover,.btn-outline-light:focus-visible{background:#fff;color:var(--cool-navy);}
+  .btn-outline-navy{background:transparent;color:var(--cool-navy);border-color:var(--cool-navy);}
+  .btn-outline-navy:hover,.btn-outline-navy:focus-visible{background:var(--cool-navy);color:#fff;}
+
+  /* Header / nav */
+  .site-header{position:fixed;top:0;left:0;right:0;z-index:300;background:rgba(20,28,35,0.72);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,0.08);transition:background 300ms ease;}
+  .site-header.scrolled{background:rgba(20,28,35,0.94);}
+  .header-inner{max-width:var(--maxw);margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:72px;gap:20px;}
+  .logo img{height:28px;width:auto;}
+  .main-nav{flex:1;display:flex;justify-content:center;}
+  .main-nav > ul{display:flex;align-items:center;gap:4px;}
+  .nav-link{position:relative;display:inline-flex;align-items:center;gap:6px;padding:10px 14px;font-weight:600;font-size:0.92rem;color:#fff;background:none;border:none;min-height:44px;font-family:'Atkinson Hyperlegible',sans-serif;}
+  .nav-link::after{content:"";position:absolute;left:14px;right:14px;bottom:6px;height:2px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform 220ms ease;}
+  .nav-link:hover::after,.nav-link:focus-visible::after{transform:scaleX(1);}
+  .chevron{transition:transform 200ms ease;}
+  .has-mega:hover .chevron,.has-mega.open .chevron{transform:rotate(180deg);}
+  .has-mega{position:relative;}
+  .mega-menu{
+    position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%) translateY(8px);
+    width:620px;max-width:90vw;background:#1c262e;border:1px solid rgba(255,255,255,0.12);
+    border-radius:var(--radius);box-shadow:var(--shadow-md);padding:28px;
+    display:grid;grid-template-columns:1fr 1fr;gap:32px;
+    opacity:0;visibility:hidden;pointer-events:none;transition:opacity 200ms ease,transform 200ms ease,visibility 200ms;z-index:50;
+  }
+  .has-mega:hover .mega-menu,.has-mega:focus-within .mega-menu,.has-mega.open .mega-menu{opacity:1;visibility:visible;pointer-events:auto;transform:translateX(-50%) translateY(0);}
+  .mega-col h3{font-family:'Atkinson Hyperlegible',sans-serif;font-size:0.74rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--amber);font-weight:700;margin-bottom:14px;}
+  .mega-col ul{display:flex;flex-direction:column;gap:2px;}
+  .mega-col a{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:8px 10px;border-radius:4px;font-size:0.92rem;color:#fff;font-weight:500;transition:background 150ms ease,color 150ms ease;}
+  .mega-col a:hover,.mega-col a:focus-visible{background:rgba(255,255,255,0.08);color:var(--amber);}
+  .mega-col .cap{font-size:0.78rem;color:rgba(255,255,255,0.55);white-space:nowrap;font-weight:400;}
+  .reserve-cta{flex-shrink:0;}
+  .hamburger{display:none;background:none;border:1.5px solid rgba(255,255,255,0.5);border-radius:6px;width:44px;height:44px;align-items:center;justify-content:center;}
+  .mobile-menu{display:none;position:fixed;inset:72px 0 0 0;background:var(--cool-navy-deep);overflow-y:auto;z-index:290;padding:20px 24px 40px;}
+  .mobile-menu.open{display:block;}
+  .mobile-menu ul.mobile-links{display:flex;flex-direction:column;}
+  .mobile-menu .mobile-link{display:flex;align-items:center;justify-content:space-between;padding:16px 4px;border-bottom:1px solid rgba(255,255,255,0.12);font-weight:600;font-size:1.05rem;color:#fff;min-height:44px;}
+  .mobile-events-toggle{width:100%;text-align:left;background:none;border:none;}
+  .mobile-submenu{display:none;padding:6px 0 14px 12px;}
+  .mobile-submenu.open{display:block;}
+  .mobile-submenu h3{font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--amber);margin:14px 0 8px;}
+  .mobile-submenu a{display:flex;justify-content:space-between;padding:10px 4px;font-size:0.94rem;color:#fff;min-height:44px;align-items:center;}
+  .mobile-submenu .cap{color:rgba(255,255,255,0.55);font-size:0.8rem;}
+  .mobile-reserve{margin-top:20px;display:block;text-align:center;}
+
+  /* Chapter dot sidebar */
+  .chapter-dots{
+    position:fixed;right:22px;top:50%;transform:translateY(-50%);
+    z-index:150;display:flex;flex-direction:column;gap:14px;
+  }
+  .chapter-dots a{
+    width:10px;height:10px;border-radius:50%;background:rgba(120,130,138,0.4);
+    display:block;position:relative;transition:background 250ms ease,transform 250ms ease;
+  }
+  .chapter-dots a::before{
+    content:attr(data-label);position:absolute;right:22px;top:50%;transform:translateY(-50%);
+    white-space:nowrap;font-size:0.75rem;font-family:'Atkinson Hyperlegible',sans-serif;
+    color:var(--ink);background:#fff;padding:4px 10px;border-radius:4px;border:1px solid var(--border);
+    opacity:0;pointer-events:none;transition:opacity 180ms ease;box-shadow:var(--shadow-md);
+  }
+  .chapter-dots a:hover::before,.chapter-dots a:focus-visible::before{opacity:1;}
+  .chapter-dots a.active{background:var(--gold);transform:scale(1.4);}
+  @media (max-width:900px){ .chapter-dots{display:none;} }
+
+  /* Hero */
+  .hero{
+    min-height:100vh;position:relative;display:flex;align-items:flex-end;
+    color:#fff;overflow:hidden;
+  }
+  .hero-bg{position:absolute;inset:0;overflow:hidden;}
+  .hero-bg img{width:100%;height:110%;object-fit:cover;transform:translateY(0);will-change:transform;}
+  .hero-bg::after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(0deg, rgba(15,20,25,0.92) 0%, rgba(20,28,35,0.55) 45%, rgba(31,42,51,0.35) 100%);
+  }
+  .hero-content{position:relative;z-index:2;padding:0 24px 100px;max-width:var(--maxw);margin:0 auto;width:100%;}
+  .hero-content .eyebrow{color:var(--silver);}
+  .hero-content p{color:rgba(255,255,255,0.82);max-width:56ch;font-size:1.1rem;}
+  .scroll-hint{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);z-index:2;color:rgba(255,255,255,0.7);font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:8px;}
+  .scroll-hint .line{width:1px;height:34px;background:rgba(255,255,255,0.4);animation:scrollpulse 2.2s ease-in-out infinite;}
+  @keyframes scrollpulse{0%,100%{opacity:0.3;}50%{opacity:1;}}
+  @media (prefers-reduced-motion: reduce){ .scroll-hint .line{animation:none;} }
+
+  /* Reveal-on-scroll utility */
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity 700ms ease, transform 700ms ease;}
+  .reveal.in-view{opacity:1;transform:translateY(0);}
+  @media (prefers-reduced-motion: reduce){ .reveal{opacity:1;transform:none;transition:none;} }
+
+  /* Narrative / rich text */
+  .narrative{max-width:66ch;margin:0 auto;}
+  .narrative .drop{font-size:1.2rem;}
+  .narrative p{font-size:1.15rem;margin-bottom:1.3em;}
+
+  /* Media break */
+  .media-break{position:relative;height:70vh;min-height:420px;overflow:hidden;}
+  .media-break img{width:100%;height:100%;object-fit:cover;}
+  .media-break::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(20,28,35,0.25) 0%, rgba(20,28,35,0.75) 100%);}
+  .media-caption{position:absolute;left:0;right:0;bottom:0;padding:40px;max-width:var(--maxw);margin:0 auto;color:#fff;}
+  .media-caption h3{color:#fff;margin-bottom:4px;}
+  .media-caption p{color:rgba(255,255,255,0.85);margin:0;max-width:56ch;}
+
+  /* Features sequential */
+  .feature-list{display:flex;flex-direction:column;gap:64px;max-width:820px;margin:0 auto;}
+  .feature-item{display:grid;grid-template-columns:80px 1fr;gap:28px;align-items:start;}
+  .feature-num{font-family:'Crimson Pro',serif;font-weight:700;font-size:2.6rem;color:var(--terracotta);}
+  .feature-item h3{margin-bottom:8px;}
+
+  /* Stats */
+  .stats-wrap{text-align:center;}
+  .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;margin-top:12px;}
+  .stat-num{font-family:'Crimson Pro',serif;font-weight:700;font-size:clamp(2.2rem,5vw,3.2rem);color:var(--citron);}
+  .stat-label{font-size:0.85rem;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.72);margin-top:8px;font-weight:600;}
+
+  /* Timeline with SVG line */
+  .timeline-wrap{max-width:760px;margin:0 auto;position:relative;}
+  .timeline-svg{position:absolute;left:19px;top:0;bottom:0;width:2px;height:100%;}
+  .timeline-svg line{stroke:var(--terracotta);stroke-width:2;stroke-dasharray:1000;stroke-dashoffset:1000;transition:stroke-dashoffset 1.2s ease;}
+  .timeline-svg.drawn line{stroke-dashoffset:0;}
+  @media (prefers-reduced-motion: reduce){ .timeline-svg line{stroke-dashoffset:0 !important;transition:none;} }
+  .tl-item{position:relative;padding-left:56px;padding-bottom:44px;}
+  .tl-item:last-child{padding-bottom:0;}
+  .tl-dot{position:absolute;left:12px;top:4px;width:16px;height:16px;border-radius:50%;background:var(--terracotta);border:3px solid var(--cream);box-shadow:0 0 0 2px var(--terracotta);}
+  .tl-year{font-family:'Crimson Pro',serif;font-weight:700;font-size:1.2rem;color:var(--cool-navy);margin-bottom:4px;}
+
+  /* Spaces chapter */
+  .spaces-list{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:900px;margin:0 auto;}
+  .space-row{
+    display:flex;justify-content:space-between;align-items:baseline;gap:12px;
+    padding:16px 20px;border-bottom:1px solid var(--border);scroll-margin-top:100px;
+  }
+  .space-row .name{font-family:'Crimson Pro',serif;font-weight:600;font-size:1.1rem;color:var(--cool-navy);}
+  .space-row .cap{font-size:0.88rem;color:var(--body-gray);white-space:nowrap;}
+
+  .vendors-list{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:960px;margin:0 auto;}
+  .vendor-item{padding:20px;border:1px solid rgba(255,255,255,0.14);border-radius:var(--radius);scroll-margin-top:100px;}
+  .vendor-item h3{color:#fff;font-size:1.05rem;margin-bottom:6px;}
+  .vendor-item p{color:rgba(255,255,255,0.72);font-size:0.9rem;margin:0;}
+
+  /* Testimonial chapters */
+  .testi-chapter{max-width:760px;margin:0 auto;text-align:center;}
+  .testi-chapter .stars{color:var(--terracotta);margin-bottom:18px;font-size:1.3rem;letter-spacing:4px;}
+  .testi-chapter blockquote{margin:0 0 22px;font-family:'Crimson Pro',serif;font-size:clamp(1.3rem,2.4vw,1.7rem);font-style:italic;color:var(--ink);line-height:1.5;}
+  .testi-chapter .name{font-weight:700;color:var(--cool-navy);}
+  .testi-chapter .role{font-size:0.88rem;color:var(--body-gray);}
+
+  /* Closing CTA */
+  .cta-close{text-align:center;background:radial-gradient(circle at 50% 0%, #2a1f16 0%, #141414 70%);}
+  .cta-close h2{color:#fff;}
+  .cta-close p{color:rgba(255,255,255,0.72);max-width:56ch;margin:0 auto 28px;}
+  .cta-row{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+  .contact-strip{margin-top:48px;padding-top:36px;border-top:1px solid rgba(255,255,255,0.14);display:flex;justify-content:center;gap:40px;flex-wrap:wrap;color:rgba(255,255,255,0.7);font-size:0.94rem;}
+  .contact-strip a{color:#fff;font-weight:600;}
+  .contact-strip a:hover{color:var(--gold);text-decoration:underline;}
+
+  .site-footer{background:#0f1418;color:rgba(255,255,255,0.6);padding:36px 0;text-align:center;font-size:0.85rem;}
+
+  @media (max-width:1024px){
+    .stats-row{grid-template-columns:repeat(2,1fr);row-gap:28px;}
+    .spaces-list{grid-template-columns:1fr;}
+    .vendors-list{grid-template-columns:1fr 1fr;}
+  }
+  @media (max-width:900px){
+    .main-nav,.reserve-cta{display:none;}
+    .hamburger{display:flex;}
+    .feature-item{grid-template-columns:56px 1fr;gap:18px;}
+    .feature-num{font-size:2rem;}
+  }
+  @media (max-width:640px){
+    section{padding:64px 0;}
+    .vendors-list{grid-template-columns:1fr;}
+    .hero-content{padding-bottom:64px;}
+    .contact-strip{flex-direction:column;gap:12px;}
+  }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="site-header" id="siteHeader">
+  <div class="header-inner">
+    <a href="#hero" class="logo" aria-label="Citron Baltimore home">
+      <img src="./logo-light.png" alt="Citron Baltimore">
+    </a>
+    <nav class="main-nav" aria-label="Primary">
+      <ul>
+        <li><a href="#hero" class="nav-link">Home</a></li>
+        <li><a href="#menus" class="nav-link">Menus</a></li>
+        <li class="has-mega" id="megaWrap">
+          <button class="nav-link mega-trigger" id="megaTrigger" aria-expanded="false" aria-controls="megaMenu">
+            Private Events
+            <svg class="chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="mega-menu" id="megaMenu" role="menu">
+            <div class="mega-col">
+              <h3>Spaces</h3>
+              <ul>
+                <li><a href="#space-fireplace-room" role="menuitem">Fireplace Room <span class="cap">20 guests</span></a></li>
+                <li><a href="#space-mirror-room" role="menuitem">Mirror Room <span class="cap">26 guests</span></a></li>
+                <li><a href="#space-club-room" role="menuitem">Club Room <span class="cap">50 guests</span></a></li>
+                <li><a href="#space-waterfront-terrace" role="menuitem">Waterfront Terrace <span class="cap">50 guests</span></a></li>
+                <li><a href="#space-citron-bar" role="menuitem">Citron Bar <span class="cap">125 guests</span></a></li>
+                <li><a href="#space-waterfront-courtyard" role="menuitem">Waterfront Courtyard <span class="cap">200 guests</span></a></li>
+                <li><a href="#space-the-cove" role="menuitem">The COVE <span class="cap">200 guests</span></a></li>
+                <li><a href="#space-entire-venue" role="menuitem">Entire Venue <span class="cap">500 guests</span></a></li>
+                <li><a href="#space-off-premise-catering" role="menuitem">Off-Premise Catering <span class="cap">unlimited</span></a></li>
+              </ul>
+            </div>
+            <div class="mega-col">
+              <h3>Vendors &amp; Services</h3>
+              <ul>
+                <li><a href="#vendor-floral-decor" role="menuitem">Floral &amp; Decor</a></li>
+                <li><a href="#vendor-linens-tabletop" role="menuitem">Linens &amp; Tabletop</a></li>
+                <li><a href="#vendor-av-production" role="menuitem">AV &amp; Production</a></li>
+                <li><a href="#vendor-event-planning" role="menuitem">Event Planning</a></li>
+                <li><a href="#vendor-photography" role="menuitem">Photography Partners</a></li>
+                <li><a href="#vendor-entertainment" role="menuitem">Entertainment &amp; Music</a></li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li><a href="#story" class="nav-link">Our Story</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+      </ul>
+    </nav>
+    <a href="#contact" class="btn btn-gold reserve-cta">Reserve a Table</a>
+    <button class="hamburger" id="hamburgerBtn" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">
+      <svg width="20" height="16" viewBox="0 0 20 16" fill="none" aria-hidden="true"><path d="M0 1h20M0 8h20M0 15h20" stroke="#ffffff" stroke-width="2"/></svg>
+    </button>
+  </div>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <ul class="mobile-links">
+      <li><a href="#hero" class="mobile-link">Home</a></li>
+      <li><a href="#menus" class="mobile-link">Menus</a></li>
+      <li>
+        <button class="mobile-link mobile-events-toggle" id="mobileEventsToggle" aria-expanded="false" aria-controls="mobileSubmenu">
+          Private Events
+          <svg class="chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="mobile-submenu" id="mobileSubmenu">
+          <h3>Spaces</h3>
+          <a href="#space-fireplace-room">Fireplace Room <span class="cap">20 guests</span></a>
+          <a href="#space-mirror-room">Mirror Room <span class="cap">26 guests</span></a>
+          <a href="#space-club-room">Club Room <span class="cap">50 guests</span></a>
+          <a href="#space-waterfront-terrace">Waterfront Terrace <span class="cap">50 guests</span></a>
+          <a href="#space-citron-bar">Citron Bar <span class="cap">125 guests</span></a>
+          <a href="#space-waterfront-courtyard">Waterfront Courtyard <span class="cap">200 guests</span></a>
+          <a href="#space-the-cove">The COVE <span class="cap">200 guests</span></a>
+          <a href="#space-entire-venue">Entire Venue <span class="cap">500 guests</span></a>
+          <a href="#space-off-premise-catering">Off-Premise Catering <span class="cap">unlimited</span></a>
+          <h3>Vendors &amp; Services</h3>
+          <a href="#vendor-floral-decor">Floral &amp; Decor</a>
+          <a href="#vendor-linens-tabletop">Linens &amp; Tabletop</a>
+          <a href="#vendor-av-production">AV &amp; Production</a>
+          <a href="#vendor-event-planning">Event Planning</a>
+          <a href="#vendor-photography">Photography Partners</a>
+          <a href="#vendor-entertainment">Entertainment &amp; Music</a>
+        </div>
+      </li>
+      <li><a href="#story" class="mobile-link">Our Story</a></li>
+      <li><a href="#contact" class="mobile-link">Contact</a></li>
+    </ul>
+    <a href="#contact" class="btn btn-gold mobile-reserve">Reserve a Table</a>
+  </div>
+</header>
+
+<nav class="chapter-dots" aria-label="Reading progress">
+  <a href="#hero" data-label="Opening" class="dot-link active" data-chapter="hero"></a>
+  <a href="#story" data-label="The Story" class="dot-link" data-chapter="story"></a>
+  <a href="#media" data-label="The COVE" class="dot-link" data-chapter="media"></a>
+  <a href="#menus" data-label="The Kitchen" class="dot-link" data-chapter="menus"></a>
+  <a href="#stats" data-label="Ten Years" class="dot-link" data-chapter="stats"></a>
+  <a href="#timeline" data-label="Timeline" class="dot-link" data-chapter="timeline"></a>
+  <a href="#spaces" data-label="Spaces" class="dot-link" data-chapter="spaces"></a>
+  <a href="#testimonials" data-label="Voices" class="dot-link" data-chapter="testimonials"></a>
+  <a href="#contact" data-label="Closing" class="dot-link" data-chapter="contact"></a>
+</nav>
+
+<main id="main">
+
+  <!-- Chapter 1: Hero -->
+  <section class="hero chapter-inverted" id="hero" data-chapter-section="hero">
+    <div class="hero-bg" id="heroBg">
+      <img src="./hero.jpg" alt="Dusk view of Quarry Lake with Citron's waterfront terrace" width="1600" height="900">
+    </div>
+    <div class="hero-content">
+      <span class="eyebrow">Chapter One &middot; 1985-2026</span>
+      <h1>Ten Years on the Water</h1>
+      <p>A family's forty-year hospitality story, and the waterfront restaurant it built at Quarry Lake.</p>
+    </div>
+    <div class="scroll-hint"><span>Scroll</span><span class="line" aria-hidden="true"></span></div>
+  </section>
+
+  <!-- Chapter 2: Narrative -->
+  <section class="chapter-default" id="story" data-chapter-section="story">
+    <div class="container narrative">
+      <span class="eyebrow reveal" style="color:var(--terracotta);">Chapter Two &middot; The Story</span>
+      <p class="drop reveal">Long before there was a Citron, there was a young Charles Levine learning the hospitality trade at Baltimore's Pimlico Hotel, absorbing the discipline and warmth that would define everything he built afterward.</p>
+      <p class="reveal">In 1985, that education became Citron Caterers, an off-premise catering operation that would go on to serve nearly 14,000 events across Maryland, Washington DC, and Northern Virginia, for clients that included five United States presidents, the NFL, the Rolling Stones, and Oprah Winfrey.</p>
+      <p class="reveal">For three decades, Charles and his wife Susan carried that catering business from ballroom to backyard, learning exactly what a room needs to feel like a celebration. Then, in November 2016, they brought everything they had learned home to Quarry Lake and opened Citron: a waterfront restaurant with a seasonal scratch kitchen, a full sushi bar, and a wine list built to match the view.</p>
+      <p class="reveal">Ten years later, that same family still walks the dining room most nights it's open.</p>
+    </div>
+  </section>
+
+  <!-- Media break -->
+  <section class="chapter-muted" id="media" data-chapter-section="media" style="padding:0;">
+    <div class="media-break" id="mediaBreak">
+      <img src="./media.jpg" alt="Gala event set up on the water at The COVE, Citron's event space" width="1600" height="900" loading="lazy">
+      <div class="media-caption">
+        <h3>The COVE</h3>
+        <p>Citron's dedicated event space, built for the celebrations that call for the whole waterfront.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chapter 4: Features sequential -->
+  <section class="chapter-default" id="menus" data-chapter-section="menus">
+    <div class="container">
+      <span class="eyebrow reveal" style="color:var(--terracotta);text-align:center;display:block;">Chapter Three &middot; What Ten Years Built</span>
+      <h2 class="reveal" style="text-align:center;max-width:640px;margin-left:auto;margin-right:auto;">Four rooms, one philosophy</h2>
+      <div class="feature-list" style="margin-top:56px;">
+        <div class="feature-item reveal">
+          <div class="feature-num">01</div>
+          <div>
+            <h3>The Kitchen</h3>
+            <p>Executive Chef Mary Hersh leads a seasonal, scratch Modern American menu alongside a full sushi bar: center-cut steaks, day-boat seafood, and house-made pastas served Wednesday through Sunday from 4 PM.</p>
+          </div>
+        </div>
+        <div class="feature-item reveal">
+          <div class="feature-num">02</div>
+          <div>
+            <h3>The Cellar</h3>
+            <p>A wine program built one vintage at a time, honored with the Wine Spectator Award of Excellence every year from 2019 through 2025, and named among FINE WINE's World's Best in 2025.</p>
+          </div>
+        </div>
+        <div class="feature-item reveal">
+          <div class="feature-num">03</div>
+          <div>
+            <h3>The Water</h3>
+            <p>Heated waterfront terraces and roughly 300 seats overlooking Quarry Lake, where Happy Hour runs daily from 4 to 6:30 PM with handcrafted cocktails.</p>
+          </div>
+        </div>
+        <div class="feature-item reveal">
+          <div class="feature-num">04</div>
+          <div>
+            <h3>The Family</h3>
+            <p>Charles and Susan Levine still oversee the room they built, alongside a team that carries Citron Caterers' 30-plus years of off-premise hospitality into every private event.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chapter 5: Stats -->
+  <section class="chapter-accent stats-wrap" id="stats" data-chapter-section="stats">
+    <div class="container">
+      <span class="eyebrow reveal" style="color:var(--citron);">Chapter Four &middot; The Midpoint</span>
+      <h2 class="reveal">A decade, counted</h2>
+      <div class="stats-row">
+        <div class="stat reveal"><div class="stat-num" data-count="14000" data-suffix="+">0</div><div class="stat-label">Events Catered</div></div>
+        <div class="stat reveal"><div class="stat-num" data-count="7">0</div><div class="stat-label">Wine Spectator Awards</div></div>
+        <div class="stat reveal"><div class="stat-num" data-count="300">0</div><div class="stat-label">Seats on the Water</div></div>
+        <div class="stat reveal"><div class="stat-num" data-count="10">0</div><div class="stat-label">Years at Quarry Lake</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chapter 6: Timeline -->
+  <section class="chapter-default" id="timeline" data-chapter-section="timeline">
+    <div class="container">
+      <span class="eyebrow reveal" style="color:var(--terracotta);text-align:center;display:block;">Chapter Five &middot; The Timeline</span>
+      <h2 class="reveal" style="text-align:center;margin-bottom:56px;">1985 to 2026</h2>
+      <div class="timeline-wrap">
+        <svg class="timeline-svg" id="timelineSvg" preserveAspectRatio="none" aria-hidden="true">
+          <line x1="1" y1="0" x2="1" y2="100%"></line>
+        </svg>
+        <ol>
+          <li class="tl-item reveal"><span class="tl-dot" aria-hidden="true"></span><div class="tl-year">1985</div><p>Charles Levine founds Citron Caterers, the start of a 30-plus year off-premise catering business.</p></li>
+          <li class="tl-item reveal"><span class="tl-dot" aria-hidden="true"></span><div class="tl-year">1985-2016</div><p>Roughly 14,000 events catered for clients including five U.S. presidents, the NFL, the Rolling Stones, and Oprah.</p></li>
+          <li class="tl-item reveal"><span class="tl-dot" aria-hidden="true"></span><div class="tl-year">2016</div><p>Charles and Susan Levine open Citron Baltimore, a waterfront restaurant and event venue at Quarry Lake.</p></li>
+          <li class="tl-item reveal"><span class="tl-dot" aria-hidden="true"></span><div class="tl-year">2019-2025</div><p>Seven consecutive Wine Spectator Awards of Excellence, capped by a 2025 FINE WINE World's Best honor.</p></li>
+          <li class="tl-item reveal"><span class="tl-dot" aria-hidden="true"></span><div class="tl-year">Nov 2026</div><p>Citron celebrates ten years on the water, with the next chapter already being written.</p></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- Spaces chapter (mega menu target) -->
+  <section class="chapter-muted" id="spaces" data-chapter-section="spaces">
+    <div class="container">
+      <span class="eyebrow reveal" style="color:#8a4a37;text-align:center;display:block;">Chapter Six &middot; Nine Rooms for Every Story</span>
+      <h2 class="reveal" style="text-align:center;max-width:680px;margin:0 auto 20px;">Every celebration finds its room</h2>
+      <p class="reveal" style="text-align:center;max-width:60ch;margin:0 auto 48px;">From a fireplace dinner for twenty to a full buyout for five hundred, ten years of events have shown us exactly what each space does best.</p>
+      <div class="spaces-list">
+        <div class="space-row reveal" id="space-fireplace-room"><span class="name">Fireplace Room</span><span class="cap">20 guests</span></div>
+        <div class="space-row reveal" id="space-mirror-room"><span class="name">Mirror Room</span><span class="cap">26 guests</span></div>
+        <div class="space-row reveal" id="space-club-room"><span class="name">Club Room</span><span class="cap">50 guests</span></div>
+        <div class="space-row reveal" id="space-waterfront-terrace"><span class="name">Waterfront Terrace</span><span class="cap">50 guests</span></div>
+        <div class="space-row reveal" id="space-citron-bar"><span class="name">Citron Bar</span><span class="cap">125 guests</span></div>
+        <div class="space-row reveal" id="space-waterfront-courtyard"><span class="name">Waterfront Courtyard</span><span class="cap">200 guests</span></div>
+        <div class="space-row reveal" id="space-the-cove"><span class="name">The COVE</span><span class="cap">200 guests</span></div>
+        <div class="space-row reveal" id="space-entire-venue"><span class="name">Entire Venue</span><span class="cap">500 guests</span></div>
+        <div class="space-row reveal" id="space-off-premise-catering"><span class="name">Off-Premise Catering</span><span class="cap">unlimited</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Vendors chapter (mega menu target) -->
+  <section class="chapter-inverted" id="vendors" data-chapter-section="vendors">
+    <div class="container">
+      <span class="eyebrow reveal" style="color:var(--amber);text-align:center;display:block;">The Partners Behind the Story</span>
+      <h2 class="reveal" style="text-align:center;max-width:640px;margin:0 auto 48px;">Vendors &amp; services</h2>
+      <div class="vendors-list">
+        <div class="vendor-item reveal" id="vendor-floral-decor"><h3>Floral &amp; Decor</h3><p>Seasonal arrangements and full-room styling.</p></div>
+        <div class="vendor-item reveal" id="vendor-linens-tabletop"><h3>Linens &amp; Tabletop</h3><p>Curated linens, china, and glassware.</p></div>
+        <div class="vendor-item reveal" id="vendor-av-production"><h3>AV &amp; Production</h3><p>Savant-powered sound, lighting, and presentation.</p></div>
+        <div class="vendor-item reveal" id="vendor-event-planning"><h3>Event Planning</h3><p>A dedicated planner from first inquiry to last toast.</p></div>
+        <div class="vendor-item reveal" id="vendor-photography"><h3>Photography Partners</h3><p>Preferred photographers who know the light on the lake.</p></div>
+        <div class="vendor-item reveal" id="vendor-entertainment"><h3>Entertainment &amp; Music</h3><p>Live music, DJs, and performers vetted for every room.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonial chapters -->
+  <section class="chapter-muted" id="testimonials" data-chapter-section="testimonials">
+    <div class="container testi-chapter reveal">
+      <div class="stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <blockquote>&ldquo;We hosted my father's 80th birthday in the Fireplace Room, and ten years later we still book Citron for every family milestone. It feels like an extension of our own family.&rdquo;</blockquote>
+      <div class="name">Karen L.</div>
+      <div class="role">Family Milestone, Fireplace Room</div>
+    </div>
+    <div class="container testi-chapter reveal" style="margin-top:72px;">
+      <div class="stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+      <blockquote>&ldquo;Our firm has held its year-end event at The COVE for three years running. Two hundred guests, full production, and a wine list that turns a work event into a destination.&rdquo;</blockquote>
+      <div class="name">Marcus B.</div>
+      <div class="role">Corporate Client, The COVE</div>
+    </div>
+  </section>
+
+  <!-- Closing CTA -->
+  <section class="cta-close chapter-inverted" id="contact" data-chapter-section="contact">
+    <div class="container">
+      <span class="eyebrow reveal" style="color:var(--gold);">Final Chapter</span>
+      <h2 class="reveal">The next ten years start with your event.</h2>
+      <p class="reveal">Whether it's a table for two or the entire waterfront for five hundred, our team is ready to help write the next chapter.</p>
+      <div class="cta-row reveal">
+        <a href="tel:14103630900" class="btn btn-gold">Reserve a Table</a>
+        <a href="mailto:events@citronbaltimore.com" class="btn btn-outline-light">Book Your Event</a>
+      </div>
+      <div class="contact-strip reveal">
+        <span>2605 Quarry Lake Drive, Baltimore, MD 21209</span>
+        <a href="tel:14103630900">410-363-0900</a>
+        <a href="mailto:events@citronbaltimore.com">events@citronbaltimore.com</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">&copy; 2026 Citron Baltimore. Family owned by Charles &amp; Susan Levine since November 2016.</div>
+</footer>
+
+<script>
+(function(){
+  document.addEventListener('DOMContentLoaded', function(){ document.body.classList.add('page-ready'); });
+
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Sticky header background on scroll
+  var header = document.getElementById('siteHeader');
+  window.addEventListener('scroll', function(){
+    if(window.scrollY > 40) header.classList.add('scrolled');
+    else header.classList.remove('scrolled');
+  }, { passive: true });
+
+  // Mega menu
+  var megaTrigger = document.getElementById('megaTrigger');
+  var megaWrap = document.getElementById('megaWrap');
+  function closeMega(){ megaWrap.classList.remove('open'); megaTrigger.setAttribute('aria-expanded','false'); }
+  function toggleMega(){
+    var isOpen = megaWrap.classList.toggle('open');
+    megaTrigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  }
+  megaTrigger.addEventListener('click', function(e){ e.preventDefault(); toggleMega(); });
+  document.addEventListener('click', function(e){ if(!megaWrap.contains(e.target)) closeMega(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeMega(); });
+
+  // Mobile menu
+  var hamburgerBtn = document.getElementById('hamburgerBtn');
+  var mobileMenu = document.getElementById('mobileMenu');
+  hamburgerBtn.addEventListener('click', function(){
+    var isOpen = mobileMenu.classList.toggle('open');
+    hamburgerBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+  var mobileEventsToggle = document.getElementById('mobileEventsToggle');
+  var mobileSubmenu = document.getElementById('mobileSubmenu');
+  mobileEventsToggle.addEventListener('click', function(){
+    var isOpen = mobileSubmenu.classList.toggle('open');
+    mobileEventsToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+
+  // Reveal-on-scroll
+  if('IntersectionObserver' in window && !reduceMotion){
+    var revealObserver = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('in-view');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+    document.querySelectorAll('.reveal').forEach(function(el){ revealObserver.observe(el); });
+  } else {
+    document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in-view'); });
+  }
+
+  // Count-up stats
+  function animateCount(el){
+    var target = parseInt(el.getAttribute('data-count'), 10) || 0;
+    var suffix = el.getAttribute('data-suffix') || '';
+    if(reduceMotion){ el.textContent = target.toLocaleString() + suffix; return; }
+    var duration = 1400;
+    var start = null;
+    function step(ts){
+      if(!start) start = ts;
+      var progress = Math.min((ts - start) / duration, 1);
+      var eased = 1 - Math.pow(1 - progress, 3);
+      var val = Math.floor(eased * target);
+      el.textContent = val.toLocaleString() + (progress >= 1 ? suffix : '');
+      if(progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  if('IntersectionObserver' in window){
+    var statObserver = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          animateCount(entry.target);
+          statObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.4 });
+    document.querySelectorAll('.stat-num').forEach(function(el){ statObserver.observe(el); });
+  } else {
+    document.querySelectorAll('.stat-num').forEach(animateCount);
+  }
+
+  // Timeline SVG line draw
+  var timelineSvg = document.getElementById('timelineSvg');
+  if(timelineSvg && 'IntersectionObserver' in window){
+    var tlObserver = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          timelineSvg.classList.add('drawn');
+          tlObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    tlObserver.observe(timelineSvg);
+  } else if(timelineSvg){
+    timelineSvg.classList.add('drawn');
+  }
+
+  // Parallax drift on hero and media (skipped for reduced motion)
+  if(!reduceMotion){
+    var heroBgImg = document.querySelector('#heroBg img');
+    var mediaImg = document.querySelector('#mediaBreak img');
+    window.addEventListener('scroll', function(){
+      var y = window.scrollY;
+      if(heroBgImg) heroBgImg.style.transform = 'translateY(' + (y * 0.18) + 'px)';
+      if(mediaImg){
+        var rect = document.getElementById('mediaBreak').getBoundingClientRect();
+        var offset = rect.top * 0.12;
+        mediaImg.style.transform = 'translateY(' + offset + 'px)';
+      }
+    }, { passive: true });
+  }
+
+  // Chapter dot progress sidebar
+  var chapterSections = document.querySelectorAll('[data-chapter-section]');
+  var dotLinks = document.querySelectorAll('.dot-link');
+  if('IntersectionObserver' in window){
+    var dotObserver = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          var id = entry.target.getAttribute('id');
+          dotLinks.forEach(function(dot){
+            dot.classList.toggle('active', dot.getAttribute('data-chapter') === id);
+          });
+        }
+      });
+    }, { threshold: 0.5 });
+    chapterSections.forEach(function(sec){ dotObserver.observe(sec); });
+  }
+})();
+</script>
+</body>
+</html>

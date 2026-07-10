@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <title>Private Events | Citron Baltimore at Quarry Lake</title>
+<meta name="description" content="Nine event spaces for 10 to 500 guests, from the intimate Fireplace Room to The COVE, plus floral, AV, planning, and entertainment partners.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1F2A33;
+    --navy-deep:#141C23;
+    --white:#FFFFFF;
+    --bg-muted:#F2F4F6;
+    --ink:#1A1A1A;
+    --body-gray:#4F4F4F;
+    --gold:#B08D3E;
+    --gold-dark:#8F7130;
+    --border:#E2E5E8;
+    --radius:6px;
+    --shadow-sm:0 1px 3px rgba(20,28,35,0.08);
+    --shadow-md:0 8px 24px rgba(20,28,35,0.12);
+    --maxw:1200px;
+  }
+  *,*::before,*::after{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *,*::before,*::after{animation-duration:0.01ms !important;animation-iteration-count:1 !important;transition-duration:0.01ms !important;scroll-behavior:auto !important;}
+  }
+  body{
+    margin:0;font-family:'Source Sans 3',sans-serif;color:var(--ink);background:var(--white);
+    line-height:1.6;-webkit-font-smoothing:antialiased;opacity:0;
+  }
+  body.page-ready{opacity:1;transition:opacity 320ms ease;}
+  h1,h2,h3,h4{font-family:'Merriweather',serif;font-weight:700;line-height:1.25;margin:0 0 0.5em;color:var(--navy);}
+  h1{font-size:clamp(2.1rem,4.5vw,3.4rem);}
+  h2{font-size:clamp(1.6rem,3vw,2.3rem);}
+  h3{font-size:1.2rem;}
+  p{margin:0 0 1em;color:var(--body-gray);}
+  a{color:inherit;text-decoration:none;cursor:pointer;}
+  img{max-width:100%;display:block;}
+  ul{margin:0;padding:0;list-style:none;}
+  button{font-family:inherit;cursor:pointer;}
+  .container{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+  .eyebrow{display:inline-block;font-size:0.78rem;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:var(--gold-dark);margin-bottom:0.9em;}
+  section{padding:88px 0;}
+  .bg-default{background:var(--white);}
+  .bg-muted{background:var(--bg-muted);}
+  .bg-accent{background:var(--navy);}
+  .skip-link{position:absolute;left:-9999px;top:0;background:var(--gold);color:var(--white);padding:12px 20px;z-index:1000;}
+  .skip-link:focus{left:12px;top:12px;}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 26px;border-radius:var(--radius);font-weight:600;font-size:0.98rem;border:1.5px solid transparent;transition:background 200ms ease,color 200ms ease,border-color 200ms ease,transform 200ms ease;min-height:44px;}
+  .btn-gold{background:var(--gold);color:var(--white);}
+  .btn-gold:hover,.btn-gold:focus-visible{background:var(--gold-dark);transform:translateY(-1px);}
+  .btn-outline-navy{background:transparent;color:var(--navy);border-color:var(--navy);}
+  .btn-outline-navy:hover,.btn-outline-navy:focus-visible{background:var(--navy);color:var(--white);}
+  .btn-outline-white{background:transparent;color:var(--white);border-color:rgba(255,255,255,0.6);}
+  .btn-outline-white:hover,.btn-outline-white:focus-visible{background:var(--white);color:var(--navy);}
+  .btn-sm{padding:9px 18px;font-size:0.88rem;min-height:38px;}
+  a:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+
+  .site-header{position:sticky;top:0;left:0;right:0;z-index:200;background:rgba(255,255,255,0.97);border-bottom:1px solid var(--border);backdrop-filter:saturate(180%) blur(6px);}
+  .header-inner{max-width:var(--maxw);margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:76px;gap:24px;}
+  .logo img{height:34px;width:auto;}
+  .main-nav{flex:1;display:flex;justify-content:center;}
+  .main-nav > ul{display:flex;align-items:center;gap:6px;}
+  .nav-link{position:relative;display:inline-flex;align-items:center;gap:6px;padding:10px 14px;font-weight:600;font-size:0.96rem;color:var(--navy);background:none;border:none;min-height:44px;}
+  .nav-link::after{content:"";position:absolute;left:14px;right:14px;bottom:6px;height:2px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform 220ms ease;}
+  .nav-link:hover::after,.nav-link:focus-visible::after,.nav-link.active::after{transform:scaleX(1);}
+  .nav-link.active{color:var(--gold-dark);}
+  .chevron{transition:transform 200ms ease;}
+  .has-mega:hover .chevron,.has-mega.open .chevron{transform:rotate(180deg);}
+  .has-mega{position:relative;}
+  .mega-menu{position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%) translateY(8px);width:640px;max-width:90vw;background:var(--white);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-md);padding:28px;display:grid;grid-template-columns:1fr 1fr;gap:32px;opacity:0;visibility:hidden;pointer-events:none;transition:opacity 200ms ease,transform 200ms ease,visibility 200ms;z-index:50;}
+  .has-mega:hover .mega-menu,.has-mega:focus-within .mega-menu,.has-mega.open .mega-menu{opacity:1;visibility:visible;pointer-events:auto;transform:translateX(-50%) translateY(0);}
+  .mega-col h3{font-family:'Source Sans 3',sans-serif;font-size:0.76rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold-dark);font-weight:700;margin-bottom:14px;}
+  .mega-col ul{display:flex;flex-direction:column;gap:2px;}
+  .mega-col a{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:8px 10px;border-radius:4px;font-size:0.94rem;color:var(--ink);font-weight:500;transition:background 150ms ease,color 150ms ease;}
+  .mega-col a:hover,.mega-col a:focus-visible{background:var(--bg-muted);color:var(--gold-dark);}
+  .mega-col .cap{font-size:0.8rem;color:var(--body-gray);white-space:nowrap;font-weight:400;}
+  .reserve-cta{flex-shrink:0;}
+  .hamburger{display:none;background:none;border:1.5px solid var(--navy);border-radius:6px;width:44px;height:44px;align-items:center;justify-content:center;}
+  .mobile-menu{display:none;position:fixed;inset:76px 0 0 0;background:var(--white);overflow-y:auto;z-index:190;padding:20px 24px 40px;}
+  .mobile-menu.open{display:block;}
+  .mobile-menu ul.mobile-links{display:flex;flex-direction:column;}
+  .mobile-menu .mobile-link{display:flex;align-items:center;justify-content:space-between;padding:16px 4px;border-bottom:1px solid var(--border);font-weight:600;font-size:1.05rem;color:var(--navy);min-height:44px;}
+  .mobile-events-toggle{width:100%;text-align:left;background:none;border:none;}
+  .mobile-submenu{display:none;padding:6px 0 14px 12px;}
+  .mobile-submenu.open{display:block;}
+  .mobile-submenu h3{font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold-dark);margin:14px 0 8px;}
+  .mobile-submenu a{display:flex;justify-content:space-between;padding:10px 4px;font-size:0.96rem;color:var(--ink);min-height:44px;align-items:center;}
+  .mobile-submenu .cap{color:var(--body-gray);font-size:0.82rem;}
+  .mobile-reserve{margin-top:20px;display:block;text-align:center;}
+
+  .breadcrumb{display:flex;gap:8px;align-items:center;font-size:0.88rem;color:var(--body-gray);margin-bottom:18px;justify-content:center;flex-wrap:wrap;}
+  .breadcrumb a{color:var(--navy);font-weight:600;}
+  .breadcrumb a:hover{color:var(--gold-dark);text-decoration:underline;}
+  .breadcrumb .sep{opacity:0.6;}
+  .breadcrumb .current{color:var(--body-gray);}
+
+  .hero-centered{text-align:center;max-width:760px;margin:0 auto;}
+  .hero-centered p{max-width:56ch;margin-left:auto;margin-right:auto;font-size:1.08rem;}
+
+  .section-head{max-width:680px;margin:0 auto 48px;text-align:center;}
+
+  .space-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+  .space-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:26px;box-shadow:var(--shadow-sm);transition:box-shadow 220ms ease,transform 220ms ease;display:flex;flex-direction:column;scroll-margin-top:96px;}
+  .space-card:hover{box-shadow:var(--shadow-md);transform:translateY(-3px);}
+  .space-card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:8px;}
+  .cap-badge{flex-shrink:0;background:var(--bg-muted);color:var(--navy);font-size:0.78rem;font-weight:700;padding:5px 10px;border-radius:20px;white-space:nowrap;}
+  .space-card p{flex:1;}
+  .space-card .card-link{margin-top:10px;font-weight:700;color:var(--gold-dark);}
+  .space-card .card-link:hover{text-decoration:underline;}
+
+  .steps-row{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;counter-reset:step;}
+  .step{position:relative;padding-top:8px;}
+  .step-num{font-family:'Merriweather',serif;font-weight:900;font-size:2.2rem;color:var(--gold);margin-bottom:8px;}
+
+  .media-break{position:relative;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-md);}
+  .media-break img{width:100%;height:100%;object-fit:cover;max-height:460px;}
+  .media-break::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(31,42,51,0.1) 0%, rgba(31,42,51,0.65) 100%);}
+  .media-caption{position:absolute;left:0;right:0;bottom:0;padding:28px 32px;color:var(--white);}
+  .media-caption h3{color:var(--white);margin-bottom:4px;}
+  .media-caption p{color:rgba(255,255,255,0.85);margin:0;}
+
+  .vendor-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  .vendor-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:22px;display:flex;gap:14px;align-items:flex-start;scroll-margin-top:96px;transition:box-shadow 220ms ease;}
+  .vendor-card:hover{box-shadow:var(--shadow-md);}
+  .vendor-card .icon{width:40px;height:40px;border-radius:50%;background:var(--bg-muted);display:flex;align-items:center;justify-content:center;color:var(--navy);flex-shrink:0;}
+
+  .cta-band{background:var(--navy);color:var(--white);text-align:center;}
+  .cta-band h2{color:var(--white);}
+  .cta-band p{color:rgba(255,255,255,0.78);max-width:56ch;margin-left:auto;margin-right:auto;}
+  .cta-row{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:20px;}
+
+  .site-footer{background:var(--navy-deep);color:rgba(255,255,255,0.8);padding:56px 0 28px;}
+  .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:40px;margin-bottom:36px;}
+  .footer-grid h4{color:var(--white);font-family:'Merriweather',serif;font-size:1rem;margin-bottom:14px;}
+  .footer-grid a{color:rgba(255,255,255,0.72);display:block;padding:6px 0;}
+  .footer-grid a:hover{color:var(--gold);}
+  .footer-logo img{height:32px;margin-bottom:14px;}
+  .footer-bottom{border-top:1px solid rgba(255,255,255,0.14);padding-top:22px;font-size:0.85rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+
+  @media (max-width:1024px){
+    .space-grid{grid-template-columns:repeat(2,1fr);}
+    .steps-row{grid-template-columns:repeat(2,1fr);row-gap:32px;}
+    .vendor-grid{grid-template-columns:repeat(2,1fr);}
+    .footer-grid{grid-template-columns:1fr 1fr;}
+  }
+  @media (max-width:900px){
+    .main-nav,.reserve-cta{display:none;}
+    .hamburger{display:flex;}
+  }
+  @media (max-width:640px){
+    section{padding:56px 0;}
+    .space-grid{grid-template-columns:1fr;}
+    .steps-row{grid-template-columns:1fr;}
+    .vendor-grid{grid-template-columns:1fr;}
+    .footer-grid{grid-template-columns:1fr;gap:28px;}
+  }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="logo" aria-label="Citron Baltimore home">
+      <img src="./logo-dark.png" alt="Citron Baltimore">
+    </a>
+    <nav class="main-nav" aria-label="Primary">
+      <ul>
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="index.html#menus" class="nav-link">Menus</a></li>
+        <li class="has-mega open" id="megaWrap">
+          <button class="nav-link mega-trigger active" id="megaTrigger" aria-expanded="false" aria-controls="megaMenu">
+            Private Events
+            <svg class="chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="mega-menu" id="megaMenu" role="menu">
+            <div class="mega-col">
+              <h3>Spaces</h3>
+              <ul>
+                <li><a href="private-events.html#space-fireplace-room" role="menuitem">Fireplace Room <span class="cap">20 guests</span></a></li>
+                <li><a href="private-events.html#space-mirror-room" role="menuitem">Mirror Room <span class="cap">26 guests</span></a></li>
+                <li><a href="private-events.html#space-club-room" role="menuitem">Club Room <span class="cap">50 guests</span></a></li>
+                <li><a href="private-events.html#space-waterfront-terrace" role="menuitem">Waterfront Terrace <span class="cap">50 guests</span></a></li>
+                <li><a href="private-events.html#space-citron-bar" role="menuitem">Citron Bar <span class="cap">125 guests</span></a></li>
+                <li><a href="private-events.html#space-waterfront-courtyard" role="menuitem">Waterfront Courtyard <span class="cap">200 guests</span></a></li>
+                <li><a href="private-events.html#space-the-cove" role="menuitem">The COVE <span class="cap">200 guests</span></a></li>
+                <li><a href="private-events.html#space-entire-venue" role="menuitem">Entire Venue <span class="cap">500 guests</span></a></li>
+                <li><a href="private-events.html#space-off-premise-catering" role="menuitem">Off-Premise Catering <span class="cap">unlimited</span></a></li>
+              </ul>
+            </div>
+            <div class="mega-col">
+              <h3>Vendors &amp; Services</h3>
+              <ul>
+                <li><a href="private-events.html#vendor-floral-decor" role="menuitem">Floral &amp; Decor</a></li>
+                <li><a href="private-events.html#vendor-linens-tabletop" role="menuitem">Linens &amp; Tabletop</a></li>
+                <li><a href="private-events.html#vendor-av-production" role="menuitem">AV &amp; Production</a></li>
+                <li><a href="private-events.html#vendor-event-planning" role="menuitem">Event Planning</a></li>
+                <li><a href="private-events.html#vendor-photography" role="menuitem">Photography Partners</a></li>
+                <li><a href="private-events.html#vendor-entertainment" role="menuitem">Entertainment &amp; Music</a></li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li><a href="about.html" class="nav-link">Our Story</a></li>
+        <li><a href="about.html#contact" class="nav-link">Contact</a></li>
+      </ul>
+    </nav>
+    <a href="about.html#contact" class="btn btn-gold reserve-cta">Reserve a Table</a>
+    <button class="hamburger" id="hamburgerBtn" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">
+      <svg width="20" height="16" viewBox="0 0 20 16" fill="none" aria-hidden="true"><path d="M0 1h20M0 8h20M0 15h20" stroke="#1F2A33" stroke-width="2"/></svg>
+    </button>
+  </div>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <ul class="mobile-links">
+      <li><a href="index.html" class="mobile-link">Home</a></li>
+      <li><a href="index.html#menus" class="mobile-link">Menus</a></li>
+      <li>
+        <button class="mobile-link mobile-events-toggle" id="mobileEventsToggle" aria-expanded="true" aria-controls="mobileSubmenu">
+          Private Events
+          <svg class="chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="mobile-submenu open" id="mobileSubmenu">
+          <h3>Spaces</h3>
+          <a href="private-events.html#space-fireplace-room">Fireplace Room <span class="cap">20 guests</span></a>
+          <a href="private-events.html#space-mirror-room">Mirror Room <span class="cap">26 guests</span></a>
+          <a href="private-events.html#space-club-room">Club Room <span class="cap">50 guests</span></a>
+          <a href="private-events.html#space-waterfront-terrace">Waterfront Terrace <span class="cap">50 guests</span></a>
+          <a href="private-events.html#space-citron-bar">Citron Bar <span class="cap">125 guests</span></a>
+          <a href="private-events.html#space-waterfront-courtyard">Waterfront Courtyard <span class="cap">200 guests</span></a>
+          <a href="private-events.html#space-the-cove">The COVE <span class="cap">200 guests</span></a>
+          <a href="private-events.html#space-entire-venue">Entire Venue <span class="cap">500 guests</span></a>
+          <a href="private-events.html#space-off-premise-catering">Off-Premise Catering <span class="cap">unlimited</span></a>
+          <h3>Vendors &amp; Services</h3>
+          <a href="private-events.html#vendor-floral-decor">Floral &amp; Decor</a>
+          <a href="private-events.html#vendor-linens-tabletop">Linens &amp; Tabletop</a>
+          <a href="private-events.html#vendor-av-production">AV &amp; Production</a>
+          <a href="private-events.html#vendor-event-planning">Event Planning</a>
+          <a href="private-events.html#vendor-photography">Photography Partners</a>
+          <a href="private-events.html#vendor-entertainment">Entertainment &amp; Music</a>
+        </div>
+      </li>
+      <li><a href="about.html" class="mobile-link">Our Story</a></li>
+      <li><a href="about.html#contact" class="mobile-link">Contact</a></li>
+    </ul>
+    <a href="about.html#contact" class="btn btn-gold mobile-reserve">Reserve a Table</a>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="bg-muted">
+    <div class="container hero-centered">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">Home</a>
+        <span class="sep" aria-hidden="true">/</span>
+        <span class="current" aria-current="page">Private Events</span>
+      </nav>
+      <span class="eyebrow">Private Events at Citron</span>
+      <h1>Nine spaces. One waterfront. Every kind of celebration.</h1>
+      <p>From an intimate fireplace dinner for 20 to a 500-guest gala across the entire venue, our events team pairs each space with the right menu, wine, and partners for your day.</p>
+      <div class="hero-cta-row" style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+        <a href="about.html#contact" class="btn btn-gold">Book Your Event</a>
+        <a href="#vendors" class="btn btn-outline-navy">See Vendors &amp; Services</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-default" id="spaces">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">The Spaces</span>
+        <h2>Find the room that fits your guest count</h2>
+        <p>Every space includes access to our seasonal kitchen, full sushi bar, and Wine Spectator, recognized wine program.</p>
+      </div>
+      <div class="space-grid">
+
+        <article class="space-card" id="space-fireplace-room">
+          <div class="space-card-top"><h3>Fireplace Room</h3><span class="cap-badge">20 guests</span></div>
+          <p>An intimate room built around a working fireplace, ideal for milestone dinners and small rehearsal dinners.</p>
+          <a href="about.html#contact" class="card-link">Inquire &rarr;</a>
+        </article>
+
+        <article class="space-card" id="space-mirror-room">
+          <div class="space-card-top"><h3>Mirror Room</h3><span class="cap-badge">26 guests</span></div>
+          <p>A refined private room with statement mirrored walls, well suited to seated dinners and toasts.</p>
+          <a href="about.html#contact" class="card-link">Inquire &rarr;</a>
+        </article>
+
+        <article class="space-card" id="space-club-room">
+          <div class="space-card-top"><h3>Club Room</h3><span class="cap-badge">50 guests</span></div>
+          <p>A flexible semi-private room for showers, corporate lunches, and cocktail-style gatherings.</p>
+          <a href="about.html#contact" class="card-link">Inquire &rarr;</a>
+        </article>
+
+        <article class="space-card" id="space-waterfront-terrace">
+          <div class="space-card-top"><h3>Waterfront Terrace</h3><span class="cap-badge">50 guests</span></div>
+          <p>A heated open-air terrace on Quarry Lake, perfect for cocktail hours and warm-weather dinners.</p>
+          <a href="about.html#contact" class="card-link">Inquire &rarr;</a>
+        </article>
+
+        <article class="space-card" id="space-citron-bar">
+          <div class="space-card-top"><h3>Citron Bar</h3><span class="cap-badge">125 guests</span></div>
+          <p>Our handcrafted-cocktail bar, available as a lively buyout for receptions and happy-hour-style events.</p>
+          <a href="about.html#contact" class="card-link">Inquire &rarr;</a>
+        </article>
+
+        <article class="space-card" id="space-waterfront-courtyard">
+          <div class="space-card-top"><h3>Waterfront Courtyard</h3><span class="cap-badge">200 guests</span></div>
+          <p>An open-air courtyard on the water, well suited to ceremonies, receptions, and large cocktail events.</p>
+          <a href="about.html#contact" class="card-link">Inquire &rarr;</a>
+        </article>
+
+        <article class="space-card" id="space-the-cove">
+          <div class="space-card-top"><h3>The COVE</h3><span class="cap-badge">200 guests</span></div>
+          <p>Citron's dedicated event space, built for weddings, galas, and corporate events with full production support.</p>
+          <a href="about.html#contact" class="card-link">Inquire &rarr;</a>
+        </article>
+
+        <article class="space-card" id="space-entire-venue">
+          <div class="space-card-top"><h3>Entire Venue</h3><span class="cap-badge">500 guests</span></div>
+          <p>A full buyout of Citron and The COVE for landmark celebrations that call for the whole waterfront.</p>
+          <a href="about.html#contact" class="card-link">Inquire &rarr;</a>
+        </article>
+
+        <article class="space-card" id="space-off-premise-catering">
+          <div class="space-card-top"><h3>Off-Premise Catering</h3><span class="cap-badge">unlimited</span></div>
+          <p>Citron Caterers brings 30+ years of off-premise catering to any venue across MD, DC, and Northern VA.</p>
+          <a href="about.html#contact" class="card-link">Inquire &rarr;</a>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-muted">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">How It Works</span>
+        <h2>Four steps from inquiry to celebration</h2>
+      </div>
+      <div class="steps-row">
+        <div class="step">
+          <div class="step-num">01</div>
+          <h3>Inquire</h3>
+          <p>Tell us your date, guest count, and vision. Our events team responds within one business day.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <h3>Tour &amp; Taste</h3>
+          <p>Walk the space in person and sample seasonal dishes and wine pairings with Chef Mary Hersh's team.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <h3>Design</h3>
+          <p>Build your menu, layout, and vendor lineup, from florals to entertainment, with your dedicated planner.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">04</div>
+          <h3>Celebrate</h3>
+          <p>Arrive to a fully executed event, from the first course to the last toast on the water.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-default">
+    <div class="container">
+      <div class="media-break">
+        <img src="./media.jpg" alt="Gala event set up in the ballroom at The COVE" width="1600" height="900" loading="lazy">
+        <div class="media-caption">
+          <h3>The COVE</h3>
+          <p>Citron's dedicated event space for weddings, galas, and corporate celebrations up to 200 guests.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-muted" id="vendors">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Trusted Partners</span>
+        <h2>Vendors &amp; services for your event</h2>
+        <p>We work with a curated roster of partners so your event feels considered from the flowers to the final song.</p>
+      </div>
+      <div class="vendor-grid">
+
+        <div class="vendor-card" id="vendor-floral-decor">
+          <div class="icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M12 2c1.5 2 1.5 5 0 7M12 22c1.5-2 1.5-5 0-7M2 12c2-1.5 5-1.5 7 0M22 12c-2 1.5-5 1.5-7 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+          <div><h3>Floral &amp; Decor</h3><p>Seasonal arrangements and full-room styling tailored to your palette.</p></div>
+        </div>
+
+        <div class="vendor-card" id="vendor-linens-tabletop">
+          <div class="icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="3" y="7" width="18" height="12" rx="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M3 11h18" stroke="currentColor" stroke-width="1.6"/></svg></div>
+          <div><h3>Linens &amp; Tabletop</h3><p>Curated linens, china, and glassware to match any theme or season.</p></div>
+        </div>
+
+        <div class="vendor-card" id="vendor-av-production">
+          <div class="icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="2" y="5" width="20" height="13" rx="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M9 21h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+          <div><h3>AV &amp; Production</h3><p>Savant-powered sound, lighting, and presentation support built into every space.</p></div>
+        </div>
+
+        <div class="vendor-card" id="vendor-event-planning">
+          <div class="icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="17" rx="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M3 9h18M8 2v4M16 2v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+          <div><h3>Event Planning</h3><p>A dedicated planner manages timeline, logistics, and vendors start to finish.</p></div>
+        </div>
+
+        <div class="vendor-card" id="vendor-photography">
+          <div class="icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 8h3l2-2h6l2 2h3v11H4V8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.2" stroke="currentColor" stroke-width="1.6"/></svg></div>
+          <div><h3>Photography Partners</h3><p>Preferred photographers who know every angle of the venue and light on the lake.</p></div>
+        </div>
+
+        <div class="vendor-card" id="vendor-entertainment">
+          <div class="icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 18V5l11-2v13" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="6" cy="18" r="3" stroke="currentColor" stroke-width="1.6"/><circle cx="17" cy="16" r="3" stroke="currentColor" stroke-width="1.6"/></svg></div>
+          <div><h3>Entertainment &amp; Music</h3><p>Live music, DJs, and performers vetted for sound, style, and reliability.</p></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="container">
+      <h2>Let's design your event.</h2>
+      <p>Share your date and vision and our team will recommend the right space, menu, and partners.</p>
+      <div class="cta-row">
+        <a href="about.html#contact" class="btn btn-gold">Book Your Event</a>
+        <a href="tel:14103630900" class="btn btn-outline-white">Call 410-363-0900</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a href="index.html" class="footer-logo"><img src="./logo-light.png" alt="Citron Baltimore"></a>
+        <p style="max-width:36ch;color:rgba(255,255,255,0.65);">2605 Quarry Lake Drive, Baltimore, MD 21209. Family owned by Charles &amp; Susan Levine since November 2016.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <a href="index.html">Home</a>
+        <a href="index.html#menus">Menus</a>
+        <a href="private-events.html">Private Events</a>
+        <a href="about.html">Our Story</a>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <a href="tel:14103630900">410-363-0900</a>
+        <a href="mailto:events@citronbaltimore.com">events@citronbaltimore.com</a>
+        <a href="about.html#contact">Directions &amp; Hours</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Citron Baltimore. All rights reserved.</span>
+      <span>Dinner Wed-Sun from 4 PM &middot; Private events 7 days a week</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  document.addEventListener('DOMContentLoaded', function(){ document.body.classList.add('page-ready'); });
+
+  var megaTrigger = document.getElementById('megaTrigger');
+  var megaWrap = document.getElementById('megaWrap');
+  function closeMega(){ megaWrap.classList.remove('open'); megaTrigger.setAttribute('aria-expanded','false'); }
+  function toggleMega(){
+    var isOpen = megaWrap.classList.toggle('open');
+    megaTrigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  }
+  megaTrigger.addEventListener('click', function(e){ e.preventDefault(); toggleMega(); });
+  document.addEventListener('click', function(e){
+    if(!megaWrap.contains(e.target)) closeMega();
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') closeMega();
+  });
+
+  var hamburgerBtn = document.getElementById('hamburgerBtn');
+  var mobileMenu = document.getElementById('mobileMenu');
+  hamburgerBtn.addEventListener('click', function(){
+    var isOpen = mobileMenu.classList.toggle('open');
+    hamburgerBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+
+  var mobileEventsToggle = document.getElementById('mobileEventsToggle');
+  var mobileSubmenu = document.getElementById('mobileSubmenu');
+  mobileEventsToggle.addEventListener('click', function(){
+    var isOpen = mobileSubmenu.classList.toggle('open');
+    mobileEventsToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+})();
+</script>
+</body>
+</html>
