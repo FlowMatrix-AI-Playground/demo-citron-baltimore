@@ -1,0 +1,371 @@
+---
+import '../styles/d3.css';
+import { SITE, NAV } from '../data/site.js';
+
+const {
+  title = 'Citron Baltimore, Waterfront Dining, Catering & Events at Quarry Lake',
+  description = 'An upscale waterfront restaurant and event venue on Quarry Lake in Baltimore County. Seasonal Modern American cuisine, a full sushi bar, a Wine Spectator honored list, and private events from 20 to 500 guests.',
+  ogImage = '/lake-poster.jpg',
+} = Astro.props;
+
+const path = Astro.url.pathname;
+const canonical = new URL(path, Astro.site);
+const isCurrent = (href) => path === href || path === href + '/';
+
+// d3 nav points at the /d3 namespace
+const D3NAV = [
+  { label: 'Menu', href: '/d3/menu' },
+  { label: 'Events & Private Dining', href: '/d3/events' },
+  { label: 'About', href: '/d3/about' },
+  { label: 'Contact', href: '/d3/contact' },
+];
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <meta name="theme-color" content="#10151C" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={new URL(ogImage, Astro.site)} />
+  <meta property="og:site_name" content="Citron Baltimore" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context":"https://schema.org","@type":"Restaurant",
+    "name":"Citron Baltimore","servesCuisine":"Modern American",
+    "priceRange":"$$$","telephone":SITE.phone,
+    "address":{"@type":"PostalAddress","streetAddress":"2605 Quarry Lake Dr","addressLocality":"Baltimore","addressRegion":"MD","postalCode":"21209"},
+    "url":"https://citronbaltimore.com","acceptsReservations":"True"
+  })} />
+</head>
+<body class="d3-body">
+  <a class="d3-skip" href="#main">Skip to content</a>
+
+  <!-- ================= NAV ================= -->
+  <header class="d3-nav" id="d3-nav" data-at-top>
+    <div class="d3-wrap d3-nav__inner">
+      <a href="/d3/" class="d3-nav__brand">
+        <span class="d3-nav__word">Citron</span>
+        <span class="d3-nav__sub">Lakeside</span>
+      </a>
+
+      <nav class="d3-nav__links" aria-label="Primary">
+        <a href="/d3/" class:list={["d3-nav__link", { 'is-current': isCurrent('/d3/') || isCurrent('/d3') }]} aria-current={isCurrent('/d3/') ? 'page' : undefined}>Home</a>
+        {D3NAV.map((item) => (
+          <a href={item.href} class:list={["d3-nav__link", { 'is-current': isCurrent(item.href) }]} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a>
+        ))}
+      </nav>
+
+      <div class="d3-nav__actions">
+        <button class="d3-btn d3-nav__cta" data-cta>Reserve <span aria-hidden="true">&amp; Plan</span></button>
+        <button class="d3-nav__burger" id="d3-burger" aria-label="Open menu" aria-expanded="false" aria-controls="d3-drawer">
+          <span></span><span></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="d3-nav__drawer" id="d3-drawer" hidden>
+      <nav aria-label="Mobile">
+        <a href="/d3/" class="d3-nav__dlink">Home</a>
+        {D3NAV.map((item) => (<a href={item.href} class="d3-nav__dlink">{item.label}</a>))}
+        <a href="/d3/journal" class="d3-nav__dlink d3-nav__dlink--muted">The Journal</a>
+        <button class="d3-btn d3-nav__dcta" data-cta>Reserve &middot; Pick-Up &middot; Events</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main"><slot /></main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="d3-footer">
+    <div class="d3-wrap">
+      <div class="d3-footer__top">
+        <div class="d3-footer__brand">
+          <a href="/d3/" class="d3-footer__word">Citron <em>Lakeside</em></a>
+          <p class="d3-footer__blurb">An upscale waterfront restaurant, catering house, and event venue on Quarry Lake. Family owned by Charles and Susan Levine since 2016. Ten years on the water this November.</p>
+          <div class="d3-footer__news">
+            <p class="d3-eyebrow d3-eyebrow--citron">From our table to yours</p>
+            <form class="d3-footer__form" id="d3-news-form">
+              <label class="d3-sr" for="d3-news-email">Email address</label>
+              <input id="d3-news-email" name="email" type="email" placeholder="you@example.com" required />
+              <button class="d3-btn" type="submit">Subscribe</button>
+            </form>
+            <p class="d3-footer__note" id="d3-news-note">Seasonal menus, wine dinners, and first word on Cove availability. No mass mail.</p>
+          </div>
+        </div>
+
+        <nav class="d3-footer__col" aria-label="Explore">
+          <h3 class="d3-footer__h">Explore</h3>
+          <a href="/d3/" class="d3-footer__link">Home</a>
+          {D3NAV.map((i) => (<a href={i.href} class="d3-footer__link">{i.label}</a>))}
+        </nav>
+
+        <nav class="d3-footer__col" aria-label="Journal">
+          <h3 class="d3-footer__h">Journal</h3>
+          <a href="/d3/journal" class="d3-footer__link">The Journal</a>
+          <a href="/d3/journal" class="d3-footer__link">Press &amp; Awards</a>
+          <a href="/d3/journal" class="d3-footer__link">Seasonal Notes</a>
+        </nav>
+
+        <div class="d3-footer__col">
+          <h3 class="d3-footer__h">Visit</h3>
+          <address class="d3-footer__addr">
+            2605 Quarry Lake Dr<br/>Baltimore, MD 21209<br/>
+            <a href={SITE.phoneHref} class="d3-footer__link">{SITE.phone}</a><br/>
+            <a href={`mailto:${SITE.email}`} class="d3-footer__link">{SITE.email}</a>
+          </address>
+          <p class="d3-footer__hours">Dinner: Wed–Sun from 4 PM<br/>Private Events: 7 days</p>
+        </div>
+      </div>
+
+      <div class="d3-footer__bottom">
+        <span>© 2026 Citron Baltimore. Quarry Lake, Baltimore County.</span>
+        <span class="d3-footer__mark">Wine Spectator Award of Excellence &middot; 2019–2025</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= CTA MODAL ================= -->
+  <div class="d3-modal" id="d3-modal" role="dialog" aria-modal="true" aria-labelledby="d3-modal-title" hidden>
+    <div class="d3-modal__scrim" data-cta-close></div>
+    <div class="d3-modal__panel" role="document">
+      <button class="d3-modal__close" data-cta-close aria-label="Close">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+      <p class="d3-eyebrow">How can we host you?</p>
+      <h2 id="d3-modal-title" class="d3-modal__title">Choose your table.</h2>
+
+      <div class="d3-modal__grid">
+        <a class="d3-choice" href={SITE.reserveUrl} target="_blank" rel="noopener">
+          <span class="d3-choice__ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="26" height="26" fill="none"><path d="M4 21V5a2 2 0 0 1 2-2h9l5 5v13" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 8h5M8 12h8M8 16h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </span>
+          <span class="d3-choice__body">
+            <span class="d3-choice__k">Reserve a Table</span>
+            <span class="d3-choice__d">Dinner on the water. Wed–Sun from 4 PM.</span>
+          </span>
+          <span class="d3-choice__arrow" aria-hidden="true">→</span>
+        </a>
+
+        <a class="d3-choice" href={SITE.pickupUrl} target="_blank" rel="noopener">
+          <span class="d3-choice__ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="26" height="26" fill="none"><path d="M6 8h12l-1 12H7L6 8Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M9 8a3 3 0 0 1 6 0" stroke="currentColor" stroke-width="1.5"/></svg>
+          </span>
+          <span class="d3-choice__body">
+            <span class="d3-choice__k">Order Pick-Up</span>
+            <span class="d3-choice__d">The kitchen, to go. Powered by Toast.</span>
+          </span>
+          <span class="d3-choice__arrow" aria-hidden="true">→</span>
+        </a>
+
+        <a class="d3-choice d3-choice--feature" href={SITE.portalUrl}>
+          <span class="d3-choice__ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="26" height="26" fill="none"><path d="M3 20V8l9-5 9 5v12" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M3 20h18M9 20v-6h6v6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          </span>
+          <span class="d3-choice__body">
+            <span class="d3-choice__k">Events &amp; Private Dining</span>
+            <span class="d3-choice__d">From 20 to 500 guests. Enter the planning portal.</span>
+          </span>
+          <span class="d3-choice__arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    /* ============== NAV ============== */
+    .d3-nav{ position:fixed; top:0; left:0; right:0; z-index:1000; transition:background var(--d3-med), border-color var(--d3-med), backdrop-filter var(--d3-med); border-bottom:1px solid transparent; }
+    .d3-nav:not([data-at-top]){ background:color-mix(in oklab, var(--d3-bg) 84%, transparent); backdrop-filter:blur(14px); border-bottom-color:var(--d3-hair); }
+    .d3-nav__inner{ display:flex; align-items:center; justify-content:space-between; height:80px; gap:24px; }
+    .d3-nav__brand{ display:flex; align-items:baseline; gap:.5em; line-height:1; }
+    .d3-nav__word{ font-family:var(--d3-display); font-size:1.7rem; color:var(--d3-cream); letter-spacing:.04em; }
+    .d3-nav__sub{ font-family:var(--d3-body); font-weight:700; font-size:.6rem; letter-spacing:.36em; text-transform:uppercase; color:var(--d3-amber); }
+    .d3-nav__links{ display:flex; align-items:center; gap:30px; }
+    .d3-nav__link{ font-family:var(--d3-body); font-weight:600; font-size:.76rem; letter-spacing:.14em; text-transform:uppercase; color:var(--d3-mist); padding:6px 0; position:relative; transition:color var(--d3-fast); }
+    .d3-nav__link::after{ content:""; position:absolute; left:0; right:100%; bottom:-2px; height:1.5px; background:var(--d3-amber); transition:right var(--d3-med) var(--d3-ease); }
+    .d3-nav__link:hover{ color:var(--d3-cream); }
+    .d3-nav__link:hover::after,.d3-nav__link.is-current::after{ right:0; }
+    .d3-nav__link.is-current{ color:var(--d3-cream); }
+    .d3-nav__actions{ display:flex; align-items:center; gap:14px; }
+    .d3-nav__cta{ min-height:46px; }
+    .d3-nav__burger{ display:none; width:46px; height:46px; background:none; border:1px solid var(--d3-hair-2); border-radius:var(--d3-radius); cursor:pointer; flex-direction:column; align-items:center; justify-content:center; gap:5px; }
+    .d3-nav__burger span{ width:18px; height:1.6px; background:var(--d3-cream); transition:transform var(--d3-fast), opacity var(--d3-fast); }
+    .d3-nav__burger[aria-expanded="true"] span:first-child{ transform:translateY(3.3px) rotate(45deg); }
+    .d3-nav__burger[aria-expanded="true"] span:last-child{ transform:translateY(-3.3px) rotate(-45deg); }
+    .d3-nav__drawer{ overflow:hidden; background:var(--d3-bg-2); border-top:1px solid var(--d3-hair); }
+    .d3-nav__drawer nav{ display:flex; flex-direction:column; padding:12px var(--d3-gutter) 24px; }
+    .d3-nav__dlink{ padding:16px 2px; font-family:var(--d3-body); font-weight:700; font-size:1rem; letter-spacing:.1em; text-transform:uppercase; color:var(--d3-cream-dim); border-bottom:1px solid var(--d3-hair); }
+    .d3-nav__dlink--muted{ color:var(--d3-mist-dim); }
+    .d3-nav__dcta{ margin-top:20px; }
+    @media (max-width:960px){
+      .d3-nav__links,.d3-nav__cta{ display:none; }
+      .d3-nav__burger{ display:flex; }
+    }
+
+    /* ============== FOOTER ============== */
+    .d3-footer{ background:var(--d3-bg-2); border-top:1px solid var(--d3-hair); padding-block: clamp(3.5rem, 2.4rem + 4vw, 5.5rem) 2rem; }
+    .d3-footer__top{ display:grid; grid-template-columns:1.6fr 1fr 1fr 1.2fr; gap:clamp(2rem, 1rem + 3vw, 4rem); }
+    .d3-footer__word{ font-family:var(--d3-display); font-size:2rem; color:var(--d3-cream); letter-spacing:.02em; }
+    .d3-footer__word em{ font-style:normal; color:var(--d3-amber); }
+    .d3-footer__blurb{ color:var(--d3-mist); font-size:var(--d3-s--1); max-width:40ch; margin:.9em 0 1.7em; line-height:1.8; }
+    .d3-footer__news .d3-eyebrow{ margin-bottom:.8em; }
+    .d3-footer__form{ display:flex; gap:8px; max-width:390px; }
+    .d3-footer__form input{ flex:1; min-height:50px; padding:0 15px; background:var(--d3-bg); border:1px solid var(--d3-hair-2); border-radius:var(--d3-radius); color:var(--d3-cream); font-family:var(--d3-body); }
+    .d3-footer__form input::placeholder{ color:var(--d3-mist-dim); }
+    .d3-footer__note{ font-size:.78rem; color:var(--d3-mist-dim); margin:.9em 0 0; }
+    .d3-footer__note.is-ok{ color:var(--d3-citron); }
+    .d3-footer__h{ font-family:var(--d3-body); font-weight:700; font-size:.66rem; letter-spacing:.22em; text-transform:uppercase; color:var(--d3-amber-soft); margin-bottom:1.3em; }
+    .d3-footer__col{ display:flex; flex-direction:column; }
+    .d3-footer__link{ display:inline-flex; align-items:center; min-height:40px; color:var(--d3-mist); font-size:var(--d3-s--1); padding:4px 0; transition:color var(--d3-fast); }
+    .d3-footer__link:hover{ color:var(--d3-amber); }
+    .d3-footer__addr{ font-style:normal; color:var(--d3-mist); font-size:var(--d3-s--1); line-height:1.95; }
+    .d3-footer__hours{ color:var(--d3-mist-dim); font-size:.8rem; margin-top:1em; line-height:1.8; }
+    .d3-footer__bottom{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-top:clamp(2.4rem, 1.6rem + 3vw, 4rem); padding-top:1.6rem; border-top:1px solid var(--d3-hair); font-size:.76rem; color:var(--d3-mist-dim); }
+    .d3-footer__mark{ color:var(--d3-amber-soft); letter-spacing:.04em; }
+    @media (max-width:900px){ .d3-footer__top{ grid-template-columns:1fr 1fr; } }
+    @media (max-width:560px){ .d3-footer__top{ grid-template-columns:1fr; } }
+
+    /* ============== MODAL ============== */
+    .d3-modal{ position:fixed; inset:0; z-index:1200; display:grid; place-items:center; padding:24px; }
+    .d3-modal[hidden]{ display:none; }
+    .d3-modal__scrim{ position:absolute; inset:0; background:rgba(6,9,13,.76); backdrop-filter:blur(7px); opacity:0; transition:opacity var(--d3-med) var(--d3-ease); }
+    .d3-modal.is-open .d3-modal__scrim{ opacity:1; }
+    .d3-modal__panel{
+      position:relative; width:min(560px, 100%);
+      background:linear-gradient(180deg, var(--d3-bg-3) 0%, var(--d3-bg-2) 100%);
+      border:1px solid var(--d3-hair-2); border-radius:var(--d3-radius-lg);
+      padding:clamp(1.7rem, 1rem + 2.6vw, 2.9rem);
+      box-shadow:0 46px 130px -34px rgba(0,0,0,.85);
+      transform:translateY(18px) scale(.98); opacity:0;
+      transition:transform var(--d3-med) var(--d3-ease), opacity var(--d3-med) var(--d3-ease);
+    }
+    .d3-modal.is-open .d3-modal__panel{ transform:none; opacity:1; }
+    .d3-modal__close{ position:absolute; top:14px; right:14px; width:44px; height:44px; display:grid; place-items:center; background:none; border:none; color:var(--d3-mist-dim); cursor:pointer; transition:color var(--d3-fast); }
+    .d3-modal__close:hover{ color:var(--d3-cream); }
+    .d3-modal__title{ font-size:var(--d3-s-2); margin:.25em 0 1.1em; }
+    .d3-modal__grid{ display:flex; flex-direction:column; gap:12px; }
+    .d3-choice{
+      display:flex; align-items:center; gap:16px;
+      padding:15px 18px; border:1px solid var(--d3-hair); border-radius:var(--d3-radius-md);
+      background:rgba(242,236,223,.02);
+      transition:border-color var(--d3-med), background var(--d3-med), transform var(--d3-fast) var(--d3-ease);
+    }
+    .d3-choice:hover{ border-color:var(--d3-amber); background:color-mix(in oklab, var(--d3-amber) 8%, transparent); transform:translateX(3px); }
+    .d3-choice__ico{ flex:none; width:48px; height:48px; display:grid; place-items:center; color:var(--d3-amber); border:1px solid var(--d3-hair-2); border-radius:50%; }
+    .d3-choice--feature .d3-choice__ico{ color:var(--d3-citron); border-color:color-mix(in oklab, var(--d3-citron) 50%, transparent); }
+    .d3-choice__body{ display:flex; flex-direction:column; gap:3px; flex:1; }
+    .d3-choice__k{ font-family:var(--d3-display); font-size:var(--d3-s-1); color:var(--d3-cream); line-height:1.15; }
+    .d3-choice__d{ font-size:var(--d3-s--1); color:var(--d3-mist-dim); }
+    .d3-choice__arrow{ color:var(--d3-mist-dim); font-size:1.2rem; transition:transform var(--d3-fast) var(--d3-ease), color var(--d3-fast); }
+    .d3-choice:hover .d3-choice__arrow{ transform:translateX(4px); color:var(--d3-amber); }
+  </style>
+
+  <script>
+    // reveal-on-scroll
+    const els = document.querySelectorAll('.d3-reveal');
+    if (els.length) {
+      if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        els.forEach((el) => el.classList.add('is-in'));
+      } else {
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target); } });
+        }, { threshold: 0.14, rootMargin: '0px 0px -8% 0px' });
+        els.forEach((el) => io.observe(el));
+      }
+    }
+
+    // count-up numbers
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    document.querySelectorAll('[data-count]').forEach((el) => {
+      const raw = el.getAttribute('data-count');
+      const num = parseFloat(raw.replace(/[^0-9.]/g, ''));
+      const prefix = raw.startsWith('~') ? '~' : '';
+      const hasComma = raw.includes(',');
+      if (reduce || !('IntersectionObserver' in window) || isNaN(num)) { el.textContent = raw; return; }
+      el.textContent = prefix + '0';
+      const io = new IntersectionObserver((ents) => {
+        ents.forEach((en) => {
+          if (!en.isIntersecting) return; io.unobserve(el);
+          const dur = 1300, t0 = performance.now();
+          const tick = (t) => {
+            const p = Math.min((t - t0) / dur, 1);
+            const eased = 1 - Math.pow(1 - p, 3);
+            const v = Math.round(num * eased);
+            el.textContent = prefix + (hasComma ? v.toLocaleString('en-US') : String(v));
+            if (p < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        });
+      }, { threshold: 0.5 });
+      io.observe(el);
+    });
+
+    // nav: solid on scroll
+    const nav = document.getElementById('d3-nav');
+    const onScroll = () => { if (window.scrollY > 40) nav.removeAttribute('data-at-top'); else nav.setAttribute('data-at-top', ''); };
+    window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+    // mobile drawer
+    const burger = document.getElementById('d3-burger');
+    const drawer = document.getElementById('d3-drawer');
+    const setOpen = (open) => {
+      burger.setAttribute('aria-expanded', String(open));
+      if (open) { drawer.hidden = false; } else { setTimeout(() => { drawer.hidden = true; }, 10); }
+    };
+    burger?.addEventListener('click', () => setOpen(burger.getAttribute('aria-expanded') !== 'true'));
+    drawer?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+
+    // newsletter
+    const nf = document.getElementById('d3-news-form');
+    nf?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const note = document.getElementById('d3-news-note');
+      note.textContent = 'Welcome to the table. Look for our first note soon.';
+      note.classList.add('is-ok');
+      nf.reset();
+    });
+
+    // CTA modal
+    const modal = document.getElementById('d3-modal');
+    if (modal) {
+      let lastFocus = null;
+      const open = () => {
+        lastFocus = document.activeElement;
+        modal.hidden = false;
+        requestAnimationFrame(() => modal.classList.add('is-open'));
+        document.documentElement.style.overflow = 'hidden';
+        const first = modal.querySelector('.d3-choice');
+        if (first) first.focus();
+      };
+      const close = () => {
+        modal.classList.remove('is-open');
+        document.documentElement.style.overflow = '';
+        const done = () => { modal.hidden = true; modal.removeEventListener('transitionend', done); };
+        modal.addEventListener('transitionend', done);
+        if (lastFocus && lastFocus.focus) lastFocus.focus();
+      };
+      document.addEventListener('click', (e) => {
+        const trigger = e.target.closest('[data-cta]');
+        if (trigger) { e.preventDefault(); open(); return; }
+        if (e.target.closest('[data-cta-close]')) { close(); }
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !modal.hidden) close();
+        if (e.key === 'Tab' && !modal.hidden) {
+          const f = modal.querySelectorAll('a[href],button:not([disabled])');
+          if (!f.length) return;
+          const first = f[0], last = f[f.length - 1];
+          if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+          else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+        }
+      });
+    }
+  </script>
+</body>
+</html>

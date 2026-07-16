@@ -1,0 +1,185 @@
+---
+import Base from '../layouts/Base.astro';
+import LakeHero from '../components/LakeHero.astro';
+import { Image } from 'astro:assets';
+import dining from '../assets/img/dining-room.jpg';
+import tuna from '../assets/img/food-tuna.jpg';
+import cove from '../assets/img/room-cove.jpg';
+import tent from '../assets/img/room-offpremise.jpg';
+import { SITE } from '../data/site.js';
+
+const stats = [
+  { n: '10', l: 'years on the water' },
+  { n: '~14,000', l: 'events catered' },
+  { n: '7', l: 'Wine Spectator awards' },
+  { n: '500', l: 'guests, at the largest' },
+];
+const pillars = [
+  { k: 'Dine', img: dining, alt: 'The main dining room at Citron Baltimore', copy: 'Seasonal Modern American and a full sushi bar, 300 seats against Quarry Lake.', href: '/menu', cta: 'The Menu' },
+  { k: 'Cater', img: tent, alt: 'Tented off-premise catering by Citron', copy: 'Forty years of off-premise catering, your tent, home, or office, at any scale.', href: '/events', cta: 'Catering' },
+  { k: 'Celebrate', img: cove, alt: 'A gala set in The Cove event space', copy: 'Nine private spaces, from a fireside twenty to the whole venue at five hundred.', href: '/events', cta: 'Private Events' },
+];
+const featuredSpaces = [
+  { name: 'The Cove', cap: 'Up to 200' },
+  { name: 'Waterfront Courtyard', cap: 'Up to 200' },
+  { name: 'Waterfront Terrace', cap: 'Up to 50' },
+  { name: 'The Entire Venue', cap: 'Up to 500' },
+];
+---
+<Base title="Citron Baltimore, Waterfront Dining, Catering & Events at Quarry Lake">
+  <LakeHero />
+
+  <!-- ===== INTRO / STATEMENT ===== -->
+  <section class="section intro" id="story">
+    <div class="wrap intro__grid">
+      <p class="eyebrow reveal">Est. 2016 &middot; Quarry Lake</p>
+      <h2 class="intro__head reveal" data-delay="1">
+        A caterer from Pimlico built a restaurant on the water, and Baltimore has been celebrating here ever since.
+      </h2>
+      <p class="intro__body reveal measure" data-delay="2">
+        Charles and Susan Levine spent thirty years bringing a fine-dining standard to other people's rooms.
+        In 2016 they built one of their own on Quarry Lake, with a kitchen good enough to stand on its own
+        every night. This November marks ten years.
+      </p>
+      <a class="intro__link reveal" data-delay="3" href="/about">Read our story <span aria-hidden="true">&rarr;</span></a>
+    </div>
+
+    <ul class="stats wrap" aria-label="By the numbers">
+      {stats.map((s, i) => (
+        <li class="stats__item reveal" data-delay={String((i % 3) + 1)}>
+          <span class="stats__n" data-count={s.n}>{s.n}</span>
+          <span class="stats__l">{s.l}</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- ===== THREE PILLARS ===== -->
+  <section class="section pillars on-light">
+    <div class="wrap">
+      <header class="pillars__head reveal">
+        <p class="eyebrow">Three ways to gather</p>
+        <h2 class="pillars__title">One kitchen. One standard. Three rooms to find you in.</h2>
+      </header>
+      <div class="pillars__grid">
+        {pillars.map((p, i) => (
+          <a class="pillar reveal" data-delay={String(i + 1)} href={p.href}>
+            <div class="pillar__media">
+              <Image src={p.img} alt={p.alt} widths={[400, 700, 900]} sizes="(max-width:900px) 90vw, 30vw" loading="lazy" format="avif" quality={58} class="pillar__img" />
+            </div>
+            <span class="pillar__k">{p.k}</span>
+            <p class="pillar__copy">{p.copy}</p>
+            <span class="pillar__cta">{p.cta} <span aria-hidden="true">&rarr;</span></span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MENU TEASER ===== -->
+  <section class="section menu-teaser">
+    <div class="wrap menu-teaser__grid">
+      <figure class="menu-teaser__media reveal">
+        <Image src={tuna} alt="Tuna tartare from Citron's raw bar" widths={[500, 760, 900]} sizes="(max-width:820px) 90vw, 46vw" loading="lazy" format="avif" quality={58} class="menu-teaser__img" />
+      </figure>
+      <div class="menu-teaser__copy reveal" data-delay="1">
+        <p class="eyebrow eyebrow--brass">From the kitchen &amp; the raw bar</p>
+        <h2 class="menu-teaser__title">Center-cut steaks, day-boat seafood, and a sushi bar built to stand on its own.</h2>
+        <p class="measure">Executive Chef Mary Hersh runs a seasonal scratch kitchen: a Maryland crab cake with more crab than binder, a raw bar that surprises the table, and a Wine Spectator honored list built to travel with the menu, not sit apart from it.</p>
+        <a class="btn" href="/menu">See the Full Menu</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== EVENTS SHOWCASE (booking lives in the portal) ===== -->
+  <section class="section events-teaser" id="events-teaser">
+    <div class="events-teaser__bg" aria-hidden="true">
+      <Image src={cove} alt="" widths={[900, 1300, 1600]} sizes="100vw" loading="lazy" format="avif" quality={50} class="events-teaser__img" />
+      <div class="events-teaser__scrim"></div>
+    </div>
+    <div class="wrap events-teaser__content">
+      <p class="eyebrow reveal">Events &amp; Private Dining</p>
+      <h2 class="events-teaser__title reveal" data-delay="1">From a fireside twenty <em>to five hundred</em> on the water.</h2>
+      <p class="events-teaser__lede measure reveal" data-delay="1">One waterfront venue, one catering house, one kitchen. Nine private spaces in total, four of them here.</p>
+      <ul class="events-teaser__spaces reveal" data-delay="2">
+        {featuredSpaces.map((s) => (
+          <li class="ev-space">
+            <span class="ev-space__name">{s.name}</span>
+            <span class="ev-space__cap">{s.cap}</span>
+          </li>
+        ))}
+      </ul>
+      <div class="events-teaser__cta reveal" data-delay="3">
+        <a class="btn" href={SITE.portalUrl}>Enter the Planning Portal</a>
+        <a class="btn btn--ghost" href="/events">See All Nine Spaces</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FINAL CTA ===== -->
+  <section class="section final-cta">
+    <div class="wrap final-cta__inner reveal">
+      <p class="eyebrow">Pull up a chair</p>
+      <h2 class="final-cta__title">However you'd like to be hosted, it starts here.</h2>
+      <button class="btn final-cta__btn" data-cta>Reserve &middot; Pick-Up &middot; Events</button>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* intro */
+  .intro__grid{ display:grid; grid-template-columns:1fr; gap:.5rem; }
+  .intro__head{ font-size:var(--step-3); font-weight:500; max-width:22ch; margin:.4em 0 .6em; }
+  .intro__body{ color:var(--mist); font-size:var(--step-1); }
+  .intro__link{ display:inline-flex; gap:.5em; margin-top:1.6em; color:var(--citron); font-weight:700; font-size:var(--step--1); letter-spacing:.06em; text-transform:uppercase; }
+  .intro__link span{ transition:transform var(--t-fast) var(--ease); display:inline-block; }
+  .intro__link:hover span{ transform:translateX(5px); }
+  .stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:2rem; margin-top:clamp(3rem, 2rem + 4vw, 5rem); padding-top:2.4rem; border-top:1px solid var(--hair); }
+  .stats__item{ display:flex; flex-direction:column; gap:.3rem; }
+  .stats__n{ font-family:var(--serif); font-size:var(--step-3); color:var(--citron); line-height:1; }
+  .stats__l{ font-size:var(--step--1); color:var(--mist-dim); }
+  @media(max-width:720px){ .stats{ grid-template-columns:1fr 1fr; gap:1.6rem 2rem; } }
+
+  /* pillars */
+  .pillars__head{ max-width:34ch; margin-bottom:clamp(2rem, 1rem + 3vw, 3.4rem); }
+  .pillars__title{ font-size:var(--step-2); margin-top:.3em; }
+  .pillars__grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(1.2rem, .6rem + 2vw, 2.4rem); }
+  .pillar{ display:flex; flex-direction:column; }
+  .pillar__media{ aspect-ratio:4/5; overflow:hidden; border-radius:4px; margin-bottom:1.2rem; }
+  .pillar__img{ width:100%; height:100%; object-fit:cover; transition:transform var(--t-slow) var(--ease); }
+  .pillar:hover .pillar__img{ transform:scale(1.05); }
+  .pillar__k{ font-family:var(--serif); font-size:var(--step-2); color:var(--ink); }
+  .pillar__copy{ color:var(--ink-soft); font-size:var(--step-0); margin:.4em 0 1em; line-height:1.6; }
+  .pillar__cta{ margin-top:auto; font-weight:700; font-size:var(--step--1); letter-spacing:.1em; text-transform:uppercase; color:var(--olive-dark); }
+  @media(max-width:820px){ .pillars__grid{ grid-template-columns:1fr; gap:2.4rem; } .pillar__media{ aspect-ratio:16/10; } }
+
+  /* menu teaser */
+  .menu-teaser__grid{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(2rem, 1rem + 4vw, 5rem); align-items:center; }
+  .menu-teaser__media{ margin:0; }
+  .menu-teaser__img{ width:100%; aspect-ratio:4/3; object-fit:cover; border-radius:4px; box-shadow:0 30px 70px -34px rgba(0,0,0,.7); }
+  .menu-teaser__title{ font-size:var(--step-2); margin-bottom:.6em; }
+  .menu-teaser__copy p{ color:var(--mist); }
+  .menu-teaser__copy .btn{ margin-top:2rem; }
+  @media(max-width:820px){ .menu-teaser__grid{ grid-template-columns:1fr; gap:2.4rem; } .menu-teaser__media{ order:-1; } }
+
+  /* events showcase */
+  .events-teaser{ position:relative; color:var(--cream); overflow:hidden; }
+  .events-teaser__bg{ position:absolute; inset:0; }
+  .events-teaser__img{ width:100%; height:100%; object-fit:cover; }
+  .events-teaser__scrim{ position:absolute; inset:0; background:linear-gradient(100deg, rgba(8,12,10,.94) 8%, rgba(8,12,10,.68) 54%, rgba(8,12,10,.36) 100%); }
+  .events-teaser__content{ position:relative; z-index:2; max-width:640px; }
+  .events-teaser__title{ font-size:var(--step-3); font-weight:500; margin:.5em 0 .5em; }
+  .events-teaser__title em{ color:var(--citron); font-style:italic; }
+  .events-teaser__lede{ color:var(--mist); font-size:var(--step-1); }
+  .events-teaser__spaces{ display:grid; grid-template-columns:1fr 1fr; gap:1px; margin-top:2.2rem; background:var(--hair); border:1px solid var(--hair); }
+  .ev-space{ display:flex; align-items:baseline; justify-content:space-between; gap:1rem; padding:1rem 1.2rem; background:color-mix(in oklab, var(--abyss) 62%, transparent); }
+  .ev-space__name{ font-family:var(--serif); font-size:var(--step-1); color:var(--cream); }
+  .ev-space__cap{ font-size:.72rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--citron); white-space:nowrap; }
+  .events-teaser__cta{ display:flex; flex-wrap:wrap; gap:14px; margin-top:2.4rem; }
+  @media(max-width:520px){ .events-teaser__spaces{ grid-template-columns:1fr; } }
+
+  /* final cta */
+  .final-cta{ text-align:center; background:radial-gradient(120% 140% at 50% 0%, var(--night) 0%, var(--abyss) 60%); }
+  .final-cta__title{ font-size:var(--step-3); font-weight:500; max-width:18ch; margin:.35em auto .9em; }
+  .final-cta__btn{ min-height:58px; font-size:var(--step-0); }
+</style>

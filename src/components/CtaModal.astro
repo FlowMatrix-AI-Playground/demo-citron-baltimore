@@ -1,0 +1,124 @@
+---
+import { SITE } from '../data/site.js';
+---
+<!-- CTA popup: opened by any [data-cta] trigger on the page -->
+<div class="cta-modal" id="cta-modal" role="dialog" aria-modal="true" aria-labelledby="cta-modal-title" hidden>
+  <div class="cta-modal__scrim" data-cta-close></div>
+  <div class="cta-modal__panel" role="document">
+    <button class="cta-modal__close" data-cta-close aria-label="Close">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+    <p class="eyebrow">How can we host you?</p>
+    <h2 id="cta-modal-title" class="cta-modal__title">Choose your table.</h2>
+
+    <div class="cta-modal__grid">
+      <a class="cta-choice" href={SITE.reserveUrl} target="_blank" rel="noopener">
+        <span class="cta-choice__ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="none"><path d="M4 21V5a2 2 0 0 1 2-2h9l5 5v13" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 8h5M8 12h8M8 16h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </span>
+        <span class="cta-choice__body">
+          <span class="cta-choice__k">Reserve a Table</span>
+          <span class="cta-choice__d">Dinner on the water. Wed–Sun from 4 PM.</span>
+        </span>
+        <span class="cta-choice__arrow" aria-hidden="true">→</span>
+      </a>
+
+      <a class="cta-choice" href={SITE.pickupUrl} target="_blank" rel="noopener">
+        <span class="cta-choice__ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="none"><path d="M6 8h12l-1 12H7L6 8Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M9 8a3 3 0 0 1 6 0" stroke="currentColor" stroke-width="1.5"/></svg>
+        </span>
+        <span class="cta-choice__body">
+          <span class="cta-choice__k">Order Pick-Up</span>
+          <span class="cta-choice__d">The kitchen, to go. Powered by Toast.</span>
+        </span>
+        <span class="cta-choice__arrow" aria-hidden="true">→</span>
+      </a>
+
+      <a class="cta-choice cta-choice--feature" href={SITE.portalUrl}>
+        <span class="cta-choice__ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="none"><path d="M3 20V8l9-5 9 5v12" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M3 20h18M9 20v-6h6v6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="cta-choice__body">
+          <span class="cta-choice__k">Events &amp; Private Dining</span>
+          <span class="cta-choice__d">From 20 to 500 guests. Enter the planning portal.</span>
+        </span>
+        <span class="cta-choice__arrow" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .cta-modal{ position:fixed; inset:0; z-index:1200; display:grid; place-items:center; padding:24px; }
+  .cta-modal[hidden]{ display:none; }
+  .cta-modal__scrim{ position:absolute; inset:0; background:rgba(6,10,9,.72); backdrop-filter:blur(6px); opacity:0; transition:opacity var(--t-med) var(--ease); }
+  .cta-modal.is-open .cta-modal__scrim{ opacity:1; }
+  .cta-modal__panel{
+    position:relative; width:min(560px, 100%);
+    background:linear-gradient(180deg, var(--night) 0%, var(--abyss-2) 100%);
+    border:1px solid var(--hair-strong); border-radius:6px;
+    padding:clamp(1.6rem,1rem + 2.4vw,2.6rem);
+    box-shadow:0 40px 120px -30px rgba(0,0,0,.8);
+    transform:translateY(18px) scale(.98); opacity:0;
+    transition:transform var(--t-med) var(--ease), opacity var(--t-med) var(--ease);
+  }
+  .cta-modal.is-open .cta-modal__panel{ transform:none; opacity:1; }
+  .cta-modal__close{ position:absolute; top:14px; right:14px; width:44px; height:44px; display:grid; place-items:center; background:none; border:none; color:var(--mist-dim); cursor:pointer; transition:color var(--t-fast); }
+  .cta-modal__close:hover{ color:var(--cream); }
+  .cta-modal__title{ font-size:var(--step-2); margin:.3em 0 1.1em; }
+  .cta-modal__grid{ display:flex; flex-direction:column; gap:12px; }
+
+  .cta-choice{
+    display:flex; align-items:center; gap:16px;
+    padding:16px 18px; border:1px solid var(--hair); border-radius:5px;
+    background:rgba(255,255,255,.015);
+    transition:border-color var(--t-med), background var(--t-med), transform var(--t-fast) var(--ease);
+  }
+  .cta-choice:hover{ border-color:var(--citron); background:rgba(199,224,75,.06); transform:translateX(3px); }
+  .cta-choice__ico{ flex:none; width:48px; height:48px; display:grid; place-items:center; color:var(--citron); border:1px solid var(--hair); border-radius:50%; }
+  .cta-choice--feature .cta-choice__ico{ color:var(--brass-light); border-color:color-mix(in oklab, var(--brass) 50%, transparent); }
+  .cta-choice__body{ display:flex; flex-direction:column; gap:3px; flex:1; }
+  .cta-choice__k{ font-family:var(--serif); font-size:var(--step-1); color:var(--cream); line-height:1.1; }
+  .cta-choice__d{ font-size:var(--step--1); color:var(--mist-dim); }
+  .cta-choice__arrow{ color:var(--mist-dim); font-size:1.2rem; transition:transform var(--t-fast) var(--ease), color var(--t-fast); }
+  .cta-choice:hover .cta-choice__arrow{ transform:translateX(4px); color:var(--citron); }
+</style>
+
+<script>
+  const modal = document.getElementById('cta-modal');
+  if (modal) {
+    let lastFocus = null;
+    const open = () => {
+      lastFocus = document.activeElement;
+      modal.hidden = false;
+      requestAnimationFrame(() => modal.classList.add('is-open'));
+      document.documentElement.style.overflow = 'hidden';
+      const first = modal.querySelector('.cta-choice');
+      if (first) first.focus();
+    };
+    const close = () => {
+      modal.classList.remove('is-open');
+      document.documentElement.style.overflow = '';
+      const done = () => { modal.hidden = true; modal.removeEventListener('transitionend', done); };
+      modal.addEventListener('transitionend', done);
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    };
+    // any element with [data-cta] opens the modal
+    document.addEventListener('click', (e) => {
+      const trigger = e.target.closest('[data-cta]');
+      if (trigger) { e.preventDefault(); open(); return; }
+      if (e.target.closest('[data-cta-close]')) { close(); }
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !modal.hidden) close();
+      // simple focus trap
+      if (e.key === 'Tab' && !modal.hidden) {
+        const f = modal.querySelectorAll('a[href],button:not([disabled])');
+        if (!f.length) return;
+        const first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    });
+  }
+</script>

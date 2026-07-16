@@ -1,0 +1,66 @@
+---
+import { Image } from 'astro:assets';
+import table from '../assets/img/date-night.jpg';
+---
+<section class="hero" id="hero">
+  <div class="hero__media">
+    <Image
+      src={table}
+      alt="A candlelit dinner at Citron Baltimore, a plated dish with red and white wine and the Quarry Lake view glowing through the windows at dusk"
+      class="hero__poster"
+      widths={[600, 900, 1242]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+      format="avif"
+      quality={58}
+    />
+    <div class="hero__scrim"></div>
+  </div>
+
+  <div class="wrap hero__content">
+    <p class="hero__eyebrow eyebrow">Quarry Lake &middot; Baltimore County</p>
+    <h1 class="hero__title">
+      <span class="hero__line"><span class="hero__lift">After dark,</span></span>
+      <span class="hero__line hero__line--accent"><span class="hero__lift">on the water.</span></span>
+    </h1>
+    <p class="hero__sub">Dinner on the water and a Wine Spectator honored cellar, a catering house forty years deep, and an event venue for twenty to five hundred. Ten years on the water this November.</p>
+    <div class="hero__cta">
+      <button class="btn" data-cta>Reserve &middot; Pick-Up &middot; Events</button>
+      <a class="btn btn--ghost" href="/menu">Explore the Menu</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero{ position:relative; min-height:100svh; display:flex; align-items:flex-end; overflow:hidden; background:var(--abyss); }
+  .hero__media{ position:absolute; inset:0; }
+  .hero__poster{
+    position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:50% 48%;
+    transform:scale(1.06); animation:heroSettle 2.4s var(--ease) .05s forwards;
+  }
+  .hero__scrim{ position:absolute; inset:0; background:
+    linear-gradient(180deg, rgba(8,12,10,.52) 0%, rgba(8,12,10,.14) 26%, rgba(8,12,10,.18) 52%, rgba(8,12,10,.60) 82%, rgba(8,12,10,.82) 100%),
+    linear-gradient(95deg, rgba(8,12,10,.82) 0%, rgba(8,12,10,.54) 24%, rgba(8,12,10,.12) 56%, transparent 78%); }
+
+  .hero__content{ position:relative; z-index:3; padding-bottom:clamp(4rem, 3rem + 6vw, 8rem); padding-top:9rem; color:var(--cream); }
+  .hero__eyebrow{ opacity:0; transform:translateY(14px); animation:heroFade .9s var(--ease) .5s forwards; }
+  .hero__title{ font-size:clamp(3rem, 1.6rem + 7.4vw, 7rem); font-weight:500; line-height:.98; margin:.24em 0 .46em; margin-left:-.03em; }
+  .hero__line{ display:block; overflow:hidden; padding-bottom:.04em; }
+  .hero__line--accent{ color:var(--citron); font-style:italic; margin-left:-.02em; }
+  .hero__lift{ display:inline-block; transform:translateY(112%); animation:heroRise 1s var(--ease) forwards; }
+  .hero__line:nth-child(1) .hero__lift{ animation-delay:.34s; }
+  .hero__line--accent .hero__lift{ animation-delay:.5s; }
+  .hero__sub{ max-width:44ch; color:var(--mist); font-size:var(--step-1); line-height:1.6; opacity:0; transform:translateY(14px); animation:heroFade .9s var(--ease) .82s forwards; }
+  .hero__cta{ display:flex; flex-wrap:wrap; gap:14px; margin-top:2.2em; opacity:0; transform:translateY(14px); animation:heroFade .9s var(--ease) .96s forwards; }
+
+  @keyframes heroRise{ to{ transform:translateY(0); } }
+  @keyframes heroFade{ to{ opacity:1; transform:none; } }
+  @keyframes heroSettle{ to{ transform:scale(1); } }
+
+  @media (prefers-reduced-motion: reduce){
+    .hero__poster{ animation:none; transform:none; }
+    .hero__eyebrow,.hero__lift,.hero__sub,.hero__cta{ animation:none !important; opacity:1 !important; transform:none !important; }
+  }
+  @media (max-width:600px){ .hero__title{ line-height:1; } }
+</style>

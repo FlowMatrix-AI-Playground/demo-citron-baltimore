@@ -1,0 +1,383 @@
+---
+import Base from '../layouts/Base.astro';
+import { Image } from 'astro:assets';
+import heroImg from '../assets/img/cove-gala.jpg';
+import { SITE } from '../data/site.js';
+
+// Occasion options (front-end demo intake)
+const occasions = [
+  { v: 'Wedding', label: 'Wedding' },
+  { v: 'Corporate', label: 'Corporate' },
+  { v: 'Celebration', label: 'Celebration' },
+  { v: 'Rehearsal Dinner', label: 'Rehearsal Dinner' },
+  { v: 'Social', label: 'Social' },
+];
+
+// The nine spaces, reference grid (name + capacity only; not individually bookable here)
+const spaces = [
+  { name: 'The Fireplace Room', cap: 'Up to 20' },
+  { name: 'The Mirror Room', cap: 'Up to 26' },
+  { name: 'The Club Room', cap: 'Up to 50' },
+  { name: 'The Waterfront Terrace', cap: 'Up to 50' },
+  { name: 'The Citron Bar', cap: 'Up to 125' },
+  { name: 'The Cove', cap: 'Up to 200' },
+  { name: 'The Waterfront Courtyard', cap: 'Up to 200' },
+  { name: 'The Entire Venue', cap: 'Up to 500' },
+  { name: 'Off-Premise Catering', cap: 'Your address, any scale' },
+];
+
+const steps = [
+  { n: '01', k: 'You tell us', copy: 'Share the occasion, the headcount, and the date. Two minutes, no obligation.' },
+  { n: '02', k: 'We propose', copy: 'A planner replies with the room that fits, a draft menu, and a clear estimate.' },
+  { n: '03', k: 'You celebrate', copy: 'We handle the rest, from the wine list to the last plate cleared.' },
+];
+---
+<Base
+  title="Plan Your Event, Citron Baltimore"
+  description="Start planning a private event or catering at Citron Baltimore, from a fireside twenty to five hundred guests."
+>
+  <!-- ===== COMPACT HERO ===== -->
+  <section class="plan-hero">
+    <div class="plan-hero__bg" aria-hidden="true">
+      <Image src={heroImg} alt="" widths={[900, 1300, 1600]} sizes="100vw" loading="eager" fetchpriority="high" format="avif" quality={58} class="plan-hero__img" />
+      <div class="plan-hero__scrim"></div>
+    </div>
+    <div class="wrap plan-hero__content cluster">
+      <p class="eyebrow reveal">The Planning Portal</p>
+      <h1 class="plan-hero__title reveal" data-delay="1">Let's plan your night <em>on the water.</em></h1>
+      <p class="plan-hero__lede reveal measure" data-delay="2">
+        A fireside twenty or five hundred under the sky, tell us a little, and a Citron planner takes it from there.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== INTERACTIVE INTAKE (front-end demo) ===== -->
+  <section class="section intake" id="intake">
+    <div class="wrap intake__grid">
+      <header class="intake__intro reveal">
+        <p class="eyebrow eyebrow--brass">Start here</p>
+        <h2 class="intake__head">A quick sketch of your event.</h2>
+        <p class="measure intake__sub">
+          Move the slider and pick an occasion, we'll suggest a room in real time. Nothing is booked until you hear back from us.
+        </p>
+      </header>
+
+      <form class="intake__form reveal" data-delay="1" id="planForm" novalidate>
+        <!-- Occasion -->
+        <fieldset class="field">
+          <legend class="field__label">What are we celebrating?</legend>
+          <div class="chips" role="radiogroup" aria-label="Occasion">
+            {occasions.map((o, i) => (
+              <label class="chip">
+                <input type="radio" name="occasion" value={o.v} checked={i === 0} />
+                <span>{o.label}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+
+        <!-- Guest count slider -->
+        <div class="field">
+          <label class="field__label" for="guests">How many guests?</label>
+          <div class="slider">
+            <input type="range" id="guests" name="guests" min="10" max="500" step="5" value="120" aria-describedby="guestReadout" />
+            <div class="slider__ticks" aria-hidden="true"><span>10</span><span>125</span><span>250</span><span>375</span><span>500</span></div>
+          </div>
+          <p class="readout" id="guestReadout" aria-live="polite">
+            <span class="readout__count"><strong id="guestVal">120</strong> guests</span>
+            <span class="readout__space">Suggested space: <strong id="spaceVal">The Citron Bar</strong></span>
+          </p>
+          <label class="offsite">
+            <input type="checkbox" id="offsite" name="offsite" />
+            <span>This is an off-site / off-premise event (we bring Citron to you)</span>
+          </label>
+        </div>
+
+        <!-- Date + contact -->
+        <div class="field">
+          <label class="field__label" for="date">Preferred date</label>
+          <input class="input" type="date" id="date" name="date" />
+        </div>
+
+        <div class="field field--split">
+          <div>
+            <label class="field__label" for="name">Your name</label>
+            <input class="input" type="text" id="name" name="name" autocomplete="name" placeholder="First &amp; last" />
+          </div>
+          <div>
+            <label class="field__label" for="email">Email</label>
+            <input class="input" type="email" id="email" name="email" autocomplete="email" placeholder="you@email.com" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="phone">Phone <span class="opt">(optional)</span></label>
+          <input class="input" type="tel" id="phone" name="phone" autocomplete="tel" placeholder="410-000-0000" />
+        </div>
+
+        <button class="btn intake__submit" type="submit" data-magnetic>Send My Inquiry</button>
+        <p class="success" id="successNote" role="status" aria-live="polite" hidden></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- ===== NINE SPACES REFERENCE ===== -->
+  <section class="section spaces on-light">
+    <div class="wrap">
+      <header class="spaces__head reveal">
+        <p class="eyebrow">Nine ways to gather</p>
+        <h2 class="spaces__title">One property, nine settings, plus catering anywhere.</h2>
+        <p class="measure spaces__sub">A reference for scale. Your planner will match the room to the moment.</p>
+      </header>
+      <ul class="spaces__grid">
+        {spaces.map((s, i) => (
+          <li class="space reveal" data-delay={String((i % 3) + 1)}>
+            <span class="space__name">{s.name}</span>
+            <span class="space__cap">{s.cap}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== WHAT HAPPENS NEXT ===== -->
+  <section class="section next">
+    <div class="wrap">
+      <header class="next__head reveal">
+        <p class="eyebrow">What happens next</p>
+        <h2 class="next__title">Three easy steps from idea to celebration.</h2>
+      </header>
+      <ol class="next__grid">
+        {steps.map((s, i) => (
+          <li class="step reveal" data-delay={String(i + 1)}>
+            <span class="step__n">{s.n}</span>
+            <span class="step__k">{s.k}</span>
+            <p class="step__copy">{s.copy}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- ===== SECONDARY ACTIONS ===== -->
+  <section class="section secondary">
+    <div class="wrap secondary__inner reveal">
+      <p class="eyebrow">Prefer another way in?</p>
+      <h2 class="secondary__title">However you'd like to begin, we're ready.</h2>
+      <div class="secondary__cta">
+        <button class="btn btn--ghost" data-cta data-magnetic>Reserve &middot; Pick-Up &middot; Events</button>
+        <a class="secondary__link" href={SITE.reserveUrl} target="_blank" rel="noopener">Just make a reservation instead <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <script define:vars={{ email: SITE.email }}>
+    (() => {
+      const form = document.getElementById('planForm');
+      if (!form) return;
+      const range = document.getElementById('guests');
+      const valEl = document.getElementById('guestVal');
+      const spaceEl = document.getElementById('spaceVal');
+      const offsite = document.getElementById('offsite');
+      const success = document.getElementById('successNote');
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      const spaceFor = (n, off) => {
+        if (off) return 'Off-Premise Catering';
+        if (n <= 20) return 'The Fireplace Room';
+        if (n <= 26) return 'The Mirror Room';
+        if (n <= 50) return 'The Club Room or Terrace';
+        if (n <= 125) return 'The Citron Bar';
+        if (n <= 200) return 'The Cove or Courtyard';
+        return 'The Entire Venue';
+      };
+
+      const paint = () => {
+        const n = Number(range.value);
+        const off = offsite.checked;
+        const pct = ((n - range.min) / (range.max - range.min)) * 100;
+        range.style.setProperty('--fill', pct + '%');
+        valEl.textContent = String(n);
+        spaceEl.textContent = spaceFor(n, off);
+      };
+      range.addEventListener('input', paint);
+      offsite.addEventListener('change', paint);
+      paint();
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const data = new FormData(form);
+        const occasion = data.get('occasion') || 'Not specified';
+        const guests = data.get('guests') || '';
+        const off = offsite.checked;
+        const date = data.get('date') || 'Flexible';
+        const name = (data.get('name') || '').toString().trim();
+        const emailAddr = (data.get('email') || '').toString().trim();
+        const phone = (data.get('phone') || '').toString().trim() || 'Not provided';
+        const space = spaceFor(Number(guests), off);
+
+        const subject = `Event inquiry, ${occasion} for ${guests} guests`;
+        const bodyLines = [
+          `Occasion: ${occasion}`,
+          `Guest count: ${guests}`,
+          `Suggested space: ${space}${off ? ' (off-premise)' : ''}`,
+          `Preferred date: ${date}`,
+          '',
+          `Name: ${name || 'Not provided'}`,
+          `Email: ${emailAddr || 'Not provided'}`,
+          `Phone: ${phone}`,
+          '',
+          'Sent from the Citron Baltimore planning portal.',
+        ];
+        const href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyLines.join('\n'))}`;
+
+        success.hidden = false;
+        success.textContent = `Thank you${name ? ', ' + name.split(' ')[0] : ''}. Your ${occasion.toLowerCase()} for ${guests} in ${space} is ready, opening your email to send.`;
+        if (!reduce) success.classList.add('is-in');
+        window.location.href = href;
+      });
+    })();
+  </script>
+</Base>
+
+<style>
+  /* ===== HERO ===== */
+  .plan-hero{ position:relative; min-height:clamp(620px, 58vh + 10vw, 800px); display:flex; align-items:flex-end; overflow:hidden; }
+  .plan-hero__bg{ position:absolute; inset:0; }
+  .plan-hero__img{ width:100%; height:100%; object-fit:cover; }
+  .plan-hero__scrim{ position:absolute; inset:0; background:linear-gradient(180deg, rgba(8,12,10,.55) 0%, rgba(8,12,10,.4) 40%, rgba(8,12,10,.94) 100%); }
+  .plan-hero__content{ position:relative; z-index:2; padding-block:8rem clamp(2.6rem, 1.6rem + 3vw, 4rem); max-width:760px; }
+  .plan-hero__title{ font-size:clamp(2.4rem,1.5rem + 3.4vw,4rem); font-weight:500; line-height:1.02; margin-top:.1em; }
+  .plan-hero__title em{ color:var(--citron); font-style:italic; }
+  .plan-hero__lede{ color:var(--mist); font-size:var(--step-1); margin-top:.8em; }
+
+  /* ===== INTAKE ===== */
+  .intake{ background:radial-gradient(140% 120% at 15% 0%, var(--abyss-2) 0%, var(--abyss) 62%); }
+  .intake__grid{ display:grid; grid-template-columns:.85fr 1.15fr; gap:clamp(2rem,1rem + 4vw,5rem); align-items:start; }
+  .intake__intro{ position:sticky; top:6rem; }
+  .intake__head{ font-size:var(--step-3); font-weight:500; margin:.15em 0 .5em; max-width:14ch; }
+  .intake__sub{ color:var(--mist); font-size:var(--step-0); }
+
+  .intake__form{
+    background:linear-gradient(180deg, var(--night) 0%, var(--abyss-2) 100%);
+    border:1px solid var(--hair-strong); border-radius:8px;
+    padding:clamp(1.5rem,1rem + 2.4vw,2.8rem);
+    box-shadow:0 40px 120px -40px rgba(0,0,0,.7);
+    display:flex; flex-direction:column; gap:2rem;
+  }
+  .field{ display:flex; flex-direction:column; gap:.85rem; border:0; padding:0; margin:0; min-width:0; }
+  .field__label{ font-family:var(--sans); font-weight:700; font-size:var(--step--1); letter-spacing:.12em; text-transform:uppercase; color:var(--mist); padding:0; }
+  .opt{ color:var(--mist-dim); font-weight:400; letter-spacing:.04em; text-transform:none; }
+
+  /* chips */
+  .chips{ display:flex; flex-wrap:wrap; gap:10px; }
+  .chip{ position:relative; cursor:pointer; }
+  .chip input{ position:absolute; opacity:0; inset:0; width:100%; height:100%; margin:0; cursor:pointer; }
+  .chip span{
+    display:inline-flex; align-items:center; min-height:44px; padding:0 1.1em;
+    border:1px solid var(--hair-strong); border-radius:40px;
+    font-size:var(--step--1); font-weight:500; color:var(--mist);
+    transition:border-color var(--t-med), background var(--t-med), color var(--t-med), transform var(--t-fast) var(--ease);
+  }
+  .chip:hover span{ transform:translateY(-2px); border-color:color-mix(in oklab, var(--citron) 50%, transparent); }
+  .chip input:checked + span{ background:var(--citron); border-color:var(--citron); color:var(--abyss); font-weight:700; }
+  .chip input:focus-visible + span{ outline:2px solid var(--citron); outline-offset:3px; }
+
+  /* slider */
+  .slider{ padding-top:.2rem; }
+  .slider__ticks{ display:flex; justify-content:space-between; margin-top:.7rem; font-size:.7rem; letter-spacing:.05em; color:var(--mist-dim); }
+  input[type="range"]{
+    --fill:0%;
+    -webkit-appearance:none; appearance:none; width:100%; height:6px; margin:0;
+    background:linear-gradient(to right, var(--citron) var(--fill), var(--hair-strong) var(--fill));
+    border-radius:40px; cursor:pointer; outline-offset:6px;
+  }
+  input[type="range"]::-webkit-slider-thumb{
+    -webkit-appearance:none; appearance:none; width:26px; height:26px; border-radius:50%;
+    background:var(--cream); border:3px solid var(--citron);
+    box-shadow:0 6px 18px -6px rgba(0,0,0,.7); cursor:grab;
+    transition:transform var(--t-fast) var(--ease);
+  }
+  input[type="range"]::-webkit-slider-thumb:active{ cursor:grabbing; transform:scale(1.12); }
+  input[type="range"]::-moz-range-thumb{
+    width:26px; height:26px; border-radius:50%;
+    background:var(--cream); border:3px solid var(--citron);
+    box-shadow:0 6px 18px -6px rgba(0,0,0,.7); cursor:grab;
+  }
+  input[type="range"]::-moz-range-track{ height:6px; background:var(--hair-strong); border-radius:40px; }
+  input[type="range"]::-moz-range-progress{ height:6px; background:var(--citron); border-radius:40px; }
+
+  .readout{ display:flex; flex-wrap:wrap; align-items:baseline; gap:.4rem 1.4rem; margin:.4rem 0 0; }
+  .readout__count{ font-size:var(--step-0); color:var(--mist); }
+  .readout__count strong{ font-family:var(--serif); font-size:var(--step-2); color:var(--citron); font-weight:600; margin-right:.15em; }
+  .readout__space{ font-size:var(--step--1); color:var(--mist-dim); letter-spacing:.02em; }
+  .readout__space strong{ color:var(--brass-light); font-weight:700; }
+
+  .offsite{ display:flex; align-items:flex-start; gap:.7rem; margin-top:.9rem; font-size:var(--step--1); color:var(--mist); cursor:pointer; }
+  .offsite input{ flex:none; width:20px; height:20px; margin-top:1px; accent-color:var(--citron); cursor:pointer; }
+
+  /* text inputs */
+  .input{
+    width:100%; min-height:52px; padding:0 1rem;
+    background:rgba(255,255,255,.03); color:var(--cream);
+    border:1px solid var(--hair-strong); border-radius:var(--radius);
+    font-family:var(--sans); font-size:var(--step-0);
+    transition:border-color var(--t-med), background var(--t-med);
+  }
+  .input::placeholder{ color:var(--mist-dim); }
+  .input:hover{ border-color:color-mix(in oklab, var(--citron) 40%, var(--hair-strong)); }
+  .input:focus{ outline:none; border-color:var(--citron); background:rgba(199,224,75,.05); }
+  .input:focus-visible{ outline:2px solid var(--citron); outline-offset:3px; }
+  .field--split{ display:grid; grid-template-columns:1fr 1fr; gap:1.4rem; }
+  .field--split > div{ display:flex; flex-direction:column; gap:.85rem; min-width:0; }
+  /* dark date picker */
+  input[type="date"]{ color-scheme:dark; }
+
+  .intake__submit{ align-self:flex-start; min-height:56px; font-size:var(--step-0); margin-top:.2rem; }
+  .success{
+    margin:0; padding:1rem 1.2rem; border-radius:var(--radius);
+    background:rgba(199,224,75,.08); border:1px solid color-mix(in oklab, var(--citron) 40%, transparent);
+    color:var(--cream); font-size:var(--step-0); line-height:1.5;
+    opacity:0; transform:translateY(8px); transition:opacity var(--t-med) var(--ease), transform var(--t-med) var(--ease);
+  }
+  .success.is-in{ opacity:1; transform:none; }
+  .success[hidden]{ display:none; }
+
+  @media(max-width:860px){
+    .intake__grid{ grid-template-columns:1fr; gap:2.4rem; }
+    .intake__intro{ position:static; }
+  }
+  @media(max-width:520px){
+    .field--split{ grid-template-columns:1fr; }
+  }
+
+  /* ===== NINE SPACES ===== */
+  .spaces__head{ max-width:40ch; margin-bottom:clamp(2rem,1rem + 3vw,3.2rem); }
+  .spaces__title{ font-size:var(--step-2); margin:.25em 0 .5em; }
+  .spaces__sub{ color:var(--ink-soft); }
+  .spaces__grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:color-mix(in oklab, var(--ink) 14%, transparent); border:1px solid color-mix(in oklab, var(--ink) 14%, transparent); border-radius:6px; overflow:hidden; }
+  .space{ display:flex; flex-direction:column; gap:.35rem; padding:clamp(1.2rem,.9rem + 1.4vw,1.8rem); background:var(--paper); transition:background var(--t-med); }
+  .space:hover{ background:var(--cream); }
+  .space__name{ font-family:var(--serif); font-size:var(--step-1); color:var(--ink); line-height:1.1; }
+  .space__cap{ font-size:.74rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--olive-dark); }
+  @media(max-width:760px){ .spaces__grid{ grid-template-columns:1fr 1fr; } }
+  @media(max-width:460px){ .spaces__grid{ grid-template-columns:1fr; } }
+
+  /* ===== WHAT HAPPENS NEXT ===== */
+  .next__head{ max-width:34ch; margin-bottom:clamp(2rem,1rem + 3vw,3.4rem); }
+  .next__title{ font-size:var(--step-2); margin-top:.25em; }
+  .next__grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(1.4rem,.8rem + 2vw,2.6rem); }
+  .step{ display:flex; flex-direction:column; gap:.6rem; padding-top:1.6rem; border-top:1px solid var(--hair-strong); }
+  .step__n{ font-family:var(--serif); font-size:var(--step-2); color:var(--citron); line-height:1; }
+  .step__k{ font-family:var(--serif); font-size:var(--step-1); color:var(--cream); }
+  .step__copy{ color:var(--mist); font-size:var(--step-0); margin:0; }
+  @media(max-width:760px){ .next__grid{ grid-template-columns:1fr; gap:1.8rem; } }
+
+  /* ===== SECONDARY ===== */
+  .secondary{ text-align:center; background:radial-gradient(120% 140% at 50% 0%, var(--night) 0%, var(--abyss) 60%); }
+  .secondary__title{ font-size:var(--step-3); font-weight:500; max-width:20ch; margin:.35em auto .9em; }
+  .secondary__cta{ display:flex; flex-direction:column; align-items:center; gap:1.2rem; }
+  .secondary__link{ display:inline-flex; gap:.5em; color:var(--citron); font-weight:700; font-size:var(--step--1); letter-spacing:.06em; text-transform:uppercase; }
+  .secondary__link span{ display:inline-block; transition:transform var(--t-fast) var(--ease); }
+  .secondary__link:hover span{ transform:translateX(5px); }
+</style>

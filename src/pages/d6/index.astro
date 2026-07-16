@@ -1,0 +1,406 @@
+---
+import D6Base from '../../layouts/D6Base.astro';
+import { Image } from 'astro:assets';
+import { SITE } from '../../data/site.js';
+import { MENU } from '../../data/menu.js';
+
+import heroImg from '../../assets/img/food-tuna.jpg';
+import appetizers from '../../assets/img/food-appetizers.jpg';
+import tuna from '../../assets/img/food-tuna.jpg';
+import wine from '../../assets/img/wine.jpg';
+import coveWed from '../../assets/img/cove-wedding.jpg';
+import courtyard from '../../assets/img/courtyard-lakefront.jpg';
+import terrace from '../../assets/img/terrace-event.jpg';
+import offprem from '../../assets/img/room-offpremise.jpg';
+import couple from '../../assets/img/charles-susan.jpg';
+import sunset from '../../assets/img/sunset.jpg';
+
+// kinetic heading letters
+const kinLetters = (text) => [...text].map((ch, i) => ({ ch, i }));
+const heroLine1 = kinLetters('Citron');
+
+// rising-sun sunburst geometry (drawn on reveal)
+const CX = 220, CY = 176, R = 168;
+const RAYS = Array.from({ length: 15 }, (_, i) => {
+  const a = Math.PI * (i / 14);
+  return {
+    x2: (CX + R * Math.cos(a)).toFixed(1),
+    y2: (CY - R * Math.sin(a)).toFixed(1),
+    d: (i * 60).toFixed(0),
+  };
+});
+const ARCS = [64, 108, 152].map((r, i) => ({
+  d: `M ${CX - r} ${CY} A ${r} ${r} 0 0 1 ${CX + r} ${CY}`,
+  delay: 200 + i * 220,
+}));
+
+// menu teaser picks
+const first = MENU.find((s) => s.id === 'first-plate').items;
+const entrees = MENU.find((s) => s.id === 'entrees').items;
+const teaser = [
+  { ...first.find((i) => i.name === 'Ahi Tuna Tartare'), img: tuna, alt: 'Ahi tuna tartare from the raw bar' },
+  { ...first.find((i) => i.name === 'Crispy Fresh Calamari'), img: appetizers, alt: 'Crispy fresh calamari with spicy passion fruit glaze' },
+  { ...entrees.find((i) => i.name.includes('Chilean Sea Bass')), img: wine, alt: 'A glass from the Wine Spectator honored cellar' },
+];
+
+const spaces = [
+  { key: 'cove', name: 'The Cove', cap: '150–500 guests', img: coveWed, alt: 'A wedding reception in The Cove ballroom', note: 'Our grand ballroom for galas and weddings, opening to the water.' },
+  { key: 'courtyard', name: 'The Courtyard', cap: '40–120 guests', img: courtyard, alt: 'Lakefront courtyard set for a gathering', note: 'Alfresco lakefront dinners under string light and open sky.' },
+  { key: 'terrace', name: 'The Terrace', cap: '20–80 guests', img: terrace, alt: 'Terrace event overlooking Quarry Lake', note: 'An intimate waterside terrace for rehearsal dinners and toasts.' },
+  { key: 'catering', name: 'Citron Caterers', cap: 'Off premise', img: offprem, alt: 'Off premise catering spread by Citron Caterers', note: 'Forty years and roughly 14,000 events, brought to your address.' },
+];
+
+const title = 'Citron Baltimore, Art Deco Waterfront Dining at Quarry Lake';
+const description = 'Citron Baltimore: an upscale waterfront restaurant and event venue on Quarry Lake. Seasonal Modern American cuisine, a full sushi bar, a Wine Spectator honored cellar, and private events from 20 to 500 guests.';
+---
+<D6Base title={title} description={description}>
+  <!-- ===================== HERO ===================== -->
+  <section class="d6-hero">
+    <div class="d6-hero__sun" aria-hidden="true">
+      <svg class="d6-sun" viewBox="0 0 440 200" width="440" height="200" fill="none" preserveAspectRatio="xMidYMax meet">
+        {RAYS.map((r) => (
+          <line x1={CX} y1={CY} x2={r.x2} y2={r.y2} stroke="var(--d6-brass)" stroke-width="1" pathLength="1" style={`transition-delay:${r.d}ms`} />
+        ))}
+        {ARCS.map((a) => (
+          <path d={a.d} stroke="var(--d6-brass)" stroke-width="1" pathLength="1" style={`transition-delay:${a.delay}ms`} />
+        ))}
+        <circle cx={CX} cy={CY} r="30" stroke="var(--d6-brass-2)" stroke-width="1.2" pathLength="1" style="transition-delay:900ms" />
+      </svg>
+    </div>
+
+    <div class="d6-wrap d6-hero__inner">
+      <div class="d6-hero__copy">
+        <p class="d6-kicker d6-rv">Waterfront · Since 2016</p>
+        <h1 class="d6-hero__title">
+          <span class="d6-kin d6-hero__kin">
+            {heroLine1.map((l) => (
+              <span class="d6-kin__l" style={`transition-delay:${80 + l.i * 55}ms`}>{l.ch}</span>
+            ))}
+          </span>
+          <span class="d6-hero__title-sub d6-rv" data-delay="2">on Quarry Lake</span>
+        </h1>
+        <p class="d6-hero__lead d6-rv" data-delay="3">
+          A jazz-age room on the water in Baltimore County. Seasonal Modern American plates, a full sushi bar,
+          and a Wine Spectator honored cellar, poured for dinner and for the grandest of celebrations.
+        </p>
+        <div class="d6-hero__cta d6-rv" data-delay="4">
+          <button class="d6-btn d6-btn--solid" data-cta>Reserve a Table</button>
+          <a class="d6-btn d6-btn--ghost" href="/d6/events">Plan an Event</a>
+        </div>
+        <ul class="d6-hero__facts d6-rv" data-delay="5">
+          <li><strong>300</strong><span>seats on the water</span></li>
+          <li><strong>10–500</strong><span>guests in The Cove</span></li>
+          <li><strong>2019–2025</strong><span>Wine Spectator</span></li>
+        </ul>
+      </div>
+
+      <div class="d6-hero__figure d6-rv" data-delay="2">
+        <div class="d6-frame d6-hero__frame">
+          <Image src={heroImg} alt="Citron's ahi tuna tartare, sesame black garlic vinaigrette, avocado and wonton crisps, in a bright white bowl" widths={[600, 900, 1200]} sizes="(max-width:900px) 90vw, 42vw" loading="eager" fetchpriority="high" format="avif" quality={58} />
+        </div>
+        <span class="d6-hero__stamp" aria-hidden="true">Est.<br />MMXVI</span>
+      </div>
+    </div>
+    <div class="d6-hero__hr" aria-hidden="true"></div>
+  </section>
+
+  <!-- ===================== STORY / INTRO ===================== -->
+  <section class="d6-section" id="seasonal">
+    <div class="d6-wrap">
+      <div class="d6-div d6-rv"><span class="d6-div__gem"></span></div>
+      <div class="d6-story">
+        <div class="d6-story__copy d6-rv">
+          <p class="d6-kicker">The House on the Water</p>
+          <h2 class="d6-story__title">A little glamour, kept honest by the tide.</h2>
+          <p>
+            Charles and Susan Levine opened Citron on Quarry Lake with a simple idea: put a serious kitchen,
+            a designer sushi bar, and an award-winning cellar in a room that feels like a celebration every night.
+            Executive Chef Mary Hersh cooks a seasonal Modern American menu with a Maryland accent, from colossal
+            lump crab to prime steaks and center-cut fish.
+          </p>
+          <p>
+            This November marks ten years on the water. Behind the restaurant, Citron Caterers has been serving
+            Charm City off premise for four decades, roughly fourteen thousand events and counting.
+          </p>
+          <a class="d6-textlink" href="/d6/about">Read our story <span aria-hidden="true">→</span></a>
+        </div>
+        <ul class="d6-story__stats">
+          <li class="d6-rv" data-delay="1"><span class="d6-stat__n" data-count="14000">14,000</span><span class="d6-stat__l">Events catered over 40 years</span></li>
+          <li class="d6-rv" data-delay="2"><span class="d6-stat__n" data-count="300">300</span><span class="d6-stat__l">Seats overlooking the lake</span></li>
+          <li class="d6-rv" data-delay="3"><span class="d6-stat__n" data-count="7">7</span><span class="d6-stat__l">Straight years, Wine Spectator</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== THREE OFFERINGS ===================== -->
+  <section class="d6-section d6-section--tint">
+    <div class="d6-wrap">
+      <div class="d6-sechead d6-rv">
+        <p class="d6-kicker">Three Ways to Gather</p>
+        <h2 class="d6-sechead__title">Dine. Cater. Celebrate.</h2>
+      </div>
+      <div class="d6-offer">
+        <article class="d6-card d6-rv" data-delay="1">
+          <span class="d6-card__no" aria-hidden="true">I</span>
+          <h3 class="d6-card__t">Dine</h3>
+          <p class="d6-card__d">Dinner on the water, Wednesday through Sunday from four. Raw bar, sushi, steaks, and a cellar honored seven years running.</p>
+          <button class="d6-textlink" data-cta>Reserve a table <span aria-hidden="true">→</span></button>
+        </article>
+        <article class="d6-card d6-rv" data-delay="2">
+          <span class="d6-card__no" aria-hidden="true">II</span>
+          <h3 class="d6-card__t">Cater</h3>
+          <p class="d6-card__d">Citron Caterers brings forty years of off-premise polish to your home or venue, including PhRMA-compliant corporate menus.</p>
+          <a class="d6-textlink" href={SITE.portalUrl}>Plan catering <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="d6-card d6-rv" data-delay="3">
+          <span class="d6-card__no" aria-hidden="true">III</span>
+          <h3 class="d6-card__t">Celebrate</h3>
+          <p class="d6-card__d">The Cove hosts from ten to five hundred, with terraces and courtyards for every size of toast on Quarry Lake.</p>
+          <a class="d6-textlink" href="/d6/events">See the spaces <span aria-hidden="true">→</span></a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== MENU TEASER ===================== -->
+  <section class="d6-section">
+    <div class="d6-wrap">
+      <div class="d6-sechead d6-rv d6-sechead--split">
+        <div>
+          <p class="d6-kicker">From the Kitchen</p>
+          <h2 class="d6-sechead__title">A taste of the card.</h2>
+        </div>
+        <a class="d6-btn d6-btn--ghost" href="/d6/menu">The Full Menu</a>
+      </div>
+      <div class="d6-teaser">
+        {teaser.map((t, i) => (
+          <article class="d6-dish d6-rv" data-delay={i + 1}>
+            <div class="d6-frame d6-dish__fig">
+              <Image src={t.img} alt={t.alt} widths={[400, 640]} sizes="(max-width:820px) 90vw, 30vw" loading="lazy" format="avif" quality={56} />
+            </div>
+            <div class="d6-dish__row">
+              <h3 class="d6-dish__name">{t.name}</h3>
+              <span class="d6-dish__dots" aria-hidden="true"></span>
+              <span class="d6-dish__price">${t.price}</span>
+            </div>
+            {t.desc && <p class="d6-dish__desc">{t.desc}</p>}
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== EVENTS SHOWCASE (interactive) ===================== -->
+  <section class="d6-section d6-section--deep" id="events">
+    <div class="d6-wrap">
+      <div class="d6-sechead d6-rv">
+        <p class="d6-kicker">The Cove &amp; Beyond</p>
+        <h2 class="d6-sechead__title">Rooms made for a celebration.</h2>
+        <p class="d6-sechead__lead">Choose a setting to see it. Every space funnels into one planning portal, from a rehearsal toast to a five-hundred-guest gala.</p>
+      </div>
+
+      <div class="d6-show">
+        <div class="d6-show__stage">
+          {spaces.map((s, i) => (
+            <div class:list={["d6-show__panel", { 'is-active': i === 0 }]} data-panel={s.key}>
+              <div class="d6-frame d6-show__frame">
+                <Image src={s.img} alt={s.alt} widths={[640, 1000]} sizes="(max-width:820px) 90vw, 58vw" loading="lazy" format="avif" quality={48} />
+              </div>
+            </div>
+          ))}
+        </div>
+        <div class="d6-show__side">
+          {spaces.map((s, i) => (
+            <button class:list={["d6-show__tab", { 'is-active': i === 0 }]} data-tab={s.key} aria-pressed={i === 0 ? 'true' : 'false'}>
+              <span class="d6-show__tab-name">{s.name}</span>
+              <span class="d6-show__tab-cap">{s.cap}</span>
+              <span class="d6-show__tab-note">{s.note}</span>
+            </button>
+          ))}
+          <a class="d6-btn d6-btn--solid d6-show__cta" href={SITE.portalUrl}>Enter the Planning Portal</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CHARM CITY NOTE ===================== -->
+  <section class="d6-section">
+    <div class="d6-wrap">
+      <div class="d6-charm">
+        <div class="d6-charm__fig d6-rv">
+          <div class="d6-frame">
+            <Image src={sunset} alt="Sunset over Quarry Lake" widths={[500, 800]} sizes="(max-width:820px) 90vw, 40vw" loading="lazy" format="avif" quality={54} />
+          </div>
+        </div>
+        <div class="d6-charm__copy d6-rv" data-delay="1">
+          <p class="d6-kicker">A Charm City Address</p>
+          <h2 class="d6-charm__title">Of Pimlico, of the water, of Baltimore.</h2>
+          <p>
+            We are a neighborhood house at heart, a short drive from Pimlico and the heart of Baltimore County.
+            The lake sets our clock: dinner runs long into gold-lit evenings, and the season decides the menu.
+          </p>
+          <p>
+            Come for a Tuesday table or the wedding of the year. Either way, you are on Quarry Lake, and the
+            night is yours.
+          </p>
+          <div class="d6-charm__meta">
+            <span>{SITE.address}</span>
+            <span><a class="d6-textlink" href={SITE.phoneHref}>{SITE.phone}</a></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PRESS STRIP ===================== -->
+  <section class="d6-section d6-section--tint" id="press">
+    <div class="d6-wrap">
+      <div class="d6-div d6-rv"><span class="d6-div__gem"></span></div>
+      <ul class="d6-press">
+        <li class="d6-rv"><span class="d6-press__k">Wine Spectator</span><span class="d6-press__v">Award of Excellence, 2019–2025</span></li>
+        <li class="d6-rv" data-delay="1"><span class="d6-press__k">Full Sushi Bar</span><span class="d6-press__v">Designer rolls &amp; nigiri, nightly</span></li>
+        <li class="d6-rv" data-delay="2"><span class="d6-press__k">Ten Years</span><span class="d6-press__v">On the water this November 2026</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===================== FINAL CTA ===================== -->
+  <section class="d6-section d6-section--deep d6-final">
+    <div class="d6-final__rays" aria-hidden="true">
+      <svg class="d6-sun" viewBox="0 0 440 130" width="440" height="130" fill="none" preserveAspectRatio="xMidYMax meet">
+        {Array.from({ length: 13 }, (_, i) => {
+          const a = Math.PI * (i / 12);
+          return { x2: (220 + 150 * Math.cos(a)).toFixed(1), y2: (128 - 150 * Math.sin(a)).toFixed(1), d: i * 55 };
+        }).map((r) => (
+          <line x1="220" y1="128" x2={r.x2} y2={r.y2} stroke="var(--d6-brass)" stroke-width="1" pathLength="1" style={`transition-delay:${r.d}ms`} />
+        ))}
+      </svg>
+    </div>
+    <div class="d6-wrap d6-final__inner">
+      <p class="d6-kicker d6-kicker--center d6-rv">Reserve · Pick-Up · Events</p>
+      <h2 class="d6-final__title d6-rv" data-delay="1">Your table on the water is waiting.</h2>
+      <p class="d6-final__lead d6-rv" data-delay="2">Book dinner, order pick-up, or open the planning portal for an event from twenty to five hundred guests.</p>
+      <button class="d6-btn d6-btn--solid d6-rv" data-delay="3" data-cta>Choose Your Table</button>
+    </div>
+  </section>
+
+  <style>
+    /* ---------- HERO ---------- */
+    .d6-hero{ position:relative; padding-top:clamp(2rem, 1rem + 4vw, 4rem); padding-bottom:clamp(2rem, 1rem + 3vw, 3.5rem); overflow:hidden; }
+    .d6-hero__sun{ position:absolute; top:clamp(-2rem, -1rem + -4vw, 1rem); left:50%; transform:translateX(-50%); width:min(760px, 120vw); opacity:.5; pointer-events:none; z-index:0; }
+    .d6-hero__sun svg{ width:100%; height:auto; }
+    .d6-hero__inner{ position:relative; z-index:1; display:grid; grid-template-columns:1.05fr 0.95fr; gap:clamp(1.6rem, 0.8rem + 3vw, 4rem); align-items:center; }
+    .d6-hero__title{ font-size:var(--d6-s-5); line-height:0.94; margin:0.5rem 0 0; }
+    .d6-hero__kin{ display:block; letter-spacing:0.02em; }
+    .d6-hero__title-sub{ display:block; font-family:var(--d6-display); font-style:italic; font-weight:400; font-size:var(--d6-s-2); color:var(--d6-citron); letter-spacing:0.04em; margin-top:0.15em; }
+    .d6-hero__lead{ margin:1.4rem 0 0; max-width:46ch; font-size:var(--d6-s-1); color:var(--d6-cream-dim); font-weight:300; }
+    .d6-hero__cta{ display:flex; flex-wrap:wrap; gap:14px; margin-top:1.8rem; }
+    .d6-hero__facts{ display:flex; flex-wrap:wrap; gap:clamp(1.2rem, 0.6rem + 2vw, 2.6rem); margin-top:2.4rem; padding-top:1.6rem; border-top:1px solid var(--d6-hair); }
+    .d6-hero__facts li{ display:flex; flex-direction:column; }
+    .d6-hero__facts strong{ font-family:var(--d6-display); font-weight:500; font-size:var(--d6-s-2); color:var(--d6-citron); line-height:1; }
+    .d6-hero__facts span{ font-size:0.7rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--d6-cream-soft); margin-top:6px; }
+    .d6-hero__figure{ position:relative; }
+    .d6-hero__frame{ aspect-ratio:4/5; }
+    /* hero is a bright plated dish: let it glow against the dark deco frame,
+       undo the ambiance frames' dimming (base filter is brightness .9) */
+    .d6-frame.d6-hero__frame img{ filter:saturate(1.02) contrast(1.02) brightness(1.03); }
+    .d6-frame.d6-hero__frame:hover img{ filter:saturate(1.05) contrast(1.03) brightness(1.06); }
+    .d6-frame.d6-hero__frame::before{ background:linear-gradient(180deg, rgba(12,20,20,0) 62%, rgba(12,20,20,.28)); }
+    .d6-hero__stamp{ position:absolute; bottom:-14px; left:-14px; width:84px; height:84px; display:grid; place-items:center; text-align:center; background:var(--d6-panel); border:1px solid var(--d6-brass); border-radius:50%; color:var(--d6-brass); font-family:var(--d6-display); font-size:0.82rem; line-height:1.2; letter-spacing:0.08em; }
+    .d6-hero__hr{ height:1px; margin-top:clamp(2rem, 1rem + 3vw, 3.5rem); background:linear-gradient(90deg, transparent, var(--d6-hair-2), transparent); }
+    @media (max-width:860px){
+      .d6-hero__inner{ grid-template-columns:1fr; }
+      .d6-hero__figure{ order:-1; max-width:420px; }
+      .d6-hero__frame{ aspect-ratio:16/12; }
+    }
+
+    /* ---------- STORY ---------- */
+    .d6-div{ margin-bottom:clamp(2.4rem, 1.4rem + 3vw, 4rem); }
+    .d6-story{ display:grid; grid-template-columns:1.3fr 0.9fr; gap:clamp(1.6rem, 0.8rem + 3vw, 4rem); align-items:start; }
+    .d6-story__title{ font-size:var(--d6-s-3); margin:0.6rem 0 1.2rem; max-width:16ch; }
+    .d6-story__copy p{ margin:0 0 1.1rem; max-width:var(--d6-measure); }
+    .d6-textlink{ display:inline-flex; align-items:center; gap:0.5em; background:none; border:none; padding:0; cursor:pointer; font-family:var(--d6-sans); font-weight:500; font-size:var(--d6-s--1); letter-spacing:0.16em; text-transform:uppercase; color:var(--d6-citron); transition:gap var(--d6-t-fast) var(--d6-ease); }
+    .d6-textlink:hover{ gap:0.9em; }
+    .d6-story__stats{ display:flex; flex-direction:column; gap:1.4rem; border-left:1px solid var(--d6-hair); padding-left:clamp(1.2rem, 0.8rem + 1.5vw, 2.2rem); }
+    .d6-story__stats li{ display:flex; flex-direction:column; }
+    /* .d6-stat__n / .d6-stat__l now live in D6Base global (shared across pages) */
+    @media (max-width:820px){ .d6-story{ grid-template-columns:1fr; } .d6-story__stats{ border-left:none; padding-left:0; border-top:1px solid var(--d6-hair); padding-top:1.6rem; } }
+
+    /* ---------- OFFERINGS ---------- */
+    .d6-sechead{ margin-bottom:clamp(2rem, 1.2rem + 2.5vw, 3.4rem); }
+    .d6-sechead--split{ display:flex; align-items:flex-end; justify-content:space-between; gap:1.5rem; flex-wrap:wrap; }
+    .d6-offer{ display:grid; grid-template-columns:repeat(3, 1fr); gap:clamp(1rem, 0.6rem + 1.5vw, 1.8rem); }
+    .d6-card{ position:relative; padding:clamp(1.6rem, 1rem + 2vw, 2.4rem); border:1px solid var(--d6-hair); background:rgba(239,231,211,.015); transition:border-color var(--d6-t-med), background var(--d6-t-med), transform var(--d6-t-med) var(--d6-ease); }
+    .d6-card:hover{ border-color:var(--d6-citron); background:var(--d6-citron-tint); transform:translateY(-4px); }
+    .d6-card__no{ font-family:var(--d6-display); font-size:1.4rem; color:var(--d6-brass); letter-spacing:0.08em; }
+    .d6-card__t{ font-size:var(--d6-s-2); margin:0.4rem 0 0.7rem; }
+    .d6-card__d{ font-size:var(--d6-s--1); color:var(--d6-cream-dim); margin:0 0 1.3rem; }
+    @media (max-width:760px){ .d6-offer{ grid-template-columns:1fr; } }
+
+    /* ---------- MENU TEASER ---------- */
+    .d6-teaser{ display:grid; grid-template-columns:repeat(3, 1fr); gap:clamp(1.2rem, 0.6rem + 2vw, 2.2rem); }
+    .d6-dish__fig{ aspect-ratio:4/3; margin-bottom:1.1rem; }
+    .d6-dish__row{ display:flex; align-items:baseline; gap:0.6rem; }
+    .d6-dish__name{ font-family:var(--d6-display); font-weight:500; font-size:var(--d6-s-1); color:var(--d6-cream); }
+    .d6-dish__dots{ flex:1; border-bottom:1px dotted var(--d6-hair-2); transform:translateY(-4px); }
+    .d6-dish__price{ font-family:var(--d6-display); font-size:var(--d6-s-1); color:var(--d6-citron); }
+    .d6-dish__desc{ font-size:var(--d6-s--1); color:var(--d6-cream-soft); margin:0.5rem 0 0; }
+    @media (max-width:760px){ .d6-teaser{ grid-template-columns:1fr; } }
+
+    /* ---------- EVENTS SHOWCASE ---------- */
+    .d6-show{ display:grid; grid-template-columns:1.4fr 1fr; gap:clamp(1.2rem, 0.6rem + 2vw, 2.4rem); align-items:stretch; }
+    .d6-show__stage{ position:relative; }
+    .d6-show__panel{ position:absolute; inset:0; opacity:0; transform:scale(1.02); transition:opacity var(--d6-t-slow) var(--d6-ease), transform var(--d6-t-slow) var(--d6-ease); pointer-events:none; }
+    .d6-show__panel.is-active{ opacity:1; transform:none; position:relative; pointer-events:auto; }
+    .d6-show__frame{ aspect-ratio:16/11; height:100%; }
+    .d6-show__side{ display:flex; flex-direction:column; gap:2px; }
+    .d6-show__tab{ text-align:left; background:none; border:none; border-top:1px solid var(--d6-hair-soft); padding:1rem 0.4rem; cursor:pointer; display:flex; flex-direction:column; gap:4px; transition:padding-left var(--d6-t-fast), background var(--d6-t-med); }
+    .d6-show__tab:last-of-type{ border-bottom:1px solid var(--d6-hair-soft); }
+    .d6-show__tab:hover{ padding-left:8px; background:rgba(201,162,75,.03); }
+    .d6-show__tab-name{ font-family:var(--d6-display); font-weight:500; font-size:var(--d6-s-1); color:var(--d6-cream-dim); transition:color var(--d6-t-fast); }
+    .d6-show__tab.is-active .d6-show__tab-name{ color:var(--d6-citron); }
+    .d6-show__tab-cap{ font-size:0.66rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--d6-cream-soft); }
+    .d6-show__tab-note{ font-size:var(--d6-s--1); color:var(--d6-cream-soft); max-height:0; opacity:0; overflow:hidden; transition:max-height var(--d6-t-med) var(--d6-ease), opacity var(--d6-t-med), margin-top var(--d6-t-med); }
+    .d6-show__tab.is-active .d6-show__tab-note{ max-height:6rem; opacity:1; margin-top:4px; }
+    .d6-show__cta{ margin-top:1.4rem; width:100%; }
+    @media (max-width:820px){ .d6-show{ grid-template-columns:1fr; } .d6-show__frame{ aspect-ratio:16/10; } }
+
+    /* ---------- CHARM ---------- */
+    .d6-charm{ display:grid; grid-template-columns:0.9fr 1.1fr; gap:clamp(1.6rem, 0.8rem + 3vw, 4rem); align-items:center; }
+    .d6-charm__fig .d6-frame{ aspect-ratio:5/6; }
+    .d6-charm__title{ font-size:var(--d6-s-3); margin:0.6rem 0 1.2rem; max-width:14ch; }
+    .d6-charm__copy p{ margin:0 0 1.1rem; max-width:var(--d6-measure); }
+    .d6-charm__meta{ display:flex; flex-wrap:wrap; gap:1.4rem; margin-top:1.4rem; padding-top:1.4rem; border-top:1px solid var(--d6-hair); font-size:var(--d6-s--1); letter-spacing:0.06em; color:var(--d6-cream-dim); }
+    @media (max-width:820px){ .d6-charm{ grid-template-columns:1fr; } .d6-charm__fig{ max-width:380px; } }
+
+    /* ---------- PRESS ---------- */
+    .d6-press{ display:grid; grid-template-columns:repeat(3, 1fr); gap:clamp(1rem, 0.6rem + 1.5vw, 2rem); text-align:center; }
+    .d6-press li{ display:flex; flex-direction:column; gap:8px; padding:1rem; }
+    .d6-press__k{ font-family:var(--d6-display); font-weight:500; font-size:var(--d6-s-2); color:var(--d6-citron); }
+    .d6-press__v{ font-size:0.78rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--d6-cream-soft); }
+    @media (max-width:700px){ .d6-press{ grid-template-columns:1fr; } .d6-press li{ border-bottom:1px solid var(--d6-hair-soft); padding-bottom:1.4rem; } }
+
+    /* ---------- FINAL ---------- */
+    .d6-final{ position:relative; overflow:hidden; text-align:center; }
+    .d6-final__rays{ position:absolute; bottom:0; left:50%; transform:translateX(-50%); width:min(700px, 120vw); opacity:.35; pointer-events:none; }
+    .d6-final__rays svg{ width:100%; height:auto; }
+    .d6-final__inner{ position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; gap:1.2rem; }
+    .d6-final__title{ font-size:var(--d6-s-4); max-width:16ch; }
+    .d6-final__lead{ max-width:52ch; color:var(--d6-cream-dim); }
+    .d6-final .d6-btn{ margin-top:0.6rem; }
+  </style>
+
+  <script>
+    // events showcase: tab switch (opacity/transform only)
+    const tabs = document.querySelectorAll('.d6-show__tab');
+    const panels = document.querySelectorAll('.d6-show__panel');
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const key = tab.getAttribute('data-tab');
+        tabs.forEach((t) => { const on = t === tab; t.classList.toggle('is-active', on); t.setAttribute('aria-pressed', String(on)); });
+        panels.forEach((p) => p.classList.toggle('is-active', p.getAttribute('data-panel') === key));
+      });
+    });
+  </script>
+</D6Base>

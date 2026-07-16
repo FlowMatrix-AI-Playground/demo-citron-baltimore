@@ -1,0 +1,12 @@
+---
+// Kinetic type: splits a string into word spans that rise into view.
+// Usage: <Kin text="Baltimore has been celebrating here" />
+const { text = '', tag = 'span', class: cls = '' } = Astro.props;
+const words = String(text).split(' ');
+const Tag = tag;
+---
+<Tag class:list={["d10-kin", cls]}>
+  {words.map((w) => (
+    <span class="d10-kin__w"><span class="d10-kin__i">{w}&nbsp;</span></span>
+  ))}
+</Tag>

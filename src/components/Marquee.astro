@@ -1,0 +1,31 @@
+---
+const items = [
+  'Wine Spectator Award of Excellence',
+  'Full Sushi Bar',
+  'Waterfront Terraces',
+  'Off-Premise Catering Since 1985',
+  'The Cove · Up to 500 Guests',
+  '300 Seats on Quarry Lake',
+  'Ten Years on the Water',
+];
+---
+<div class="marquee" role="img" aria-label={items.join(', ')}>
+  <div class="marquee__track" aria-hidden="true">
+    {[0, 1].map(() => (
+      <div class="marquee__group">
+        {items.map((t) => (<span class="marquee__item">{t}<span class="marquee__sep">✦</span></span>))}
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  .marquee{ overflow:hidden; border-block:1px solid var(--hair); background:var(--abyss-2); padding-block:1.4rem; }
+  .marquee__track{ display:flex; width:max-content; animation:marquee 38s linear infinite; }
+  .marquee:hover .marquee__track{ animation-play-state:paused; }
+  .marquee__group{ display:flex; }
+  .marquee__item{ display:inline-flex; align-items:center; font-family:var(--serif); font-size:clamp(1.1rem,.9rem + 1vw,1.7rem); color:var(--cream); white-space:nowrap; padding-inline:.2em; }
+  .marquee__sep{ color:var(--citron); margin-inline:1.1em; font-size:.7em; }
+  @keyframes marquee{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce){ .marquee__track{ animation:none; flex-wrap:wrap; width:100%; justify-content:center; } .marquee__group:nth-child(2){ display:none; } }
+</style>

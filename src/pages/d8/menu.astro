@@ -1,0 +1,167 @@
+---
+import Base from '../../layouts/D8Base.astro';
+import { Image } from 'astro:assets';
+import { MENU, MENU_NOTES } from '../../data/menu.js';
+import { SITE } from '../../data/site.js';
+import hero from '../../assets/img/food-tuna.jpg';
+import wine from '../../assets/img/wine.jpg';
+
+const twoCol = new Set(['sushi', 'add-ons', 'sides']);
+---
+<Base
+  title="Menu, Citron Baltimore"
+  description="Seasonal Modern American, a full sushi bar, prime steaks and day-boat seafood at Quarry Lake."
+>
+  <!-- ===== HERO ===== -->
+  <section class="d8-mhero">
+    <div class="d8-mhero__media" aria-hidden="true">
+      <Image src={hero} alt="" widths={[900, 1300, 1500]} sizes="100vw" loading="eager" fetchpriority="high" format="avif" quality={52} class="d8-mhero__img" />
+      <div class="d8-mhero__scrim"></div>
+    </div>
+    <div class="d8-wrap d8-mhero__inner">
+      <p class="d8-label d8-label--neon">Dinner · Quarry Lake</p>
+      <h1 class="d8-mhero__title">The Menu</h1>
+      <p class="d8-mhero__lede">A seasonal Modern American kitchen and a full sushi bar, prime center-cut steaks, day-boat seafood, and a Wine Spectator honored list, all against the water.</p>
+    </div>
+  </section>
+
+  <!-- ===== MENU BODY ===== -->
+  <div class="d8-section d8-menubody">
+    <div class="d8-wrap d8-menubody__wrap">
+      {MENU.map((sec, i) => (
+        <section
+          class:list={["d8-course d8-rv", { 'd8-course--sushi': sec.id === 'sushi' }]}
+          data-delay={String((i % 3) + 1)}
+          aria-labelledby={`d8-sec-${sec.id}`}
+        >
+          <header class="d8-course__head">
+            <p class="d8-label d8-label--mag d8-course__eyebrow">{sec.id === 'sushi' ? 'The Sushi Bar' : `Course 0${i + 1}`}</p>
+            <div class="d8-course__titlerow">
+              <h2 class="d8-course__title" id={`d8-sec-${sec.id}`}>{sec.title}</h2>
+              <span class="d8-course__rule" aria-hidden="true"></span>
+              {sec.note && <span class="d8-course__note">{sec.note}</span>}
+            </div>
+          </header>
+
+          <ul class:list={["d8-mlist", { 'd8-mlist--two': twoCol.has(sec.id) }]}>
+            {sec.items.map((it) => (
+              <li class="d8-mitem">
+                <div class="d8-mitem__row">
+                  <span class="d8-mitem__name">{it.name}</span>
+                  {!sec.note && <span class="d8-mitem__lead" aria-hidden="true"></span>}
+                  {!sec.note && it.price != null && (
+                    <span class="d8-mitem__price">{it.price}</span>
+                  )}
+                  <a
+                    class:list={["d8-mitem__cart", { 'd8-mitem__cart--end': !!sec.note }]}
+                    href={SITE.pickupUrl}
+                    target="_blank"
+                    rel="noopener"
+                    aria-label={`Add ${it.name} to pick-up order`}
+                  >
+                    <svg class="d8-mitem__carticon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                      <circle cx="9" cy="20" r="1.15"></circle>
+                      <circle cx="18" cy="20" r="1.15"></circle>
+                      <path d="M2.5 3h2l2.15 11.1a1.55 1.55 0 0 0 1.55 1.25h8.4a1.55 1.55 0 0 0 1.55-1.25L21.5 7H6"></path>
+                    </svg>
+                  </a>
+                </div>
+                {it.desc && <p class="d8-mitem__desc">{it.desc}</p>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+
+      <div class="d8-menunotes d8-rv" data-delay="1">
+        {MENU_NOTES.map((n) => (<p class="d8-menunotes__line">{n}</p>))}
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CTA BAND ===== -->
+  <section class="d8-mcta">
+    <div class="d8-mcta__media" aria-hidden="true">
+      <Image src={wine} alt="" widths={[900, 1300]} sizes="100vw" loading="lazy" format="avif" quality={44} class="d8-mcta__img" />
+      <div class="d8-mcta__scrim"></div>
+    </div>
+    <div class="d8-wrap d8-mcta__inner d8-rv">
+      <p class="d8-label d8-label--neon">Pull up a chair</p>
+      <h2 class="d8-mcta__title">Reserve a table or order pick-up.</h2>
+      <p class="d8-mcta__lede">Dinner Wednesday through Sunday from 4 PM, or take the kitchen to go. Planning something larger? Our private dining spaces host from twenty to five hundred.</p>
+      <button class="d8-btn d8-mcta__btn" data-cta>Reserve · Pick-Up · Events</button>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* ===== HERO ===== */
+  .d8-mhero{ position:relative; overflow:hidden; min-height:clamp(44vh, 30vh + 12rem, 60vh); display:flex; align-items:flex-end; padding-block:clamp(3.4rem, 2rem + 8vw, 7rem); }
+  .d8-mhero__media{ position:absolute; inset:0; }
+  .d8-mhero__img{ width:100%; height:100%; object-fit:cover; opacity:.55; }
+  .d8-mhero__scrim{ position:absolute; inset:0; background:
+    radial-gradient(90% 80% at 82% 0%, rgba(196,222,122,.1) 0%, transparent 45%),
+    linear-gradient(180deg, rgba(10,10,12,.6) 0%, rgba(10,10,12,.35) 40%, rgba(10,10,12,.96) 100%); }
+  .d8-mhero__inner{ position:relative; z-index:2; max-width:720px; }
+  .d8-mhero__title{ font-size:var(--d8-s-4); font-weight:700; line-height:.96; margin:.24em 0 .3em; color:var(--d8-white); }
+  .d8-mhero__lede{ color:var(--d8-mist); font-size:var(--d8-s-1); max-width:52ch; }
+
+  /* ===== MENU BODY ===== */
+  .d8-menubody{ background:linear-gradient(180deg, var(--d8-base) 0%, var(--d8-base-2) 100%); }
+  .d8-menubody__wrap{ max-width:1080px; }
+
+  .d8-course{ padding-block:clamp(2.2rem, 1.4rem + 3vw, 3.6rem); }
+  .d8-course + .d8-course{ border-top:1px solid var(--d8-hair); }
+  .d8-course__head{ margin-bottom:clamp(1.6rem, 1rem + 2vw, 2.6rem); }
+  .d8-course__eyebrow{ margin-bottom:1rem; }
+  .d8-course--sushi .d8-course__eyebrow{ color:var(--d8-neon); }
+  .d8-course--sushi .d8-course__eyebrow::before,.d8-course--sushi .d8-course__eyebrow::after{ color:var(--d8-neon); }
+  .d8-course__titlerow{ display:flex; align-items:baseline; gap:clamp(1rem, .6rem + 1.6vw, 1.6rem); }
+  .d8-course__title{ font-size:var(--d8-s-3); font-weight:700; flex:none; }
+  .d8-course__rule{ flex:1; height:1px; background:var(--d8-hair-2); transform:translateY(-.28em); }
+  .d8-course__note{ flex:none; font-family:var(--d8-mono); font-weight:700; font-size:var(--d8-s--1); letter-spacing:.1em; text-transform:uppercase; color:var(--d8-neon); border:1px solid color-mix(in oklab, var(--d8-neon) 40%, transparent); border-radius:999px; padding:6px 15px; transform:translateY(-.2em); white-space:nowrap; }
+
+  .d8-mlist{ display:grid; grid-template-columns:1fr; gap:clamp(1.4rem, 1rem + 1.2vw, 2rem); }
+  .d8-mlist--two{ grid-template-columns:1fr 1fr; column-gap:clamp(2rem, 1rem + 4vw, 4.5rem); }
+  .d8-mitem{ break-inside:avoid; }
+  .d8-mitem__row{ display:flex; align-items:baseline; gap:.35rem; }
+  .d8-mitem__name{ font-family:var(--d8-display); font-weight:600; font-size:var(--d8-s-1); color:var(--d8-white); line-height:1.15; flex:0 1 auto; }
+  .d8-mitem__lead{ flex:1 1 auto; min-width:1.5rem; align-self:flex-end; border-bottom:1px dotted var(--d8-hair-2); transform:translateY(-.34em); margin:0 .15rem; }
+  .d8-mitem__price{ flex:none; font-family:var(--d8-mono); font-weight:700; font-size:var(--d8-s-0); color:var(--d8-neon); font-variant-numeric:tabular-nums; }
+  .d8-mitem__desc{ margin:.4em 0 0; color:var(--d8-dim); font-size:var(--d8-s--1); line-height:1.55; max-width:52ch; }
+
+  /* subtle pick-up cart, aligned to the price end, brightens to citron on hover/focus */
+  .d8-mitem__cart{ flex:none; align-self:center; display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; margin:-6px 0 -6px .1rem; border-radius:8px; color:var(--d8-dim); opacity:.7; transition:color .2s ease, opacity .2s ease, background-color .2s ease; -webkit-tap-highlight-color:transparent; }
+  .d8-mitem__cart--end{ margin-left:auto; }
+  .d8-mitem__carticon{ display:block; width:16px; height:16px; }
+  .d8-mitem__cart:hover,.d8-mitem__cart:focus-visible{ color:var(--d8-neon); opacity:1; background-color:color-mix(in oklab, var(--d8-neon) 10%, transparent); }
+  .d8-mitem__cart:focus-visible{ outline:2px solid color-mix(in oklab, var(--d8-neon) 55%, transparent); outline-offset:2px; }
+
+  /* sushi highlight */
+  .d8-course--sushi{ position:relative; margin-block:clamp(1rem, .5rem + 1.5vw, 2rem); padding-inline:clamp(1.4rem, .8rem + 2.5vw, 3rem); padding-block:clamp(2rem, 1.4rem + 2vw, 3rem); background:
+      radial-gradient(120% 90% at 100% 0%, rgba(196,222,122,.06) 0%, transparent 55%),
+      linear-gradient(180deg, rgba(196,222,122,.03) 0%, transparent 100%); border:1px solid color-mix(in oklab, var(--d8-neon) 26%, var(--d8-hair)); border-radius:var(--d8-radius); box-shadow:0 0 50px rgba(196,222,122,.06); }
+  .d8-course--sushi + .d8-course{ border-top:0; }
+  .d8-course--sushi .d8-mitem__price{ color:var(--d8-neon); }
+
+  /* notes */
+  .d8-menunotes{ margin-top:clamp(2.6rem, 1.6rem + 3vw, 4rem); padding-top:2rem; border-top:1px solid var(--d8-hair); display:grid; gap:.6rem; }
+  .d8-menunotes__line{ margin:0; color:var(--d8-dim); font-size:var(--d8-s--1); line-height:1.5; max-width:74ch; }
+
+  /* ===== CTA BAND ===== */
+  .d8-mcta{ position:relative; overflow:hidden; color:var(--d8-white); padding-block:clamp(4.5rem, 3rem + 8vw, 8rem); }
+  .d8-mcta__media{ position:absolute; inset:0; }
+  .d8-mcta__img{ width:100%; height:100%; object-fit:cover; opacity:.5; }
+  .d8-mcta__scrim{ position:absolute; inset:0; background:linear-gradient(90deg, rgba(10,10,12,.96) 8%, rgba(10,10,12,.76) 52%, rgba(10,10,12,.44) 100%); }
+  .d8-mcta__inner{ position:relative; z-index:2; max-width:640px; }
+  .d8-mcta__title{ font-size:var(--d8-s-3); font-weight:700; line-height:1.02; margin:.4em 0 .4em; }
+  .d8-mcta__lede{ color:var(--d8-mist); font-size:var(--d8-s-0); max-width:52ch; }
+  .d8-mcta__btn{ min-height:60px; font-size:var(--d8-s-0); margin-top:2rem; }
+
+  @media(max-width:680px){
+    .d8-mlist--two{ grid-template-columns:1fr; gap:clamp(1.4rem, 1rem + 1.2vw, 2rem); }
+    .d8-course__titlerow{ flex-wrap:wrap; gap:.6rem 1rem; }
+    .d8-course__rule{ display:none; }
+    .d8-course__note{ transform:none; }
+  }
+</style>

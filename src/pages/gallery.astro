@@ -1,0 +1,230 @@
+---
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/500.css';
+import '@fontsource/inter/600.css';
+import '@fontsource/inter/700.css';
+import '@fontsource/inter/800.css';
+import { Image } from 'astro:assets';
+import DemoFeedback from '../components/DemoFeedback.astro';
+// FlowMatrix flow-channel mark (mono, currentColor) - faint hero watermark only
+const MARK = '<g fill="currentColor"><rect x="80" y="112" width="468" height="120" rx="16"/><rect x="80" y="452" width="468" height="120" rx="16"/><rect x="80" y="792" width="468" height="120" rx="16"/><rect x="488" y="288" width="456" height="120" rx="16"/><rect x="488" y="572" width="324" height="120" rx="16"/><rect x="428" y="112" width="120" height="800" rx="16"/><rect x="824" y="572" width="120" height="120" rx="16"/></g>';
+import dateNight from '../assets/img/date-night.jpg';
+import exterior from '../assets/img/exterior.jpg';
+import tuna from '../assets/img/food-tuna.jpg';
+import dining from '../assets/img/dining-room.jpg';
+import crab from '../assets/img/food-crabcake.jpg';
+import cove from '../assets/img/room-cove.jpg';
+import courtyard from '../assets/img/courtyard-gathering.jpg';
+import decor from '../assets/img/decor-food.jpg';
+import gala from '../assets/img/cove-gala.jpg';
+
+const designs = [
+  { n: '01', href: '/', name: 'After Dark on the Water', note: 'Cinematic dark luxury. A candlelit waterfront dinner, kinetic serif type, quiet restraint.', img: dateNight },
+  { n: '02', href: '/d3', name: 'Lakeside at Dusk', note: 'Photography-first and twilight-toned. The Citron building at dusk, precision-set editorial type.', img: exterior },
+  { n: '03', href: '/d6', name: 'Deco Quarry', note: 'Jazz-age art deco in Citron green and gilt. Sunburst linework, a plated dish under glass.', img: tuna },
+  { n: '04', href: '/d8', name: 'Nightfall', note: 'Refined after-dark energy. The dining room at night with a restrained jewel-citron accent.', img: dining },
+  { n: '05', href: '/d10', name: 'Gastronomic', note: 'Maximalist and food-forward. A full-bleed signature crab cake and an expressive tasting-menu flow.', img: crab },
+];
+const portals = [
+  { n: 'A', href: '/portals/1', name: 'The Concierge', note: 'Split-screen checkout with a sticky “Your Event” rail. Scheduling via a pop-up calendar.', img: cove },
+  { n: 'B', href: '/portals/2', name: 'The Explorer Map', note: 'An interactive property map with a guest slider and room drawer. Scheduling via a slide-in sidebar.', img: exterior },
+  { n: 'C', href: '/portals/3', name: 'The Storyboard', note: 'A guided four-step flow. The final step embeds the scheduler inline.', img: courtyard },
+  { n: 'D', href: '/portals/4', name: 'The Configurator', note: 'Build your event live with a running summary. A full framed scheduling iframe closes it out.', img: decor },
+  { n: 'E', href: '/portals/5', name: 'The Guided Concierge', note: 'A conversational wizard ending in add-to-calendar and iCal options.', img: gala },
+];
+---
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo Design Portal · FlowMatrix AI × Citron Baltimore</title>
+<meta name="description" content="A FlowMatrix AI design portal: five website directions and five interactive checkout portals, prepared for Citron Baltimore." />
+<link rel="icon" href="/brand/fm-mark-official.svg" type="image/svg+xml" />
+<style>
+  :root{
+    --paper:oklch(0.97 0.003 100); --card:#FFFFFF;
+    --ink:oklch(0.10 0.01 255); --ink-2:oklch(0.30 0.02 258);
+    --slate:oklch(0.50 0 0); --slate-2:oklch(0.52 0.008 258);
+    --blue:oklch(0.50 0.07 235); --blue-deep:oklch(0.38 0.06 245); --blue-bright:oklch(0.58 0.07 233);
+    --sky:oklch(0.72 0.06 233); --sky-tint:oklch(0.955 0.018 233); --navy:oklch(0.21 0.034 264.665);
+    --cream:oklch(0.985 0.003 100);
+    --line:oklch(0.90 0.02 230); --line-2:oklch(0.93 0.012 240);
+    --sans:'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --ease:cubic-bezier(0.22,1,0.36,1);
+  }
+  *,*::before,*::after{ box-sizing:border-box; }
+  body{ margin:0; background:var(--paper); color:var(--slate); font-family:var(--sans); -webkit-font-smoothing:antialiased; line-height:1.6; }
+  img,svg{ display:block; max-width:100%; }
+  a{ color:inherit; text-decoration:none; }
+  h1,h2,h3{ margin:0; color:var(--ink); font-weight:700; letter-spacing:-0.02em; }
+  .wrap{ max-width:1220px; margin-inline:auto; padding-inline:clamp(1.25rem, 0.8rem + 2vw, 2.6rem); }
+  a:focus-visible,button:focus-visible{ outline:2px solid var(--blue); outline-offset:3px; border-radius:5px; }
+
+  /* ===== top bar ===== */
+  .top{ background:var(--paper); border-bottom:1px solid var(--line); }
+  .top__bar{ display:flex; align-items:center; justify-content:space-between; height:66px; }
+  .logo{ display:inline-flex; align-items:center; }
+  .logo-img{ height:30px; width:auto; }
+  .top__meta{ display:flex; align-items:center; gap:10px; font-size:.8rem; font-weight:500; color:var(--slate); letter-spacing:.01em; }
+  .top__dot{ width:6px; height:6px; border-radius:50%; background:var(--blue); flex:none; }
+  @media(max-width:640px){ .top__meta{ display:none; } }
+
+  /* ===== HERO band (steel-blue → navy) ===== */
+  .hero{ position:relative; overflow:hidden; background:linear-gradient(135deg, oklch(0.41 0.06 240) 0%, oklch(0.30 0.045 250) 48%, oklch(0.21 0.034 264.665) 100%); color:var(--cream); }
+  .hero__flow{ position:absolute; inset:0; opacity:.5; pointer-events:none; }
+  .hero__mark{ position:absolute; right:-40px; top:50%; transform:translateY(-50%); width:min(46vw,520px); color:rgba(247,247,245,.06); pointer-events:none; }
+  .hero__inner{ position:relative; z-index:2; padding-block:clamp(3.2rem, 2.2rem + 5vw, 6rem); }
+  .hero__eyebrow{ display:inline-flex; align-items:center; gap:10px; font-size:.74rem; font-weight:600; letter-spacing:.18em; text-transform:uppercase; color:#CFE0EC; }
+  .hero__eyebrow::before{ content:""; width:22px; height:2px; background:var(--sky); border-radius:2px; }
+  .hero__title{ color:var(--cream); font-size:clamp(2.6rem, 1.5rem + 5vw, 5.2rem); line-height:1.0; font-weight:800; letter-spacing:-0.03em; margin:.5rem 0 0; max-width:16ch; }
+
+  @keyframes flow{ from{ transform:translateX(-40%);} to{ transform:translateX(40%);} }
+  .flowline{ transform-origin:center; animation:flow 9s linear infinite alternate; }
+  .flowline--2{ animation-duration:12s; animation-direction:alternate-reverse; }
+  .flowline--3{ animation-duration:10.5s; }
+  @media (prefers-reduced-motion: reduce){ .flowline{ animation:none; } }
+
+  /* ===== prepared-for lockup ===== */
+  .prep{ background:var(--paper); }
+  .prep__card{ position:relative; margin-top:clamp(-2.4rem, -1.6rem - 2vw, -3.4rem); z-index:5; background:var(--card); border:1px solid var(--line); border-radius:14px; box-shadow:0 24px 60px -34px rgba(15,17,21,.28); padding:clamp(1.4rem, 1rem + 2vw, 2.1rem) clamp(1.6rem, 1rem + 3vw, 2.8rem); display:flex; align-items:center; gap:clamp(1.3rem, .8rem + 3vw, 2.6rem); flex-wrap:wrap; }
+  .prep__label{ font-size:.68rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:var(--slate-2); }
+  .prep__citron{ display:inline-flex; align-items:center; }
+  .prep__citron img{ height:46px; width:auto; }
+  .prep__tail{ margin-left:auto; font-size:.86rem; color:var(--slate); max-width:30ch; }
+  .prep__tail strong{ color:var(--ink); font-weight:600; }
+  @media(max-width:760px){ .prep__card{ flex-direction:column; align-items:flex-start; gap:1.1rem; } .prep__tail{ margin-left:0; } }
+
+  /* ===== groups ===== */
+  .group{ padding-block:clamp(2.4rem, 1.6rem + 3vw, 4rem); }
+  .group__head{ display:flex; align-items:baseline; gap:14px; margin-bottom:1.8rem; }
+  .group__head h2{ font-size:clamp(1.5rem, 1.1rem + 1.8vw, 2.2rem); }
+  .group__head .count{ font-size:.72rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--blue); }
+  .group__head .line{ flex:1; border-bottom:1px solid var(--line); transform:translateY(-4px); }
+
+  .grid{ --g:clamp(1rem, 0.5rem + 1.6vw, 1.6rem); display:flex; flex-wrap:wrap; justify-content:center; gap:var(--g); }
+  .grid > .card{ flex:0 1 calc((100% - 2 * var(--g)) / 3); }
+  @media(max-width:900px){ .grid > .card{ flex-basis:calc((100% - var(--g)) / 2); } }
+  @media(max-width:600px){ .grid > .card{ flex-basis:100%; } }
+
+  .card{ display:flex; flex-direction:column; background:var(--card); border:1px solid var(--line); border-radius:12px; overflow:hidden; transition:transform .35s var(--ease), border-color .35s var(--ease), box-shadow .35s var(--ease); }
+  .card:hover{ transform:translateY(-6px); border-color:var(--blue); box-shadow:0 26px 54px -30px rgba(15,17,21,.3); }
+  .card__media{ position:relative; aspect-ratio:16/10; overflow:hidden; background:var(--sky-tint); }
+  .card__media img{ width:100%; height:100%; object-fit:cover; transition:transform .6s var(--ease); }
+  .card:hover .card__media img{ transform:scale(1.05); }
+  .card__no{ position:absolute; top:11px; left:12px; font-size:.72rem; font-weight:700; color:var(--cream); background:rgba(15,17,21,.6); backdrop-filter:blur(4px); padding:4px 9px; border-radius:6px; }
+  .card__badge{ position:absolute; top:11px; right:12px; font-weight:700; font-size:.58rem; letter-spacing:.09em; text-transform:uppercase; color:var(--cream); background:var(--blue); padding:5px 9px; border-radius:6px; }
+  .card__badge--p{ background:var(--ink); }
+  .card__body{ padding:18px 20px 20px; display:flex; flex-direction:column; flex:1; }
+  .card__name{ font-size:1.24rem; margin-bottom:.4rem; letter-spacing:-0.015em; }
+  .card__note{ color:var(--slate); font-size:.9rem; line-height:1.55; margin:0 0 1.1rem; }
+  .card__open{ margin-top:auto; display:inline-flex; align-items:center; gap:7px; font-weight:600; font-size:.8rem; color:var(--blue); }
+  .card__open svg{ width:15px; height:15px; transition:transform .2s var(--ease); }
+  .card:hover .card__open svg{ transform:translateX(4px); }
+
+  footer{ border-top:1px solid var(--line); margin-top:0; padding-block:2rem; }
+  footer .wrap{ display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; font-size:.8rem; color:var(--slate); }
+  footer .fm{ display:inline-flex; align-items:center; }
+  footer .foot-logo{ height:20px; width:auto; }
+  footer .foot-right{ display:inline-flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  footer .foot-link{ color:var(--blue); font-weight:600; }
+  footer .foot-link:hover{ text-decoration:underline; text-underline-offset:3px; }
+  footer .foot-sep{ color:var(--line); }
+</style>
+</head>
+<body>
+  <div class="top">
+    <div class="wrap top__bar">
+      <a class="logo" href="/gallery" aria-label="FlowMatrix AI home">
+        <img class="logo-img" src="/brand/fm-lockup-light.svg" alt="FlowMatrix" width="153" height="30" />
+      </a>
+      <div class="top__meta"><span class="top__dot"></span> Digital Enablement · Websites</div>
+    </div>
+  </div>
+
+  <!-- ===== HERO ===== -->
+  <header class="hero">
+    <svg class="hero__flow" viewBox="0 0 1200 400" preserveAspectRatio="none" aria-hidden="true">
+      <g stroke="#F7F7F5" stroke-width="2" fill="none" opacity="0.5">
+        <path class="flowline" d="M-100,90 H360 a24,24 0 0 1 24,24 V210" />
+        <path class="flowline flowline--2" d="M-100,200 H520" />
+        <path class="flowline flowline--3" d="M-100,320 H360 a24,24 0 0 0 24,-24 V150 a24,24 0 0 1 24,-24 H1300" />
+        <path class="flowline flowline--2" d="M600,150 H1300" />
+        <path class="flowline" d="M420,280 H1300" />
+      </g>
+      <circle class="flowline flowline--3" cx="384" cy="150" r="6" fill="#CFE0EC" />
+    </svg>
+    <svg class="hero__mark" viewBox="0 0 1024 1024" aria-hidden="true" set:html={MARK}></svg>
+    <div class="wrap hero__inner">
+      <span class="hero__eyebrow">FlowMatrix AI · Design Exploration</span>
+      <h1 class="hero__title">Demo Design Portal</h1>
+    </div>
+  </header>
+
+  <!-- ===== prepared-for lockup ===== -->
+  <div class="prep">
+    <div class="wrap">
+      <div class="prep__card">
+        <span class="prep__label">Prepared for</span>
+        <span class="prep__citron"><img src="/brand/citron-logo.png" alt="Citron Baltimore" /></span>
+        <span class="prep__tail"><strong>Citron Baltimore</strong> · Waterfront dining, catering &amp; events at Quarry Lake</span>
+      </div>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <section class="group">
+      <div class="group__head"><h2>Website Designs</h2><span class="line"></span></div>
+      <div class="grid">
+        {designs.map((d) => (
+          <a class="card" href={d.href}>
+            <div class="card__media">
+              <Image src={d.img} alt={d.name} widths={[400, 700]} sizes="(max-width:900px) 90vw, 30vw" loading="lazy" format="avif" quality={56} />
+              <span class="card__no">{d.n}</span>
+              <span class="card__badge">Website</span>
+            </div>
+            <div class="card__body">
+              <h3 class="card__name">{d.name}</h3>
+              <p class="card__note">{d.note}</p>
+              <span class="card__open">View design <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="group">
+      <div class="group__head"><h2>Checkout Portals</h2><span class="line"></span></div>
+      <div class="grid">
+        {portals.map((p) => (
+          <a class="card" href={p.href}>
+            <div class="card__media">
+              <Image src={p.img} alt={p.name} widths={[400, 700]} sizes="(max-width:900px) 90vw, 30vw" loading="lazy" format="avif" quality={56} />
+              <span class="card__no">{p.n}</span>
+              <span class="card__badge card__badge--p">Portal</span>
+            </div>
+            <div class="card__body">
+              <h3 class="card__name">{p.name}</h3>
+              <p class="card__note">{p.note}</p>
+              <span class="card__open">Open portal <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <DemoFeedback />
+
+  <footer>
+    <div class="wrap">
+      <a class="fm" href="https://flowmatrixai.com" target="_blank" rel="noopener" aria-label="FlowMatrix AI website"><img class="foot-logo" src="/brand/fm-lockup-light.svg" alt="FlowMatrix" width="102" height="20" /></a>
+      <span class="foot-right">
+        <a class="foot-link" href="https://flowmatrixai.com" target="_blank" rel="noopener">flowmatrixai.com</a>
+        <span class="foot-sep">·</span>
+        <span>Prepared for Citron Baltimore · 2026</span>
+      </span>
+    </div>
+  </footer>
+</body>
+</html>

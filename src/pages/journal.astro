@@ -1,0 +1,156 @@
+---
+import Base from '../layouts/Base.astro';
+import { Image } from 'astro:assets';
+import sunset from '../assets/img/sunset.jpg';
+import gala from '../assets/img/cove-gala.jpg';
+import wine from '../assets/img/wine.jpg';
+import apps from '../assets/img/food-appetizers.jpg';
+import courtyard from '../assets/img/courtyard-gathering.jpg';
+
+const press = [
+  { source: 'Wine Spectator', line: 'Award of Excellence, every year 2019 through 2025.' },
+  { source: 'Baltimore', line: 'Named among the Best of Baltimore for waterfront dining.' },
+  { source: 'OpenTable', line: "Diner's Choice for food, service, and ambience." },
+  { source: 'Restaurant Association of Maryland', line: 'Charles Levine, Restaurateur of the Year nominee, 2018 Stars of the Industry Gala.' },
+  { source: 'MD Theatre Guide', line: 'Featured as a premier pre-show and celebration destination.' },
+  { source: 'ABC', line: 'Local coverage of Citron’s seasonal menus and events.' },
+];
+const seasonal = [
+  { date: 'This November', title: 'Ten Years on the Water', teaser: 'A look back at a decade at Quarry Lake, and what’s next for The Cove.', img: gala },
+  { date: 'Seasonal', title: 'The Fall Menu Arrives', teaser: 'Chef Mary Hersh turns to day-boat seafood, prime cuts, and the raw bar.', img: apps },
+  { date: 'Cellar Notes', title: 'Wine Dinners Return', teaser: 'An intimate series pairing the Wine Spectator–honored list with the season.', img: wine },
+  { date: 'Spring', title: 'Preakness Week at Citron', teaser: 'Baltimore’s biggest week, celebrated on the water. Reserve early.', img: courtyard },
+];
+---
+<Base title="The Journal, Citron Baltimore" description="Press, awards, seasonal notes, and news from Citron Baltimore at Quarry Lake.">
+  <!-- hero -->
+  <section class="jhero">
+    <div class="jhero__media">
+      <Image src={sunset} alt="Dusk over Quarry Lake" class="jhero__img" widths={[768, 1280, 1600]} sizes="100vw" loading="eager" fetchpriority="high" format="avif" quality={60} />
+      <div class="jhero__scrim"></div>
+    </div>
+    <div class="wrap jhero__content cluster">
+      <p class="eyebrow reveal">The Journal</p>
+      <h1 class="jhero__title reveal" data-delay="1">Notes from the water.</h1>
+      <p class="jhero__deck reveal measure" data-delay="2">Press, awards, and seasonal word from Quarry Lake, gathered like a magazine.</p>
+    </div>
+  </section>
+
+  <!-- featured -->
+  <section class="section">
+    <a class="feat reveal" href="#">
+      <div class="feat__media">
+        <Image src={gala} alt="A gala set in The Cove" widths={[500, 900]} sizes="(max-width:900px) 92vw, 52vw" loading="lazy" format="avif" quality={58} class="feat__img" />
+      </div>
+      <div class="feat__body cluster">
+        <p class="eyebrow eyebrow--brass">Featured &middot; 3 min read</p>
+        <h2 class="feat__title">Ten Years on the Water</h2>
+        <p class="feat__deck">In November 2016, a caterer from Pimlico opened a restaurant at Quarry Lake. This November marks ten years, and The Cove has hosted Baltimore’s celebrations for nearly all of them.</p>
+        <span class="feat__more">Read the story <span aria-hidden="true">→</span></span>
+      </div>
+    </a>
+  </section>
+
+  <!-- press & awards -->
+  <section class="section on-light" id="press">
+    <div class="wrap">
+      <header class="jhead reveal">
+        <p class="eyebrow">Press &amp; Awards</p>
+        <h2 class="jhead__title">Recognition, on and off the water.</h2>
+      </header>
+      <ul class="press">
+        {press.map((p, i) => (
+          <li class="press__row reveal" data-delay={String((i % 3) + 1)}>
+            <span class="press__source">{p.source}</span>
+            <span class="press__line">{p.line}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- seasonal notes -->
+  <section class="section" id="seasonal">
+    <div class="wrap">
+      <header class="jhead reveal">
+        <p class="eyebrow">Seasonal Notes</p>
+        <h2 class="jhead__title">What’s changing at the table.</h2>
+      </header>
+      <div class="notes">
+        {seasonal.map((s, i) => (
+          <a class="note reveal" data-delay={String((i % 3) + 1)} href="#">
+            <div class="note__media">
+              <Image src={s.img} alt={s.title} widths={[360, 600]} sizes="(max-width:700px) 90vw, 30vw" loading="lazy" format="avif" quality={55} class="note__img" />
+            </div>
+            <p class="note__date">{s.date}</p>
+            <h3 class="note__title">{s.title}</h3>
+            <p class="note__teaser">{s.teaser}</p>
+            <span class="note__more">Read <span aria-hidden="true">→</span></span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- newsletter nudge -->
+  <section class="section jnews">
+    <div class="wrap jnews__inner reveal">
+      <p class="eyebrow">From our table to yours</p>
+      <h2 class="jnews__title">A short, occasional note worth reading.</h2>
+      <p class="measure">Seasonal menus, wine dinners, and the first word on Cove availability. You can subscribe at the foot of any page, no mass mail.</p>
+      <button class="btn jnews__btn" data-cta data-magnetic>Reserve &middot; Pick-Up &middot; Events</button>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .jhero{ position:relative; min-height:56svh; display:flex; align-items:flex-end; overflow:hidden; }
+  .jhero__media{ position:absolute; inset:0; }
+  .jhero__img{ width:100%; height:100%; object-fit:cover; }
+  .jhero__scrim{ position:absolute; inset:0; background:linear-gradient(to bottom, rgba(8,12,10,.4) 0%, rgba(8,12,10,.55) 50%, rgba(8,12,10,.92) 100%); }
+  .jhero__content{ position:relative; z-index:2; padding-block:8rem 3.4rem; color:var(--cream); }
+  .jhero__title{ font-size:var(--step-4); font-weight:500; margin-left:-.03em; }
+  .jhero__deck{ color:var(--mist); font-size:var(--step-1); }
+
+  /* featured */
+  .feat{ display:grid; grid-template-columns:1.1fr 1fr; gap:clamp(1.6rem,1rem + 3vw,3.4rem); align-items:center; }
+  .feat__media{ aspect-ratio:16/11; overflow:hidden; border-radius:5px; }
+  .feat__img{ width:100%; height:100%; object-fit:cover; transition:transform var(--t-slow) var(--ease); }
+  .feat:hover .feat__img{ transform:scale(1.04); }
+  .feat__title{ font-size:var(--step-3); font-weight:500; }
+  .feat__deck{ color:var(--mist); font-size:var(--step-1); }
+  .feat__more{ display:inline-flex; gap:.5em; margin-top:.4rem; color:var(--citron); font-weight:700; font-size:var(--step--1); letter-spacing:.08em; text-transform:uppercase; }
+  @media(max-width:820px){ .feat{ grid-template-columns:1fr; } }
+
+  /* section head */
+  .jhead{ max-width:40ch; margin-bottom:clamp(2rem,1rem + 3vw,3.4rem); }
+  .jhead__title{ font-size:var(--step-2); }
+
+  /* press */
+  .press{ border-top:1px solid var(--rule); }
+  .on-light .press{ border-color:rgba(26,26,26,.14); }
+  .press__row{ display:grid; grid-template-columns:minmax(180px, 22%) 1fr; gap:1.5rem; align-items:baseline; padding:1.5rem 0; border-bottom:1px solid rgba(26,26,26,.14); }
+  .press__source{ font-family:var(--serif); font-size:var(--step-1); color:var(--ink); }
+  .press__line{ color:var(--ink-soft); font-size:var(--step-0); }
+  @media(max-width:640px){ .press__row{ grid-template-columns:1fr; gap:.3rem; } }
+
+  /* seasonal notes */
+  .notes{ display:grid; grid-template-columns:repeat(4,1fr); gap:clamp(1.2rem,.6rem + 2vw,2rem); }
+  .note{ display:flex; flex-direction:column; }
+  .note__media{ aspect-ratio:4/3; overflow:hidden; border-radius:4px; margin-bottom:1.1rem; }
+  .note__img{ width:100%; height:100%; object-fit:cover; transition:transform var(--t-slow) var(--ease); }
+  .note:hover .note__img{ transform:scale(1.06); }
+  .note__date{ font-size:.68rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--brass-light); margin-bottom:.5rem; }
+  .note__title{ font-size:var(--step-1); margin-bottom:.4rem; }
+  .note__teaser{ color:var(--mist-dim); font-size:var(--step--1); line-height:1.6; }
+  .note__more{ margin-top:.9rem; color:var(--citron); font-weight:700; font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; }
+  @media(max-width:900px){ .notes{ grid-template-columns:1fr 1fr; } }
+  @media(max-width:520px){ .notes{ grid-template-columns:1fr; } }
+
+  /* newsletter */
+  .jnews{ text-align:center; background:radial-gradient(120% 140% at 50% 0%, var(--night) 0%, var(--abyss) 60%); }
+  .jnews__inner{ max-width:640px; margin-inline:auto; }
+  .jnews__inner .measure{ margin-inline:auto; }
+  .jnews__title{ font-size:var(--step-2); margin-bottom:.5em; }
+  .jnews__btn{ margin-top:2rem; min-height:56px; }
+</style>

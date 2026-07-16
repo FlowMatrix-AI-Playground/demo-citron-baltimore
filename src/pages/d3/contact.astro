@@ -1,0 +1,295 @@
+---
+import D3Base from '../../layouts/D3Base.astro';
+import { Image } from 'astro:assets';
+import exterior from '../../assets/img/exterior.jpg';
+import { SITE } from '../../data/site.js';
+
+const hours = [
+  { k: 'Dinner', v: 'Wednesday – Sunday, from 4 PM' },
+  { k: 'Happy Hour', v: 'Daily service, 4 – 6:30 PM' },
+  { k: 'Private Events', v: 'Seven days a week, by arrangement' },
+];
+
+const actions = [
+  { label: 'Reserve a Table', href: SITE.reserveUrl, cls: 'd3-btn', ext: true },
+  { label: 'Order Pick-Up', href: SITE.pickupUrl, cls: 'd3-btn d3-btn--ghost', ext: true },
+  { label: 'Plan an Event', href: SITE.portalUrl, cls: 'd3-btn d3-btn--ghost', ext: false },
+];
+---
+<D3Base
+  title="Contact, Citron Baltimore"
+  description="Visit Citron Baltimore at Quarry Lake, reservations, private events, hours, and directions."
+>
+  <!-- ===== HERO ===== -->
+  <section class="d3-chero" aria-labelledby="d3-chero-title">
+    <div class="d3-chero__media" aria-hidden="true">
+      <Image src={exterior} alt="" widths={[900, 1300, 1500]} sizes="100vw" loading="eager" fetchpriority="high" format="avif" quality={55} class="d3-chero__img" />
+      <div class="d3-chero__scrim"></div>
+    </div>
+    <div class="d3-wrap d3-chero__inner">
+      <p class="d3-eyebrow">Visit &middot; Quarry Lake</p>
+      <h1 id="d3-chero-title" class="d3-chero__title">Come find us on the water.</h1>
+      <p class="d3-chero__lead d3-measure">Reservations, private events, and everything in between, the quickest way to reach the team is right here.</p>
+    </div>
+  </section>
+
+  <!-- ===== FORM + DETAILS ===== -->
+  <section class="d3-section d3-cmain">
+    <div class="d3-wrap d3-cmain__grid">
+      <div class="d3-cform-col d3-reveal">
+        <p class="d3-eyebrow">Send a note</p>
+        <h2 class="d3-cform__title">Tell us what you have in mind.</h2>
+        <p class="d3-cform__sub d3-measure">A short message is plenty. We will follow up personally, no automated queues, no lists.</p>
+
+        <form class="d3-cform" id="d3-contact-form" novalidate>
+          <div class="d3-cfield">
+            <label for="d3-cf-name">Name</label>
+            <input id="d3-cf-name" name="name" type="text" autocomplete="name" required placeholder="Your name" />
+          </div>
+          <div class="d3-cfield-row">
+            <div class="d3-cfield">
+              <label for="d3-cf-email">Email</label>
+              <input id="d3-cf-email" name="email" type="email" autocomplete="email" required placeholder="you@email.com" />
+            </div>
+            <div class="d3-cfield">
+              <label for="d3-cf-phone">Phone</label>
+              <input id="d3-cf-phone" name="phone" type="tel" autocomplete="tel" placeholder="Optional" />
+            </div>
+          </div>
+          <div class="d3-cfield">
+            <label for="d3-cf-type">Inquiry type</label>
+            <div class="d3-cselect">
+              <select id="d3-cf-type" name="type">
+                <option value="Reservation">Reservation</option>
+                <option value="Private Event">Private Event</option>
+                <option value="Catering">Catering</option>
+                <option value="General">General</option>
+              </select>
+              <svg class="d3-cselect__chev" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+                <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+          <div class="d3-cfield">
+            <label for="d3-cf-message">Message</label>
+            <textarea id="d3-cf-message" name="message" rows="5" required placeholder="Dates, party size, or anything you'd like us to know."></textarea>
+          </div>
+          <button class="d3-btn d3-cform__btn" type="submit">Send Message</button>
+          <p class="d3-cform__note" id="d3-contact-status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+
+      <aside class="d3-cdetails d3-reveal" data-delay="1" aria-label="Visit details">
+        <div class="d3-cpanel">
+          <p class="d3-eyebrow d3-eyebrow--citron">The particulars</p>
+          <dl class="d3-cinfo">
+            <div class="d3-cinfo__row">
+              <dt>Address</dt>
+              <dd>{SITE.address}</dd>
+            </div>
+            <div class="d3-cinfo__row">
+              <dt>Phone</dt>
+              <dd><a href={SITE.phoneHref} class="d3-clink">{SITE.phone}</a></dd>
+            </div>
+            <div class="d3-cinfo__row">
+              <dt>Events</dt>
+              <dd><a href={`mailto:${SITE.email}`} class="d3-clink">{SITE.email}</a></dd>
+            </div>
+          </dl>
+          <hr class="d3-cpanel__rule" />
+          <div class="d3-chours">
+            <p class="d3-chours__label">Hours</p>
+            <ul class="d3-chours__list">
+              {hours.map((h) => (
+                <li class="d3-chours__row">
+                  <span class="d3-chours__k">{h.k}</span>
+                  <span class="d3-chours__v">{h.v}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <hr class="d3-cpanel__rule" />
+          <div class="d3-cquick">
+            <p class="d3-cquick__label">Quick actions</p>
+            <div class="d3-cquick__btns">
+              {actions.map((a) => (
+                a.ext
+                  ? <a class={a.cls} href={a.href} target="_blank" rel="noopener">{a.label}</a>
+                  : <a class={a.cls} href={a.href}>{a.label}</a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ===== GETTING HERE ===== -->
+  <section class="d3-section d3-chere">
+    <div class="d3-wrap d3-chere__grid">
+      <div class="d3-chere__copy d3-reveal">
+        <p class="d3-eyebrow">Getting here</p>
+        <h2 class="d3-chere__title">On Quarry Lake, in Baltimore County.</h2>
+        <p class="d3-measure">You will find us at the water’s edge in the Quarry Lake community, just off I-83 at Greenspring Avenue, a few minutes north of the city and easy from either direction. Ample on-site parking sits steps from the door, so the walk in is short and the view starts early.</p>
+        <ul class="d3-chere__points">
+          <li><span class="d3-chere__pin" aria-hidden="true"></span>2605 Quarry Lake Dr, Baltimore, MD 21209</li>
+          <li><span class="d3-chere__pin" aria-hidden="true"></span>Off I-83 &middot; Greenspring Avenue exit</li>
+          <li><span class="d3-chere__pin" aria-hidden="true"></span>Complimentary on-site parking</li>
+        </ul>
+        <a class="d3-arrow d3-chere__cta" href={SITE.reserveUrl} target="_blank" rel="noopener">Reserve your table <span aria-hidden="true">→</span></a>
+      </div>
+
+      <figure class="d3-cmap d3-reveal" data-delay="1" aria-label="Stylized map of Citron's location on Quarry Lake">
+        <svg class="d3-cmap__svg" viewBox="0 0 400 340" role="img" xmlns="http://www.w3.org/2000/svg">
+          <title>Citron Baltimore sits on the shore of Quarry Lake, just off I-83 at Greenspring Avenue.</title>
+          <defs>
+            <linearGradient id="d3lake" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#1C2531"/>
+              <stop offset="1" stop-color="#0E1319"/>
+            </linearGradient>
+            <radialGradient id="d3glow" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#E0A05A" stop-opacity="0.5"/>
+              <stop offset="1" stop-color="#E0A05A" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <rect x="0" y="0" width="400" height="340" fill="#141B24"/>
+          <path d="M0 250 L400 210" stroke="#2A3644" stroke-width="10" fill="none"/>
+          <path d="M300 0 L250 340" stroke="#232E3A" stroke-width="7" fill="none"/>
+          <path d="M0 250 L400 210" stroke="#3C4A5A" stroke-width="1.5" stroke-dasharray="7 9" fill="none"/>
+          <text x="20" y="240" fill="#9AA3AE" font-size="11" letter-spacing="1.5" font-family="Karla, sans-serif">I-83</text>
+          <text x="262" y="60" fill="#9AA3AE" font-size="10" letter-spacing="1" font-family="Karla, sans-serif" transform="rotate(80 262 60)">GREENSPRING AVE</text>
+          <path d="M70 60 C150 40 300 55 340 120 C365 165 320 220 240 225 C150 232 90 200 70 150 C56 115 40 70 70 60 Z" fill="url(#d3lake)" stroke="#3C4A5A" stroke-width="1.25"/>
+          <path d="M110 120 C160 108 240 112 290 135" fill="none" stroke="#B6D63F" stroke-width="1" opacity="0.3"/>
+          <path d="M120 150 C170 140 250 144 285 162" fill="none" stroke="#B6D63F" stroke-width="1" opacity="0.22"/>
+          <text x="150" y="145" fill="#9AA3AE" font-size="12" letter-spacing="2.5" font-family="Marcellus, serif">Quarry Lake</text>
+          <circle cx="238" cy="196" r="46" fill="url(#d3glow)"/>
+          <g transform="translate(238 196)">
+            <path d="M0 -26 C14 -26 24 -16 24 -3 C24 14 0 34 0 34 C0 34 -24 14 -24 -3 C-24 -16 -14 -26 0 -26 Z" fill="#E0A05A" stroke="#10151C" stroke-width="1.5"/>
+            <circle cx="0" cy="-3" r="7" fill="#10151C"/>
+          </g>
+          <text x="238" y="252" fill="#F2ECDF" font-size="13" text-anchor="middle" font-family="Marcellus, serif">Citron</text>
+        </svg>
+        <figcaption class="d3-cmap__cap">Quarry Lake &middot; Baltimore County, MD</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ===== FINAL CTA ===== -->
+  <section class="d3-section d3-cfinal">
+    <div class="d3-wrap d3-cfinal__inner d3-reveal">
+      <p class="d3-eyebrow">Whenever you’re ready</p>
+      <h2 class="d3-cfinal__title">A table by the water is waiting.</h2>
+      <button class="d3-btn d3-cfinal__btn" data-cta>Reserve &middot; Pick-Up &middot; Events</button>
+    </div>
+  </section>
+
+  <style>
+    /* hero */
+    .d3-chero{ position:relative; isolation:isolate; overflow:hidden; min-height:clamp(360px, 52vh, 560px); display:flex; align-items:flex-end; padding-block:clamp(3rem, 2rem + 6vw, 6rem); }
+    .d3-chero__media{ position:absolute; inset:0; z-index:-1; }
+    .d3-chero__img{ width:100%; height:100%; object-fit:cover; }
+    .d3-chero__scrim{ position:absolute; inset:0; background:linear-gradient(180deg, rgba(16,21,28,.42) 0%, rgba(16,21,28,.55) 45%, rgba(16,21,28,.95) 100%); }
+    .d3-chero__inner{ max-width:760px; }
+    .d3-chero__title{ font-size:var(--d3-s-4); line-height:1.03; }
+    .d3-chero__lead{ color:var(--d3-cream-dim); font-size:var(--d3-s-1); margin-top:1rem; }
+
+    /* form + details */
+    .d3-cmain__grid{ display:grid; grid-template-columns:1.15fr .85fr; gap:clamp(2rem, 1rem + 4vw, 4.5rem); align-items:start; }
+    .d3-cform__title{ font-size:var(--d3-s-2); }
+    .d3-cform__sub{ color:var(--d3-mist); margin:.5em 0 0; }
+    .d3-cform{ margin-top:2rem; display:flex; flex-direction:column; gap:1.25rem; }
+    .d3-cfield{ display:flex; flex-direction:column; gap:.5rem; }
+    .d3-cfield-row{ display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; }
+    .d3-cfield label{ font-family:var(--d3-body); font-weight:700; font-size:var(--d3-s--1); letter-spacing:.14em; text-transform:uppercase; color:var(--d3-mist-dim); }
+    .d3-cform input,.d3-cform textarea,.d3-cform select{ width:100%; font-family:var(--d3-body); font-size:var(--d3-s-0); color:var(--d3-cream); background:var(--d3-bg-2); border:1px solid var(--d3-hair-2); border-radius:var(--d3-radius); padding:.85em 1em; line-height:1.5; transition:border-color var(--d3-med) var(--d3-ease), background var(--d3-med), box-shadow var(--d3-med); }
+    .d3-cform textarea{ resize:vertical; min-height:8em; }
+    .d3-cform input::placeholder,.d3-cform textarea::placeholder{ color:var(--d3-mist-dim); opacity:.7; }
+    .d3-cform input:hover,.d3-cform textarea:hover,.d3-cform select:hover{ border-color:var(--d3-hair-2); background:var(--d3-bg-3); }
+    .d3-cform input:focus,.d3-cform textarea:focus,.d3-cform select:focus{ outline:none; border-color:var(--d3-amber); background:var(--d3-bg-3); box-shadow:0 0 0 3px color-mix(in oklab, var(--d3-amber) 22%, transparent); }
+    .d3-cform input:focus-visible,.d3-cform textarea:focus-visible,.d3-cform select:focus-visible{ outline:2px solid var(--d3-amber); outline-offset:3px; }
+    .d3-cselect{ position:relative; }
+    .d3-cselect select{ appearance:none; -webkit-appearance:none; -moz-appearance:none; padding-right:2.6em; cursor:pointer; }
+    .d3-cselect__chev{ position:absolute; right:1em; top:50%; transform:translateY(-50%); color:var(--d3-amber); pointer-events:none; }
+    .d3-cform select option{ background:var(--d3-bg-2); color:var(--d3-cream); }
+    .d3-cform__btn{ align-self:flex-start; margin-top:.4rem; }
+    .d3-cform__note{ margin:0; min-height:1.4em; font-size:var(--d3-s--1); color:var(--d3-citron); font-weight:500; }
+    .d3-cform__note.is-error{ color:var(--d3-amber-soft); }
+
+    .d3-cpanel{ background:linear-gradient(180deg, var(--d3-bg-3) 0%, var(--d3-bg-2) 100%); border:1px solid var(--d3-hair); border-radius:var(--d3-radius-lg); padding:clamp(1.7rem, 1rem + 2.2vw, 2.5rem); position:sticky; top:2rem; }
+    .d3-cinfo{ margin:1.4rem 0 0; display:flex; flex-direction:column; gap:1.15rem; }
+    .d3-cinfo__row{ display:flex; flex-direction:column; gap:.25rem; }
+    .d3-cinfo__row dt{ font-size:var(--d3-s--1); font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--d3-mist-dim); margin:0; }
+    .d3-cinfo__row dd{ margin:0; font-size:var(--d3-s-0); color:var(--d3-cream); }
+    .d3-clink{ color:var(--d3-amber); border-bottom:1px solid transparent; transition:border-color var(--d3-fast); }
+    .d3-clink:hover{ border-bottom-color:var(--d3-amber); }
+    .d3-cpanel__rule{ border:0; border-top:1px solid var(--d3-hair); margin:1.6rem 0; }
+    .d3-chours__label,.d3-cquick__label{ font-size:var(--d3-s--1); font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--d3-amber-soft); margin:0 0 1rem; }
+    .d3-chours__list{ display:flex; flex-direction:column; gap:.85rem; }
+    .d3-chours__row{ display:flex; flex-direction:column; gap:.15rem; }
+    .d3-chours__k{ font-family:var(--d3-display); font-size:var(--d3-s-1); color:var(--d3-cream); line-height:1.1; }
+    .d3-chours__v{ font-size:var(--d3-s--1); color:var(--d3-mist); }
+    .d3-cquick__btns{ display:flex; flex-direction:column; gap:.75rem; }
+    .d3-cquick__btns .d3-btn{ width:100%; }
+
+    /* getting here */
+    .d3-chere{ background:var(--d3-bg-2); }
+    .d3-chere__grid{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(2rem, 1rem + 4vw, 4.5rem); align-items:center; }
+    .d3-chere__title{ font-size:var(--d3-s-2); margin:0 0 .6em; line-height:1.12; }
+    .d3-chere__copy p{ color:var(--d3-mist); }
+    .d3-chere__points{ display:flex; flex-direction:column; gap:.85rem; margin:1.8rem 0 0; }
+    .d3-chere__points li{ display:flex; align-items:center; gap:.75rem; font-size:var(--d3-s-0); color:var(--d3-cream-dim); font-weight:500; }
+    .d3-chere__pin{ flex:0 0 auto; width:10px; height:10px; border-radius:50%; background:var(--d3-amber); box-shadow:0 0 0 4px color-mix(in oklab, var(--d3-amber) 22%, transparent); }
+    .d3-chere__cta{ margin-top:2rem; }
+    .d3-cmap{ margin:0; }
+    .d3-cmap__svg{ width:100%; height:auto; border-radius:var(--d3-radius-md); border:1px solid var(--d3-hair-2); box-shadow:0 30px 70px -34px rgba(0,0,0,.6); }
+    .d3-cmap__cap{ margin-top:.9rem; text-align:center; font-size:var(--d3-s--1); letter-spacing:.06em; color:var(--d3-mist); }
+
+    /* final */
+    .d3-cfinal{ text-align:center; background:radial-gradient(120% 150% at 50% 0%, var(--d3-bg-3) 0%, var(--d3-bg) 60%); }
+    .d3-cfinal__title{ font-size:var(--d3-s-3); max-width:18ch; margin:0 auto .85em; line-height:1.1; }
+    .d3-cfinal__btn{ min-height:58px; font-size:var(--d3-s-0); }
+
+    @media (max-width:900px){
+      .d3-cmain__grid{ grid-template-columns:1fr; }
+      .d3-cpanel{ position:static; }
+      .d3-chere__grid{ grid-template-columns:1fr; }
+      .d3-cmap{ order:-1; max-width:460px; }
+    }
+    @media (max-width:520px){ .d3-cfield-row{ grid-template-columns:1fr; } }
+  </style>
+
+  <script>
+    const form = document.getElementById('d3-contact-form');
+    const status = document.getElementById('d3-contact-status');
+    if (form && status) {
+      const email = 'events@citronbaltimore.com';
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const data = new FormData(form);
+        const name = String(data.get('name') || '').trim();
+        const from = String(data.get('email') || '').trim();
+        const phone = String(data.get('phone') || '').trim();
+        const type = String(data.get('type') || 'General').trim();
+        const message = String(data.get('message') || '').trim();
+        status.classList.remove('is-error');
+        if (!name || !from || !message) {
+          status.textContent = 'Please add your name, email, and a short message so we can reply.';
+          status.classList.add('is-error');
+          return;
+        }
+        const subject = `${type} inquiry, ${name}`;
+        const bodyLines = [
+          `Name: ${name}`,
+          `Email: ${from}`,
+          phone ? `Phone: ${phone}` : null,
+          `Inquiry type: ${type}`,
+          '',
+          message,
+        ].filter(Boolean);
+        const href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyLines.join('\n'))}`;
+        status.textContent = `Thank you, ${name.split(' ')[0]}, your email is ready to send. If it did not open, reach us directly at ${email}.`;
+        window.location.href = href;
+      });
+    }
+  </script>
+</D3Base>

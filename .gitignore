@@ -1,0 +1,29 @@
+# build output
+dist/
+dist-*/
+.astro/
+
+# dependencies
+node_modules/
+
+# env / secrets
+.env
+.env.*
+!.env.example
+
+# os / editor
+.DS_Store
+*.log
+
+# ad-hoc dev/diagnostic scripts (not part of the site)
+shot*.mjs
+inspect*.mjs
+diag*.mjs
+verify*.mjs
+overlap.mjs
+
+# cloudflare wrangler
+.wrangler/
+
+# archived rejected designs (kept locally, out of the repo)
+_rejected/

@@ -1,0 +1,593 @@
+---
+// ============================================================
+// Citron Baltimore, Design d8 "Nightfall"
+// Near-black base with a restrained citron jewel accent and a dusty-rose second.
+// A refined after-dark dining mood: quiet glow, not nightclub neon.
+// Self-contained layout. All CSS namespaced under `.d8`.
+// ============================================================
+import '@fontsource/syne/500.css';
+import '@fontsource/syne/600.css';
+import '@fontsource/syne/700.css';
+import '@fontsource/syne/800.css';
+import '@fontsource/space-mono/400.css';
+import '@fontsource/space-mono/700.css';
+import '@fontsource/archivo/400.css';
+import '@fontsource/archivo/500.css';
+import '@fontsource/archivo/600.css';
+import '@fontsource/archivo/700.css';
+import { SITE } from '../data/site.js';
+
+const {
+  title = 'Citron Baltimore, Waterfront Dining, Catering & Events at Quarry Lake',
+  description = 'An upscale waterfront restaurant and event venue on Quarry Lake in Baltimore County. Seasonal Modern American cuisine, a full sushi bar, a Wine Spectator honored list, and private events from 20 to 500 guests.',
+  ogImage = '/lake-poster.jpg',
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const path = Astro.url.pathname.replace(/\/$/, '') || '/d8';
+
+const NAV = [
+  { label: 'Home', href: '/d8/' },
+  { label: 'Menu', href: '/d8/menu' },
+  { label: 'Events & Private Dining', href: '/d8/events' },
+  { label: 'About', href: '/d8/about' },
+  { label: 'Contact', href: '/d8/contact' },
+];
+const isCurrent = (href) => {
+  const clean = href.replace(/\/$/, '') || '/d8';
+  return clean === path;
+};
+---
+<!doctype html>
+<html lang="en" class="d8-html">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <meta name="theme-color" content="#0A0A0C" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={new URL(ogImage, Astro.site)} />
+  <meta property="og:site_name" content="Citron Baltimore" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context":"https://schema.org","@type":"Restaurant",
+    "name":"Citron Baltimore","servesCuisine":"Modern American",
+    "priceRange":"$$$","telephone":SITE.phone,
+    "address":{"@type":"PostalAddress","streetAddress":"2605 Quarry Lake Dr","addressLocality":"Baltimore","addressRegion":"MD","postalCode":"21209"},
+    "url":"https://citronbaltimore.com","acceptsReservations":"True"
+  })} />
+</head>
+<body class="d8">
+  <a class="d8-skip" href="#main">Skip to content</a>
+  <div class="d8-cursorglow" id="d8-cursorglow" aria-hidden="true"></div>
+
+  <!-- ===================== NAV ===================== -->
+  <header class="d8-nav" id="d8-nav" data-at-top>
+    <div class="d8-wrap d8-nav__bar">
+      <a href="/d8/" class="d8-brand">
+        <span class="d8-brand__dot" aria-hidden="true"></span>
+        <span class="d8-brand__word">Citron</span>
+        <span class="d8-brand__tag">Nightfall · Quarry Lake</span>
+      </a>
+
+      <nav class="d8-nav__links" aria-label="Primary">
+        {NAV.map((item) => (
+          <a
+            href={item.href}
+            class:list={["d8-navlink", { 'is-current': isCurrent(item.href) }]}
+            aria-current={isCurrent(item.href) ? 'page' : undefined}
+          >{item.label}</a>
+        ))}
+      </nav>
+
+      <div class="d8-nav__actions">
+        <button class="d8-btn d8-btn--sm d8-nav__cta" data-cta>Reserve</button>
+        <button class="d8-burger" id="d8-burger" aria-label="Open menu" aria-expanded="false" aria-controls="d8-drawer">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="d8-drawer" id="d8-drawer" hidden>
+      <nav aria-label="Mobile">
+        {NAV.map((item) => (<a href={item.href} class="d8-drawer__link">{item.label}</a>))}
+        <a href="/d8/#marquee" class="d8-drawer__link d8-drawer__link--muted">The Marquee, dispatches</a>
+        <button class="d8-btn d8-drawer__cta" data-cta>Reserve · Pick-Up · Events</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main"><slot /></main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="d8-foot">
+    <div class="d8-wrap">
+      <div class="d8-foot__top">
+        <div class="d8-foot__brand">
+          <a href="/d8/" class="d8-foot__word">Citron <em>Baltimore</em></a>
+          <p class="d8-foot__blurb">An upscale waterfront restaurant, catering house, and event venue on Quarry Lake. Family-owned by Charles &amp; Susan Levine since 2016. Ten years on the water this November.</p>
+          <div class="d8-foot__news">
+            <p class="d8-label">On the wire</p>
+            <form class="d8-foot__form" id="d8-news">
+              <label class="d8-sr" for="d8-news-email">Email address</label>
+              <input id="d8-news-email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required />
+              <button class="d8-btn d8-btn--sm" type="submit">Join</button>
+            </form>
+            <p class="d8-foot__note" id="d8-news-note">Seasonal menus, wine dinners, and first word on Cove availability. No mass mail.</p>
+          </div>
+        </div>
+
+        <nav class="d8-foot__col" aria-label="Explore">
+          <h2 class="d8-foot__h">Explore</h2>
+          <a href="/d8/" class="d8-foot__link">Home</a>
+          <a href="/d8/menu" class="d8-foot__link">The Menu</a>
+          <a href="/d8/events" class="d8-foot__link">Events &amp; Private Dining</a>
+          <a href="/d8/about" class="d8-foot__link">About</a>
+          <a href="/d8/contact" class="d8-foot__link">Contact</a>
+        </nav>
+
+        <nav class="d8-foot__col" aria-label="The Marquee">
+          <h2 class="d8-foot__h">The Marquee</h2>
+          <a href="/d8/#marquee" class="d8-foot__link">Dispatches</a>
+          <a href="/d8/about#press" class="d8-foot__link">Press &amp; Awards</a>
+          <a href={SITE.reserveUrl} class="d8-foot__link" target="_blank" rel="noopener">Reserve on OpenTable</a>
+          <a href={SITE.pickupUrl} class="d8-foot__link" target="_blank" rel="noopener">Order Pick-Up</a>
+          <a href={SITE.portalUrl} class="d8-foot__link">Plan an Event</a>
+        </nav>
+
+        <div class="d8-foot__col">
+          <h2 class="d8-foot__h">Find us</h2>
+          <address class="d8-foot__addr">
+            2605 Quarry Lake Dr<br />Baltimore, MD 21209<br />
+            <a href={SITE.phoneHref} class="d8-foot__link d8-foot__link--inline">{SITE.phone}</a><br />
+            <a href={`mailto:${SITE.email}`} class="d8-foot__link d8-foot__link--inline">{SITE.email}</a>
+          </address>
+          <p class="d8-foot__hours">Dinner: Wed–Sun from 4 PM<br />Private events: 7 days</p>
+        </div>
+      </div>
+
+      <div class="d8-foot__bottom">
+        <span>© 2026 Citron Baltimore. Quarry Lake, Baltimore County.</span>
+        <span class="d8-foot__award">Wine Spectator Award of Excellence · 2019–2025</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===================== CTA POPUP ===================== -->
+  <div class="d8-modal" id="d8-modal" role="dialog" aria-modal="true" aria-labelledby="d8-modal-title" hidden>
+    <div class="d8-modal__scrim" data-cta-close></div>
+    <div class="d8-modal__panel" role="document">
+      <button class="d8-modal__close" data-cta-close aria-label="Close">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+      <p class="d8-label d8-label--neon">How can we host you?</p>
+      <h2 id="d8-modal-title" class="d8-modal__title">Pick your night.</h2>
+      <div class="d8-modal__grid">
+        <a class="d8-choice" href={SITE.reserveUrl} target="_blank" rel="noopener">
+          <span class="d8-choice__no" aria-hidden="true">01</span>
+          <span class="d8-choice__body">
+            <span class="d8-choice__k">Reserve a Table</span>
+            <span class="d8-choice__d">Dinner on the water. Wed–Sun from 4 PM.</span>
+          </span>
+          <span class="d8-choice__arrow" aria-hidden="true">→</span>
+        </a>
+        <a class="d8-choice" href={SITE.pickupUrl} target="_blank" rel="noopener">
+          <span class="d8-choice__no" aria-hidden="true">02</span>
+          <span class="d8-choice__body">
+            <span class="d8-choice__k">Order Pick-Up</span>
+            <span class="d8-choice__d">The kitchen, to go. Powered by Toast.</span>
+          </span>
+          <span class="d8-choice__arrow" aria-hidden="true">→</span>
+        </a>
+        <a class="d8-choice d8-choice--feature" href={SITE.portalUrl}>
+          <span class="d8-choice__no" aria-hidden="true">03</span>
+          <span class="d8-choice__body">
+            <span class="d8-choice__k">Events &amp; Private Dining</span>
+            <span class="d8-choice__d">From 20 to 500 guests. Enter the planning portal.</span>
+          </span>
+          <span class="d8-choice__arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <style is:global>
+    /* ============================================================
+       d8 "Nightfall Neon", tokens + base (scoped under .d8)
+       ============================================================ */
+    .d8{
+      /* palette: near-black + electric citron neon + hot magenta */
+      --d8-base:#0A0A0C;
+      --d8-base-2:#101016;
+      --d8-base-3:#16161E;
+      --d8-panel:rgba(255,255,255,.028);
+      --d8-panel-2:rgba(255,255,255,.05);
+      /* refined citron: a jewel accent, not an acid neon. Softer chroma + luminance
+         so it glows quietly on near-black instead of glaring. */
+      --d8-neon:#C4DE7A;
+      --d8-neon-rgb:196,222,122;
+      --d8-neon-soft:#D2E896;
+      --d8-magenta:#E08AB0; /* dusty rose, dialed back from hot magenta */
+      --d8-cyan:#39E7FF;
+      --d8-white:#F3F3EE;
+      --d8-mist:#AEAEB8;
+      --d8-dim:#8A8A96; /* WCAG AA: >=4.8:1 on base/base-2 */
+      --d8-hair:rgba(255,255,255,.08);
+      --d8-hair-2:rgba(255,255,255,.15);
+
+      /* glows pulled way back: a faint halo, never a bloom */
+      --d8-glow-neon:0 0 12px rgba(196,222,122,.16);
+      --d8-glow-neon-lg:0 0 20px rgba(196,222,122,.2);
+      --d8-glow-mag:0 0 14px rgba(224,138,176,.18);
+
+      --d8-display:'Syne',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+      --d8-mono:'Space Mono',ui-monospace,'SFMono-Regular',Menlo,monospace;
+      --d8-body:'Archivo',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+
+      /* fluid type, spaces around every +/- (KIT rule) */
+      --d8-s--1: clamp(0.8rem, 0.76rem + 0.2vw, 0.9rem);
+      --d8-s-0:  clamp(1rem, 0.95rem + 0.24vw, 1.12rem);
+      --d8-s-1:  clamp(1.2rem, 1.05rem + 0.7vw, 1.55rem);
+      --d8-s-2:  clamp(1.6rem, 1.25rem + 1.7vw, 2.6rem);
+      --d8-s-3:  clamp(2.2rem, 1.5rem + 3.4vw, 4rem);
+      --d8-s-4:  clamp(2.9rem, 1.6rem + 6vw, 6.2rem);
+      --d8-s-5:  clamp(3.6rem, 1.4rem + 10vw, 9rem);
+
+      --d8-gutter: clamp(1.15rem, 0.7rem + 2vw, 2.75rem);
+      --d8-maxw:1260px;
+
+      --d8-t-fast:170ms;
+      --d8-t-med:340ms;
+      --d8-t-slow:640ms;
+      --d8-ease:cubic-bezier(0.22, 1, 0.36, 1);
+      --d8-radius:14px;
+
+      margin:0;
+      background:var(--d8-base);
+      color:var(--d8-mist);
+      font-family:var(--d8-body);
+      font-size:var(--d8-s-0);
+      line-height:1.65;
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+      overflow-x:hidden;
+    }
+    .d8 *,.d8 *::before,.d8 *::after{ box-sizing:border-box; }
+    .d8-html{ -webkit-text-size-adjust:100%; scroll-behavior:smooth; background:#0A0A0C; }
+    .d8 img,.d8 svg,.d8 canvas{ display:block; max-width:100%; }
+    .d8 a{ color:inherit; text-decoration:none; }
+    .d8 button{ font-family:inherit; }
+    .d8 ul,.d8 ol{ margin:0; padding:0; list-style:none; }
+    .d8 h1,.d8 h2,.d8 h3,.d8 h4{
+      font-family:var(--d8-display); font-weight:700; margin:0;
+      line-height:1.02; color:var(--d8-white); letter-spacing:-0.02em;
+    }
+    .d8 :where(a,button,input,textarea,select,[tabindex]):focus-visible{
+      outline:2px solid var(--d8-neon); outline-offset:3px; border-radius:3px;
+    }
+    .d8 ::selection{ background:var(--d8-neon); color:#0A0A0C; }
+
+    .d8-sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+    .d8-wrap{ width:100%; max-width:var(--d8-maxw); margin-inline:auto; padding-inline:var(--d8-gutter); }
+    /* lists using the wrap must out-specify the `.d8 ul` reset above so they stay centered */
+    .d8 ul.d8-wrap, .d8 ol.d8-wrap{ margin-inline:auto; padding-inline:var(--d8-gutter); }
+
+    .d8-skip{ position:absolute; left:-999px; top:0; background:var(--d8-neon); color:#0A0A0C; padding:12px 20px; z-index:1400; font-weight:700; font-family:var(--d8-mono); }
+    .d8-skip:focus{ left:12px; top:12px; }
+
+    /* cursor-reactive ambient glow (gated on in JS) */
+    .d8-cursorglow{
+      position:fixed; top:0; left:0; width:60vmax; height:60vmax; z-index:0;
+      transform:translate3d(-50%, -50%, 0); pointer-events:none; opacity:0;
+      background:radial-gradient(circle, rgba(196,222,122,.06) 0%, rgba(196,222,122,.025) 30%, transparent 62%);
+      transition:opacity var(--d8-t-slow) var(--d8-ease); will-change:transform;
+      mix-blend-mode:screen;
+    }
+    .d8-cursorglow.is-on{ opacity:1; }
+
+    /* --- mono label / eyebrow --- */
+    .d8-label{
+      font-family:var(--d8-mono); font-weight:700; font-size:var(--d8-s--1);
+      letter-spacing:0.22em; text-transform:uppercase; color:var(--d8-dim);
+      display:inline-flex; align-items:center; gap:0.7em; margin:0;
+    }
+    .d8-label::before{ content:"["; color:var(--d8-neon); }
+    .d8-label::after{ content:"]"; color:var(--d8-neon); }
+    .d8-label--neon{ color:var(--d8-neon); }
+    .d8-label--mag{ color:var(--d8-magenta); }
+    .d8-label--mag::before,.d8-label--mag::after{ color:var(--d8-magenta); }
+    .d8-label--plain::before,.d8-label--plain::after{ content:none; }
+
+    /* --- buttons --- */
+    .d8-btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:0.6em;
+      min-height:54px; padding:0 1.7em;
+      background:var(--d8-neon); color:#0A0A0C;
+      font-family:var(--d8-display); font-weight:700; font-size:var(--d8-s--1);
+      letter-spacing:0.06em; text-transform:uppercase;
+      border:1px solid var(--d8-neon); border-radius:999px;
+      cursor:pointer; position:relative; isolation:isolate;
+      box-shadow:none;
+      transition:transform var(--d8-t-fast) var(--d8-ease), box-shadow var(--d8-t-med), background var(--d8-t-med), color var(--d8-t-med);
+    }
+    .d8-btn:hover{ transform:translateY(-2px); box-shadow:var(--d8-glow-neon-lg); background:var(--d8-neon-soft); }
+    .d8-btn--sm{ min-height:44px; padding:0 1.3em; }
+    .d8-btn--ghost{
+      background:transparent; color:var(--d8-neon);
+      border-color:color-mix(in oklab, var(--d8-neon) 55%, transparent);
+      box-shadow:none;
+    }
+    .d8-btn--ghost:hover{ background:rgba(196,222,122,.08); border-color:var(--d8-neon); box-shadow:var(--d8-glow-neon); color:var(--d8-neon-soft); }
+    .d8-btn--mag{ background:var(--d8-magenta); border-color:var(--d8-magenta); color:#0A0A0C; box-shadow:var(--d8-glow-mag); }
+    .d8-btn--mag:hover{ background:#e79ec0; box-shadow:var(--d8-glow-mag); }
+
+    /* --- section rhythm --- */
+    .d8-section{ position:relative; z-index:1; padding-block: clamp(3.8rem, 2.4rem + 6vw, 7.5rem); }
+    .d8-section--tint{ background:var(--d8-base-2); }
+    .d8-section--grid{
+      background:
+        linear-gradient(var(--d8-hair) 1px, transparent 1px) 0 0 / 100% clamp(3rem, 8vw, 5rem),
+        var(--d8-base);
+    }
+
+    /* --- glass card + cursor glow --- */
+    .d8-card{
+      position:relative; overflow:hidden;
+      background:var(--d8-panel);
+      border:1px solid var(--d8-hair);
+      border-radius:var(--d8-radius);
+      backdrop-filter:blur(6px);
+      transition:border-color var(--d8-t-med), transform var(--d8-t-med) var(--d8-ease), box-shadow var(--d8-t-med);
+    }
+    .d8-card::before{
+      content:""; position:absolute; inset:0; pointer-events:none; opacity:0;
+      background:radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%), rgba(196,222,122,.09), transparent 60%);
+      transition:opacity var(--d8-t-med);
+    }
+    .d8-card:hover{ border-color:color-mix(in oklab, var(--d8-neon) 45%, transparent); transform:translateY(-4px); box-shadow:0 24px 60px -30px rgba(0,0,0,.9), var(--d8-glow-neon); }
+    .d8-card:hover::before{ opacity:1; }
+
+    /* --- reveal --- */
+    .d8-rv{ opacity:0; transform:translateY(22px); transition:opacity var(--d8-t-slow) var(--d8-ease), transform var(--d8-t-slow) var(--d8-ease); }
+    .d8-rv.is-in{ opacity:1; transform:none; }
+    .d8-rv[data-delay="1"]{ transition-delay:80ms; }
+    .d8-rv[data-delay="2"]{ transition-delay:160ms; }
+    .d8-rv[data-delay="3"]{ transition-delay:240ms; }
+    .d8-rv[data-delay="4"]{ transition-delay:320ms; }
+
+    /* --- section heading helper --- */
+    .d8-sechead{ display:flex; flex-direction:column; gap:0.9rem; max-width:44ch; }
+    .d8-sechead h2{ font-size:var(--d8-s-3); font-weight:700; }
+    .d8-h-accent{ color:var(--d8-neon); }
+    .d8-h-mag{ color:var(--d8-magenta); }
+
+    /* ===================== NAV ===================== */
+    .d8-nav{ position:sticky; top:0; z-index:1000; transition:background var(--d8-t-med), border-color var(--d8-t-med), backdrop-filter var(--d8-t-med);
+      border-bottom:1px solid transparent; }
+    .d8-nav:not([data-at-top]){ background:rgba(10,10,12,.78); backdrop-filter:blur(14px); border-bottom-color:var(--d8-hair); }
+    .d8-nav__bar{ display:flex; align-items:center; justify-content:space-between; gap:1.5rem; height:76px; }
+    .d8-brand{ display:flex; align-items:center; gap:0.6rem; }
+    .d8-brand__dot{ width:8px; height:8px; border-radius:50%; background:var(--d8-neon); box-shadow:var(--d8-glow-neon); animation:d8pulse 3.6s var(--d8-ease) infinite; }
+    .d8-brand__word{ font-family:var(--d8-display); font-weight:700; font-size:1.4rem; color:var(--d8-white); letter-spacing:-0.01em; }
+    .d8-brand__tag{ font-family:var(--d8-mono); font-size:0.58rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--d8-dim); border-left:1px solid var(--d8-hair-2); padding-left:0.7rem; }
+    .d8-nav__links{ display:flex; align-items:center; gap:24px; }
+    .d8-navlink{ font-family:var(--d8-mono); font-weight:400; font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--d8-mist); padding:6px 0; position:relative; transition:color var(--d8-t-fast); }
+    .d8-navlink::after{ content:""; position:absolute; left:0; right:100%; bottom:0; height:1px; background:var(--d8-neon); transition:right var(--d8-t-med) var(--d8-ease); }
+    .d8-navlink:hover{ color:var(--d8-white); }
+    .d8-navlink:hover::after,.d8-navlink.is-current::after{ right:0; }
+    .d8-navlink.is-current{ color:var(--d8-white); }
+    .d8-nav__actions{ display:flex; align-items:center; gap:12px; }
+    .d8-burger{ display:none; width:44px; height:44px; background:none; border:1px solid var(--d8-hair-2); border-radius:10px; cursor:pointer; flex-direction:column; align-items:center; justify-content:center; gap:4px; }
+    .d8-burger span{ width:18px; height:2px; background:var(--d8-neon); transition:transform var(--d8-t-fast), opacity var(--d8-t-fast); }
+    .d8-burger[aria-expanded="true"] span:nth-child(1){ transform:translateY(6px) rotate(45deg); }
+    .d8-burger[aria-expanded="true"] span:nth-child(2){ opacity:0; }
+    .d8-burger[aria-expanded="true"] span:nth-child(3){ transform:translateY(-6px) rotate(-45deg); }
+
+    .d8-drawer{ overflow:hidden; background:rgba(10,10,12,.96); backdrop-filter:blur(14px); border-bottom:1px solid var(--d8-hair); }
+    .d8-drawer nav{ display:flex; flex-direction:column; padding:8px var(--d8-gutter) 22px; }
+    .d8-drawer__link{ padding:15px 2px; font-family:var(--d8-display); font-weight:600; font-size:1.05rem; color:var(--d8-white); border-bottom:1px solid var(--d8-hair); }
+    .d8-drawer__link--muted{ color:var(--d8-dim); font-family:var(--d8-mono); font-size:0.8rem; letter-spacing:0.08em; text-transform:uppercase; }
+    .d8-drawer__cta{ margin-top:18px; width:100%; }
+
+    @media (max-width:1040px){
+      .d8-nav__links,.d8-nav__cta{ display:none; }
+      .d8-burger{ display:flex; }
+      .d8-brand__tag{ display:none; }
+    }
+
+    /* ===================== FOOTER ===================== */
+    .d8-foot{ position:relative; z-index:1; background:var(--d8-base-2); border-top:1px solid var(--d8-hair); padding-block:clamp(3rem, 2rem + 4vw, 5rem) 2rem; }
+    .d8-foot__top{ display:grid; grid-template-columns:1.7fr 1fr 1fr 1.2fr; gap:clamp(1.6rem, 0.8rem + 3vw, 3.4rem); }
+    .d8-foot__word{ font-family:var(--d8-display); font-weight:700; font-size:1.9rem; color:var(--d8-white); letter-spacing:-0.02em; }
+    .d8-foot__word em{ font-style:normal; color:var(--d8-neon); }
+    .d8-foot__blurb{ color:var(--d8-mist); font-size:var(--d8-s--1); max-width:42ch; margin:0.8em 0 1.6em; line-height:1.7; }
+    .d8-foot__news .d8-label{ margin-bottom:0.8em; }
+    .d8-foot__form{ display:flex; gap:8px; max-width:380px; }
+    .d8-foot__form input{ flex:1; min-height:48px; padding:0 14px; background:var(--d8-base-3); border:1px solid var(--d8-hair-2); border-radius:999px; color:var(--d8-white); font-family:var(--d8-body); }
+    .d8-foot__form input::placeholder{ color:var(--d8-dim); }
+    .d8-foot__form input:focus{ outline:none; border-color:var(--d8-neon); box-shadow:0 0 0 3px rgba(196,222,122,.14); }
+    .d8-foot__note{ font-size:0.78rem; color:var(--d8-dim); margin:0.9em 0 0; }
+    .d8-foot__note.is-ok{ color:var(--d8-neon); }
+    .d8-foot__h{ font-family:var(--d8-mono); font-weight:700; font-size:0.66rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--d8-white); margin-bottom:1.1em; padding-bottom:0.8em; border-bottom:1px solid var(--d8-hair); }
+    .d8-foot__col{ display:flex; flex-direction:column; }
+    .d8-foot__link{ display:inline-flex; align-items:center; min-height:38px; color:var(--d8-mist); font-size:var(--d8-s--1); padding:2px 0; transition:color var(--d8-t-fast), padding-left var(--d8-t-fast); }
+    .d8-foot__link:hover{ color:var(--d8-neon); padding-left:6px; }
+    .d8-foot__link--inline{ min-height:0; display:inline; padding:0; }
+    .d8-foot__addr{ font-style:normal; color:var(--d8-mist); font-size:var(--d8-s--1); line-height:1.9; }
+    .d8-foot__hours{ color:var(--d8-dim); font-size:0.8rem; margin-top:1em; line-height:1.7; }
+    .d8-foot__bottom{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-top:clamp(2.4rem, 1.4rem + 3vw, 3.6rem); padding-top:1.5rem; border-top:1px solid var(--d8-hair); font-size:0.74rem; color:var(--d8-dim); font-family:var(--d8-mono); }
+    .d8-foot__award{ color:var(--d8-neon); }
+    @media(max-width:900px){ .d8-foot__top{ grid-template-columns:1fr 1fr; } }
+    @media(max-width:560px){ .d8-foot__top{ grid-template-columns:1fr; } }
+
+    /* ===================== CTA MODAL ===================== */
+    .d8-modal{ position:fixed; inset:0; z-index:1300; display:grid; place-items:center; padding:22px; }
+    .d8-modal[hidden]{ display:none; }
+    .d8-modal__scrim{ position:absolute; inset:0; background:rgba(4,4,6,.82); backdrop-filter:blur(6px); opacity:0; transition:opacity var(--d8-t-med) var(--d8-ease); }
+    .d8-modal.is-open .d8-modal__scrim{ opacity:1; }
+    .d8-modal__panel{ position:relative; width:min(560px,100%);
+      background:linear-gradient(180deg, var(--d8-base-3) 0%, var(--d8-base) 100%);
+      border:1px solid var(--d8-hair-2); border-radius:var(--d8-radius);
+      box-shadow:0 40px 120px -30px rgba(0,0,0,.9), 0 0 40px rgba(196,222,122,.05);
+      padding:clamp(1.6rem, 1rem + 2.4vw, 2.6rem);
+      transform:translateY(16px) scale(.98); opacity:0;
+      transition:transform var(--d8-t-med) var(--d8-ease), opacity var(--d8-t-med) var(--d8-ease); }
+    .d8-modal.is-open .d8-modal__panel{ transform:none; opacity:1; }
+    .d8-modal__close{ position:absolute; top:12px; right:12px; width:44px; height:44px; display:grid; place-items:center; background:none; border:none; color:var(--d8-mist); cursor:pointer; transition:color var(--d8-t-fast), transform var(--d8-t-fast); }
+    .d8-modal__close:hover{ color:var(--d8-neon); transform:rotate(90deg); }
+    .d8-modal__title{ font-size:var(--d8-s-2); font-weight:700; margin:0.35em 0 1em; }
+    .d8-modal__grid{ display:flex; flex-direction:column; gap:10px; }
+    .d8-choice{ display:flex; align-items:center; gap:16px; padding:16px 16px; border:1px solid var(--d8-hair); border-radius:12px; background:var(--d8-panel); transition:border-color var(--d8-t-med), background var(--d8-t-med), transform var(--d8-t-fast) var(--d8-ease), box-shadow var(--d8-t-med); }
+    .d8-choice:hover{ border-color:var(--d8-neon); background:rgba(196,222,122,.06); transform:translateX(4px); box-shadow:var(--d8-glow-neon); }
+    .d8-choice--feature{ border-color:color-mix(in oklab, var(--d8-magenta) 40%, var(--d8-hair)); }
+    .d8-choice--feature:hover{ border-color:var(--d8-magenta); background:rgba(224,138,176,.06); box-shadow:var(--d8-glow-mag); }
+    .d8-choice__no{ font-family:var(--d8-mono); font-weight:700; font-size:1.1rem; color:var(--d8-neon); flex:none; width:1.9em; }
+    .d8-choice--feature .d8-choice__no{ color:var(--d8-magenta); }
+    .d8-choice__body{ display:flex; flex-direction:column; gap:2px; flex:1; }
+    .d8-choice__k{ font-family:var(--d8-display); font-weight:700; font-size:var(--d8-s-1); color:var(--d8-white); line-height:1.1; }
+    .d8-choice__d{ font-size:var(--d8-s--1); color:var(--d8-dim); }
+    .d8-choice__arrow{ color:var(--d8-dim); font-size:1.2rem; transition:transform var(--d8-t-fast) var(--d8-ease), color var(--d8-t-fast); }
+    .d8-choice:hover .d8-choice__arrow{ transform:translateX(5px); color:var(--d8-neon); }
+    .d8-choice--feature:hover .d8-choice__arrow{ color:var(--d8-magenta); }
+
+    @keyframes d8pulse{ 0%,100%{ opacity:1; box-shadow:0 0 10px rgba(196,222,122,.28); } 50%{ opacity:.5; box-shadow:0 0 3px rgba(196,222,122,.12); } }
+
+    /* ===================== MOTION GUARD ===================== */
+    @media (prefers-reduced-motion: reduce){
+      .d8-html{ scroll-behavior:auto; }
+      .d8 *,.d8 *::before,.d8 *::after{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; }
+      .d8-rv{ opacity:1; transform:none; }
+      .d8-cursorglow{ display:none; }
+    }
+  </style>
+
+  <script>
+    // reveal-on-scroll (transform/opacity only)
+    const els = document.querySelectorAll('.d8-rv');
+    if (els.length){
+      if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches){
+        els.forEach((el) => el.classList.add('is-in'));
+      } else {
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((en) => { if (en.isIntersecting){ en.target.classList.add('is-in'); io.unobserve(en.target); } });
+        }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+        els.forEach((el) => io.observe(el));
+      }
+    }
+
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const fine = matchMedia('(hover:hover) and (pointer:fine)').matches;
+
+    // kinetic mono count-up
+    document.querySelectorAll('[data-count]').forEach((el) => {
+      const raw = el.getAttribute('data-count');
+      const num = parseFloat(raw.replace(/[^0-9.]/g, ''));
+      const prefix = raw.startsWith('~') ? '~' : '';
+      const hasComma = raw.includes(',');
+      if (reduce || !('IntersectionObserver' in window) || isNaN(num)){ el.textContent = raw; return; }
+      el.textContent = prefix + '0';
+      const io = new IntersectionObserver((ents) => {
+        ents.forEach((en) => {
+          if (!en.isIntersecting) return; io.unobserve(el);
+          const dur = 1300, t0 = performance.now();
+          const tick = (t) => {
+            const p = Math.min((t - t0) / dur, 1);
+            const eased = 1 - Math.pow(1 - p, 3);
+            const v = Math.round(num * eased);
+            el.textContent = prefix + (hasComma ? v.toLocaleString('en-US') : String(v));
+            if (p < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        });
+      }, { threshold: 0.5 });
+      io.observe(el);
+    });
+
+    // nav: solid-on-scroll
+    const nav = document.getElementById('d8-nav');
+    if (nav){
+      const onScroll = () => { if (window.scrollY > 24) nav.removeAttribute('data-at-top'); else nav.setAttribute('data-at-top',''); };
+      window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+    }
+
+    // mobile drawer
+    const burger = document.getElementById('d8-burger');
+    const drawer = document.getElementById('d8-drawer');
+    const setOpen = (open) => {
+      if (!burger || !drawer) return;
+      burger.setAttribute('aria-expanded', String(open));
+      if (open){ drawer.hidden = false; } else { setTimeout(() => { drawer.hidden = true; }, 10); }
+    };
+    burger?.addEventListener('click', () => setOpen(burger.getAttribute('aria-expanded') !== 'true'));
+    drawer?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+
+    // newsletter
+    const nf = document.getElementById('d8-news');
+    nf?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const note = document.getElementById('d8-news-note');
+      if (note){ note.textContent = 'You are on the wire. Watch for our first dispatch soon.'; note.classList.add('is-ok'); }
+      nf.reset();
+    });
+
+    // cursor-reactive ambient glow + per-card glow (gated on first pointer move)
+    if (fine && !reduce){
+      const glow = document.getElementById('d8-cursorglow');
+      let booted = false, gx = innerWidth / 2, gy = innerHeight / 2, tx = gx, ty = gy, raf = 0;
+      const loop = () => { gx += (tx - gx) * 0.12; gy += (ty - gy) * 0.12; if (glow) glow.style.transform = `translate3d(${gx}px, ${gy}px, 0) translate(-50%, -50%)`; raf = requestAnimationFrame(loop); };
+      const cards = document.querySelectorAll('.d8-card');
+      const onMove = (e) => {
+        tx = e.clientX; ty = e.clientY;
+        if (!booted){ booted = true; glow?.classList.add('is-on'); raf = requestAnimationFrame(loop); }
+      };
+      window.addEventListener('pointermove', onMove, { passive: true });
+      cards.forEach((c) => c.addEventListener('pointermove', (e) => {
+        const r = c.getBoundingClientRect();
+        c.style.setProperty('--mx', `${e.clientX - r.left}px`);
+        c.style.setProperty('--my', `${e.clientY - r.top}px`);
+      }, { passive: true }));
+    }
+
+    // CTA modal
+    const modal = document.getElementById('d8-modal');
+    if (modal){
+      let lastFocus = null;
+      const open = () => {
+        lastFocus = document.activeElement;
+        modal.hidden = false;
+        requestAnimationFrame(() => modal.classList.add('is-open'));
+        document.documentElement.style.overflow = 'hidden';
+        const first = modal.querySelector('.d8-choice');
+        if (first) first.focus();
+      };
+      const close = () => {
+        modal.classList.remove('is-open');
+        document.documentElement.style.overflow = '';
+        const done = () => { modal.hidden = true; modal.removeEventListener('transitionend', done); };
+        modal.addEventListener('transitionend', done);
+        if (lastFocus && lastFocus.focus) lastFocus.focus();
+      };
+      document.addEventListener('click', (e) => {
+        const trigger = e.target.closest('[data-cta]');
+        if (trigger){ e.preventDefault(); open(); return; }
+        if (e.target.closest('[data-cta-close]')){ close(); }
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !modal.hidden) close();
+        if (e.key === 'Tab' && !modal.hidden){
+          const f = modal.querySelectorAll('a[href],button:not([disabled])');
+          if (!f.length) return;
+          const first = f[0], last = f[f.length - 1];
+          if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+          else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+        }
+      });
+    }
+  </script>
+</body>
+</html>

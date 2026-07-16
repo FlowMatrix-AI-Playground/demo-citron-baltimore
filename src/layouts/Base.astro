@@ -1,0 +1,89 @@
+---
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import CtaModal from '../components/CtaModal.astro';
+import { SITE } from '../data/site.js';
+
+const {
+  title = 'Citron Baltimore, Waterfront Dining, Catering & Events at Quarry Lake',
+  description = 'An upscale waterfront restaurant and event venue on Quarry Lake in Baltimore County. Seasonal Modern American cuisine, a full sushi bar, a Wine Spectator–honored list, and private events from 20 to 500 guests.',
+  ogImage = '/lake-poster.jpg',
+} = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <meta name="theme-color" content="#0B1210" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={new URL(ogImage, Astro.site)} />
+  <meta property="og:site_name" content="Citron Baltimore" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context":"https://schema.org","@type":"Restaurant",
+    "name":"Citron Baltimore","servesCuisine":"Modern American",
+    "priceRange":"$$$","telephone":SITE.phone,
+    "address":{"@type":"PostalAddress","streetAddress":"2605 Quarry Lake Dr","addressLocality":"Baltimore","addressRegion":"MD","postalCode":"21209"},
+    "url":"https://citronbaltimore.com","acceptsReservations":"True"
+  })} />
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <Nav />
+  <main id="main"><slot /></main>
+  <Footer />
+  <CtaModal />
+
+  <script>
+    // reveal-on-scroll (transform/opacity only)
+    const els = document.querySelectorAll('.reveal');
+    if (els.length) {
+      if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        els.forEach((el) => el.classList.add('is-in'));
+      } else {
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target); } });
+        }, { threshold: 0.14, rootMargin: '0px 0px -8% 0px' });
+        els.forEach((el) => io.observe(el));
+      }
+    }
+
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // count-up numbers on reveal
+    document.querySelectorAll('[data-count]').forEach((el) => {
+      const raw = el.getAttribute('data-count');
+      const num = parseFloat(raw.replace(/[^0-9.]/g, ''));
+      const prefix = raw.startsWith('~') ? '~' : '';
+      const hasComma = raw.includes(',');
+      if (reduce || !('IntersectionObserver' in window) || isNaN(num)) { el.textContent = raw; return; }
+      el.textContent = prefix + '0';
+      const io = new IntersectionObserver((ents) => {
+        ents.forEach((en) => {
+          if (!en.isIntersecting) return; io.unobserve(el);
+          const dur = 1300, t0 = performance.now();
+          const tick = (t) => {
+            const p = Math.min((t - t0) / dur, 1);
+            const eased = 1 - Math.pow(1 - p, 3);
+            let v = Math.round(num * eased);
+            let s = hasComma ? v.toLocaleString('en-US') : String(v);
+            el.textContent = prefix + s;
+            if (p < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        });
+      }, { threshold: 0.5 });
+      io.observe(el);
+    });
+  </script>
+</body>
+</html>

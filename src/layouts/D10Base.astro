@@ -1,0 +1,558 @@
+---
+// ============================================================
+// Citron Baltimore, Design d10 "Gastronomic"
+// Maximalist, food-forward, expressive editorial. Rich warm dark
+// with cream, saturated citron + a deep wine/burgundy accent.
+// All CSS is namespaced under `.d10` so it never leaks into the flagship.
+// ============================================================
+import '@fontsource/dm-serif-display/400.css';
+import '@fontsource/dm-serif-display/400-italic.css';
+import '@fontsource/archivo/400.css';
+import '@fontsource/archivo/500.css';
+import '@fontsource/archivo/600.css';
+import '@fontsource/archivo/700.css';
+import '@fontsource/archivo/800.css';
+import '@fontsource/archivo/900.css';
+import { SITE } from '../data/site.js';
+
+const {
+  title = 'Citron Baltimore, Waterfront Dining, Catering & Events at Quarry Lake',
+  description = 'An upscale waterfront restaurant and event venue on Quarry Lake in Baltimore County. Seasonal Modern American cuisine, a full sushi bar, a Wine Spectator honored list, and private events from 20 to 500 guests.',
+  ogImage = '/lake-poster.jpg',
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const path = Astro.url.pathname.replace(/\/$/, '') || '/d10';
+
+const NAV = [
+  { label: 'Home', href: '/d10/' },
+  { label: 'Menu', href: '/d10/menu' },
+  { label: 'Events & Private Dining', href: '/d10/events' },
+  { label: 'About', href: '/d10/about' },
+  { label: 'Contact', href: '/d10/contact' },
+];
+const isCurrent = (href) => {
+  const clean = href.replace(/\/$/, '') || '/d10';
+  return clean === path;
+};
+---
+<!doctype html>
+<html lang="en" class="d10-html">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <meta name="theme-color" content="#171210" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={new URL(ogImage, Astro.site)} />
+  <meta property="og:site_name" content="Citron Baltimore" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context":"https://schema.org","@type":"Restaurant",
+    "name":"Citron Baltimore","servesCuisine":"Modern American",
+    "priceRange":"$$$","telephone":SITE.phone,
+    "address":{"@type":"PostalAddress","streetAddress":"2605 Quarry Lake Dr","addressLocality":"Baltimore","addressRegion":"MD","postalCode":"21209"},
+    "url":"https://citronbaltimore.com","acceptsReservations":"True",
+    "servesCuisine":["Modern American","Sushi","Seafood"],
+    "hasMenu":"https://citronbaltimore.com/d10/menu"
+  })} />
+</head>
+<body class="d10">
+  <a class="d10-skip" href="#main">Skip to content</a>
+
+  <!-- ===================== NAV ===================== -->
+  <header class="d10-nav" id="d10-nav" data-at-top>
+    <div class="d10-wrap d10-nav__bar">
+      <a href="/d10/" class="d10-nav__brand">
+        <span class="d10-nav__mark" aria-hidden="true">✦</span>
+        <span class="d10-nav__word">Citron</span>
+        <span class="d10-nav__loc">Baltimore</span>
+      </a>
+
+      <nav class="d10-nav__links" aria-label="Primary">
+        {NAV.map((item) => (
+          <a
+            href={item.href}
+            class:list={["d10-nav__link", { 'is-current': isCurrent(item.href) }]}
+            aria-current={isCurrent(item.href) ? 'page' : undefined}
+          >{item.label}</a>
+        ))}
+      </nav>
+
+      <div class="d10-nav__actions">
+        <button class="d10-btn d10-btn--sm d10-nav__cta" data-cta>Reserve</button>
+        <button class="d10-nav__burger" id="d10-burger" aria-label="Open menu" aria-expanded="false" aria-controls="d10-drawer">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="d10-drawer" id="d10-drawer" hidden>
+      <nav aria-label="Mobile">
+        {NAV.map((item) => (<a href={item.href} class="d10-drawer__link">{item.label}</a>))}
+        <a href="/d10/#journal" class="d10-drawer__link d10-drawer__link--muted">The Larder Journal</a>
+        <button class="d10-btn d10-drawer__cta" data-cta>Reserve · Pick-Up · Events</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main"><slot /></main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="d10-foot" id="journal">
+    <div class="d10-wrap">
+      <div class="d10-foot__top">
+        <p class="d10-foot__wordmark">Citron<span>Baltimore</span></p>
+        <p class="d10-foot__blurb">A waterfront kitchen, catering house, and event venue on Quarry Lake. Family-owned by Charles &amp; Susan Levine since 2016. Ten years on the water this November.</p>
+      </div>
+
+      <div class="d10-foot__grid">
+        <div class="d10-foot__news">
+          <p class="d10-eyebrow">The Larder Journal</p>
+          <p class="d10-foot__newscopy">Seasonal menus, wine dinners, and first word on Cove availability. No mass mail, only the good stuff.</p>
+          <form class="d10-foot__form" id="d10-news">
+            <label class="d10-sr" for="d10-news-email">Email address</label>
+            <input id="d10-news-email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required />
+            <button class="d10-btn d10-btn--sm" type="submit">Join</button>
+          </form>
+          <p class="d10-foot__note" id="d10-news-note"></p>
+        </div>
+
+        <nav class="d10-foot__col" aria-label="Explore">
+          <h2 class="d10-foot__h">Explore</h2>
+          <a href="/d10/" class="d10-foot__link">Home</a>
+          <a href="/d10/menu" class="d10-foot__link">The Menu</a>
+          <a href="/d10/events" class="d10-foot__link">Events &amp; Private Dining</a>
+          <a href="/d10/about" class="d10-foot__link">About</a>
+          <a href="/d10/contact" class="d10-foot__link">Contact</a>
+        </nav>
+
+        <nav class="d10-foot__col" aria-label="Reserve">
+          <h2 class="d10-foot__h">Reserve</h2>
+          <a href={SITE.reserveUrl} class="d10-foot__link" target="_blank" rel="noopener">Reserve on OpenTable</a>
+          <a href={SITE.pickupUrl} class="d10-foot__link" target="_blank" rel="noopener">Order Pick-Up</a>
+          <a href={SITE.portalUrl} class="d10-foot__link">Plan an Event</a>
+          <a href={SITE.phoneHref} class="d10-foot__link">{SITE.phone}</a>
+        </nav>
+
+        <div class="d10-foot__col">
+          <h2 class="d10-foot__h">Visit</h2>
+          <address class="d10-foot__addr">
+            2605 Quarry Lake Dr<br />Baltimore, MD 21209<br />
+            <a href={`mailto:${SITE.email}`} class="d10-foot__link d10-foot__link--inline">{SITE.email}</a>
+          </address>
+          <p class="d10-foot__hours">Dinner: Wed–Sun from 4 PM<br />Private Events: 7 days a week</p>
+        </div>
+      </div>
+
+      <div class="d10-foot__bottom">
+        <span>© 2026 Citron Baltimore. Quarry Lake, Baltimore County.</span>
+        <span class="d10-foot__award">Wine Spectator Award of Excellence · 2019–2025</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===================== CTA POPUP ===================== -->
+  <div class="d10-modal" id="d10-modal" role="dialog" aria-modal="true" aria-labelledby="d10-modal-title" hidden>
+    <div class="d10-modal__scrim" data-cta-close></div>
+    <div class="d10-modal__panel" role="document">
+      <button class="d10-modal__close" data-cta-close aria-label="Close">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+      <p class="d10-eyebrow d10-eyebrow--citron">Pull up a chair</p>
+      <h2 id="d10-modal-title" class="d10-modal__title">How may we <em>host</em> you?</h2>
+      <div class="d10-modal__grid">
+        <a class="d10-choice" href={SITE.reserveUrl} target="_blank" rel="noopener">
+          <span class="d10-choice__no" aria-hidden="true">01</span>
+          <span class="d10-choice__body">
+            <span class="d10-choice__k">Reserve a Table</span>
+            <span class="d10-choice__d">Dinner on the water. Wed–Sun from 4 PM.</span>
+          </span>
+          <span class="d10-choice__arrow" aria-hidden="true">→</span>
+        </a>
+        <a class="d10-choice" href={SITE.pickupUrl} target="_blank" rel="noopener">
+          <span class="d10-choice__no" aria-hidden="true">02</span>
+          <span class="d10-choice__body">
+            <span class="d10-choice__k">Order Pick-Up</span>
+            <span class="d10-choice__d">The kitchen, to go. Powered by Toast.</span>
+          </span>
+          <span class="d10-choice__arrow" aria-hidden="true">→</span>
+        </a>
+        <a class="d10-choice d10-choice--feature" href={SITE.portalUrl}>
+          <span class="d10-choice__no" aria-hidden="true">03</span>
+          <span class="d10-choice__body">
+            <span class="d10-choice__k">Events &amp; Private Dining</span>
+            <span class="d10-choice__d">From 20 to 500 guests. Enter the planning portal.</span>
+          </span>
+          <span class="d10-choice__arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <style is:global>
+    /* ============================================================
+       d10 "Gastronomic", tokens + base (scoped under .d10)
+       ============================================================ */
+    .d10{
+      /* palette: warm dark + cream + saturated citron + wine */
+      --d10-ink:#171210;
+      --d10-ink-2:#201814;
+      --d10-ink-3:#2B211B;
+      --d10-wine:#43141D;
+      --d10-wine-2:#5E1B28;
+      --d10-burgundy:#8A2233;
+      --d10-cream:#F4EBD9;
+      --d10-cream-2:#E4D4B9;
+      --d10-cream-3:#B9A88C;
+      --d10-citron:#DCE43F;
+      --d10-citron-2:#C3CB2E;
+      --d10-line:rgba(244,235,217,.14);
+      --d10-line-2:rgba(244,235,217,.28);
+
+      --d10-display:'DM Serif Display','Cormorant',Georgia,'Times New Roman',serif;
+      --d10-sans:'Archivo',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+
+      /* fluid type, spaces around every +/- (KIT rule) */
+      --d10-s--1: clamp(0.8rem, 0.77rem + 0.15vw, 0.9rem);
+      --d10-s-0:  clamp(1rem, 0.95rem + 0.22vw, 1.12rem);
+      --d10-s-1:  clamp(1.2rem, 1.05rem + 0.7vw, 1.6rem);
+      --d10-s-2:  clamp(1.6rem, 1.2rem + 1.9vw, 2.8rem);
+      --d10-s-3:  clamp(2.2rem, 1.4rem + 3.8vw, 4.4rem);
+      --d10-s-4:  clamp(3rem, 1.4rem + 7vw, 7rem);
+      --d10-s-5:  clamp(3.6rem, 0.6rem + 12vw, 11rem);
+
+      --d10-gutter: clamp(1.15rem, 0.7rem + 2vw, 2.75rem);
+      --d10-maxw:1280px;
+      --d10-measure:62ch;
+
+      --d10-t-fast:180ms;
+      --d10-t-med:360ms;
+      --d10-t-slow:680ms;
+      --d10-ease:cubic-bezier(0.22, 1, 0.36, 1);
+      --d10-radius:14px;
+
+      margin:0;
+      background:var(--d10-ink);
+      color:var(--d10-cream);
+      font-family:var(--d10-sans);
+      font-size:var(--d10-s-0);
+      line-height:1.62;
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+      overflow-x:hidden;
+    }
+    .d10 *,.d10 *::before,.d10 *::after{ box-sizing:border-box; }
+    .d10-html{ -webkit-text-size-adjust:100%; scroll-behavior:smooth; background:#171210; }
+    .d10 img,.d10 svg,.d10 canvas{ display:block; max-width:100%; }
+    .d10 a{ color:inherit; text-decoration:none; }
+    .d10 button{ font-family:inherit; }
+    .d10 ul,.d10 ol{ margin:0; padding:0; list-style:none; }
+    .d10 h1,.d10 h2,.d10 h3,.d10 h4{
+      font-family:var(--d10-display); font-weight:400; margin:0;
+      line-height:1.02; color:var(--d10-cream); letter-spacing:-0.005em;
+    }
+    .d10 p{ margin:0; }
+    .d10 em{ font-style:italic; }
+    .d10 :where(a,button,input,textarea,select,[tabindex]):focus-visible{
+      outline:2px solid var(--d10-citron); outline-offset:3px; border-radius:2px;
+    }
+
+    .d10-sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+    .d10-wrap{ width:100%; max-width:var(--d10-maxw); margin-inline:auto; padding-inline:var(--d10-gutter); }
+    /* lists using the wrap must out-specify the `.d10 ul` reset above so they stay centered */
+    .d10 ul.d10-wrap, .d10 ol.d10-wrap{ margin-inline:auto; padding-inline:var(--d10-gutter); }
+    .d10-measure{ max-width:var(--d10-measure); }
+
+    .d10-skip{ position:absolute; left:-999px; top:0; background:var(--d10-citron); color:var(--d10-ink); padding:12px 20px; z-index:1400; font-weight:800; border-radius:0 0 8px 0; }
+    .d10-skip:focus{ left:0; top:0; }
+
+    /* --- eyebrow --- */
+    .d10-eyebrow{
+      font-family:var(--d10-sans); font-weight:800; font-size:var(--d10-s--1);
+      letter-spacing:0.28em; text-transform:uppercase; color:var(--d10-cream-3);
+      display:inline-flex; align-items:center; gap:0.75em;
+    }
+    .d10-eyebrow::before{ content:""; width:2.2em; height:2px; background:var(--d10-burgundy); }
+    .d10-eyebrow--citron{ color:var(--d10-citron); }
+    .d10-eyebrow--citron::before{ background:var(--d10-citron); }
+    .d10-eyebrow--ink{ color:var(--d10-ink); }
+    .d10-eyebrow--ink::before{ background:var(--d10-wine); }
+
+    /* --- buttons --- */
+    .d10-btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:0.6em;
+      min-height:56px; padding:0 1.9em;
+      background:var(--d10-citron); color:var(--d10-ink);
+      font-family:var(--d10-sans); font-weight:800; font-size:var(--d10-s--1);
+      letter-spacing:0.14em; text-transform:uppercase;
+      border:2px solid var(--d10-citron); border-radius:60px;
+      cursor:pointer; position:relative; overflow:hidden;
+      transition:transform var(--d10-t-fast) var(--d10-ease), background var(--d10-t-med), color var(--d10-t-med), border-color var(--d10-t-med);
+    }
+    .d10-btn:hover{ transform:translateY(-3px); background:var(--d10-cream); border-color:var(--d10-cream); }
+    .d10-btn--sm{ min-height:44px; padding:0 1.3em; }
+    .d10-btn--ghost{ background:transparent; color:var(--d10-cream); border-color:var(--d10-line-2); }
+    .d10-btn--ghost:hover{ background:var(--d10-cream); color:var(--d10-ink); border-color:var(--d10-cream); }
+    .d10-btn--wine{ background:var(--d10-burgundy); border-color:var(--d10-burgundy); color:var(--d10-cream); }
+    .d10-btn--wine:hover{ background:var(--d10-wine-2); border-color:var(--d10-wine-2); color:var(--d10-cream); }
+
+    /* --- section rhythm --- */
+    .d10-section{ padding-block: clamp(3.8rem, 2.4rem + 6vw, 8rem); position:relative; }
+    .d10-section--wine{ background:var(--d10-wine); }
+    .d10-section--cream{ background:var(--d10-cream); color:var(--d10-ink-2); }
+    .d10-section--cream h1,.d10-section--cream h2,.d10-section--cream h3{ color:var(--d10-ink); }
+    .d10-section--cream .d10-eyebrow{ color:var(--d10-wine-2); }
+    .d10-section--cream .d10-eyebrow::before{ background:var(--d10-burgundy); }
+
+    /* --- reveal --- */
+    .d10-rv{ opacity:0; transform:translateY(26px); transition:opacity var(--d10-t-slow) var(--d10-ease), transform var(--d10-t-slow) var(--d10-ease); }
+    .d10-rv.is-in{ opacity:1; transform:none; }
+    .d10-rv[data-delay="1"]{ transition-delay:90ms; }
+    .d10-rv[data-delay="2"]{ transition-delay:180ms; }
+    .d10-rv[data-delay="3"]{ transition-delay:270ms; }
+    .d10-rv[data-delay="4"]{ transition-delay:360ms; }
+
+    /* --- kinetic type: words rise on load/reveal --- */
+    .d10-kin{ display:inline; }
+    .d10-kin .d10-kin__w{ display:inline-block; overflow:hidden; vertical-align:top; }
+    .d10-kin .d10-kin__i{ display:inline-block; transform:translateY(112%); transition:transform var(--d10-t-slow) var(--d10-ease); }
+    .d10-kin.is-in .d10-kin__i{ transform:translateY(0); }
+    .d10-kin__w:nth-child(1) .d10-kin__i{ transition-delay:40ms; }
+    .d10-kin__w:nth-child(2) .d10-kin__i{ transition-delay:110ms; }
+    .d10-kin__w:nth-child(3) .d10-kin__i{ transition-delay:180ms; }
+    .d10-kin__w:nth-child(4) .d10-kin__i{ transition-delay:250ms; }
+    .d10-kin__w:nth-child(5) .d10-kin__i{ transition-delay:320ms; }
+    .d10-kin__w:nth-child(6) .d10-kin__i{ transition-delay:390ms; }
+    .d10-kin__w:nth-child(7) .d10-kin__i{ transition-delay:460ms; }
+    .d10-kin__w:nth-child(8) .d10-kin__i{ transition-delay:530ms; }
+
+    /* --- food media / hover-zoom --- */
+    .d10-media{ position:relative; overflow:hidden; background:var(--d10-ink-3); border-radius:var(--d10-radius); }
+    .d10-media img{ width:100%; height:100%; object-fit:cover; transition:transform var(--d10-t-slow) var(--d10-ease); }
+    .d10-media:hover img{ transform:scale(1.06); }
+
+    /* ===================== NAV ===================== */
+    .d10-nav{ position:sticky; top:0; z-index:1000; background:rgba(23,18,16,.78); backdrop-filter:blur(12px); border-bottom:1px solid transparent; transition:background var(--d10-t-med), border-color var(--d10-t-med); }
+    .d10-nav:not([data-at-top]){ background:rgba(23,18,16,.94); border-bottom:1px solid var(--d10-line); }
+    .d10-nav__bar{ display:flex; align-items:center; justify-content:space-between; gap:1.5rem; height:78px; }
+    .d10-nav__brand{ display:flex; align-items:baseline; gap:0.5em; line-height:1; }
+    .d10-nav__mark{ color:var(--d10-citron); font-size:0.9em; }
+    .d10-nav__word{ font-family:var(--d10-display); font-size:1.7rem; color:var(--d10-cream); letter-spacing:0.01em; }
+    .d10-nav__loc{ font-family:var(--d10-sans); font-weight:800; font-size:0.58rem; letter-spacing:0.34em; text-transform:uppercase; color:var(--d10-citron); }
+    .d10-nav__links{ display:flex; align-items:center; gap:30px; }
+    .d10-nav__link{ font-family:var(--d10-sans); font-weight:600; font-size:0.78rem; letter-spacing:0.06em; color:var(--d10-cream-2); position:relative; padding:6px 0; transition:color var(--d10-t-fast); }
+    .d10-nav__link::after{ content:""; position:absolute; left:0; right:100%; bottom:0; height:2px; background:var(--d10-citron); transition:right var(--d10-t-med) var(--d10-ease); }
+    .d10-nav__link:hover{ color:var(--d10-cream); }
+    .d10-nav__link:hover::after,.d10-nav__link.is-current::after{ right:0; }
+    .d10-nav__link.is-current{ color:var(--d10-citron); }
+    .d10-nav__actions{ display:flex; align-items:center; gap:12px; }
+    .d10-nav__burger{ display:none; width:46px; height:46px; background:none; border:1px solid var(--d10-line-2); border-radius:50%; cursor:pointer; flex-direction:column; align-items:center; justify-content:center; gap:4px; }
+    .d10-nav__burger span{ width:18px; height:2px; background:var(--d10-cream); transition:transform var(--d10-t-fast), opacity var(--d10-t-fast); }
+    .d10-nav__burger[aria-expanded="true"] span:nth-child(1){ transform:translateY(6px) rotate(45deg); }
+    .d10-nav__burger[aria-expanded="true"] span:nth-child(2){ opacity:0; }
+    .d10-nav__burger[aria-expanded="true"] span:nth-child(3){ transform:translateY(-6px) rotate(-45deg); }
+
+    .d10-drawer{ overflow:hidden; background:var(--d10-ink-2); border-bottom:1px solid var(--d10-line); }
+    .d10-drawer nav{ display:flex; flex-direction:column; padding:10px var(--d10-gutter) 22px; }
+    .d10-drawer__link{ padding:15px 2px; font-family:var(--d10-display); font-size:1.35rem; color:var(--d10-cream); border-bottom:1px solid var(--d10-line); }
+    .d10-drawer__link--muted{ color:var(--d10-cream-3); font-size:1rem; font-family:var(--d10-sans); font-weight:600; }
+    .d10-drawer__cta{ margin-top:18px; }
+
+    @media (max-width:1040px){
+      .d10-nav__links,.d10-nav__cta{ display:none; }
+      .d10-nav__burger{ display:flex; }
+    }
+
+    /* ===================== FOOTER ===================== */
+    .d10-foot{ background:var(--d10-ink-2); border-top:1px solid var(--d10-line); padding-block:clamp(3rem, 2rem + 4vw, 5.5rem) 2.2rem; }
+    .d10-foot__top{ display:grid; grid-template-columns:auto 1fr; gap:clamp(1.5rem, 0.8rem + 3vw, 4rem); align-items:end; padding-bottom:clamp(2rem, 1.4rem + 2vw, 3.2rem); border-bottom:1px solid var(--d10-line); }
+    .d10-foot__wordmark{ font-family:var(--d10-display); font-size:clamp(2.4rem, 1.4rem + 4vw, 4.6rem); line-height:0.9; color:var(--d10-cream); }
+    .d10-foot__wordmark span{ display:block; color:var(--d10-citron); font-size:0.42em; font-family:var(--d10-sans); font-weight:800; letter-spacing:0.34em; text-transform:uppercase; margin-top:0.5em; }
+    .d10-foot__blurb{ color:var(--d10-cream-3); font-size:var(--d10-s-0); max-width:44ch; line-height:1.7; }
+    .d10-foot__grid{ display:grid; grid-template-columns:1.6fr 1fr 1fr 1.1fr; gap:clamp(1.6rem, 0.8rem + 3vw, 3.4rem); padding-top:clamp(2.2rem, 1.4rem + 3vw, 3.4rem); }
+    .d10-foot__news .d10-eyebrow{ margin-bottom:0.9em; }
+    .d10-foot__newscopy{ color:var(--d10-cream-3); font-size:var(--d10-s--1); max-width:40ch; margin-bottom:1.3em; line-height:1.7; }
+    .d10-foot__form{ display:flex; gap:8px; max-width:400px; }
+    .d10-foot__form input{ flex:1; min-height:52px; padding:0 16px; background:var(--d10-ink); border:1px solid var(--d10-line-2); border-radius:60px; color:var(--d10-cream); font-family:var(--d10-sans); }
+    .d10-foot__form input::placeholder{ color:var(--d10-cream-3); }
+    .d10-foot__note{ font-size:0.78rem; color:var(--d10-citron); margin-top:0.9em; font-weight:700; min-height:1.2em; }
+    .d10-foot__h{ font-family:var(--d10-sans); font-weight:800; font-size:0.66rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--d10-cream); margin-bottom:1.1em; }
+    .d10-foot__col{ display:flex; flex-direction:column; }
+    .d10-foot__link{ display:inline-flex; align-items:center; min-height:38px; color:var(--d10-cream-3); font-size:var(--d10-s--1); padding:3px 0; transition:color var(--d10-t-fast), padding-left var(--d10-t-fast); }
+    .d10-foot__link:hover{ color:var(--d10-citron); padding-left:5px; }
+    .d10-foot__link--inline{ min-height:0; display:inline; padding:0; }
+    .d10-foot__addr{ font-style:normal; color:var(--d10-cream-2); font-size:var(--d10-s--1); line-height:1.9; }
+    .d10-foot__hours{ color:var(--d10-cream-3); font-size:0.8rem; margin-top:1em; line-height:1.7; }
+    .d10-foot__bottom{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-top:clamp(2.2rem, 1.4rem + 3vw, 3.6rem); padding-top:1.4rem; border-top:1px solid var(--d10-line); font-size:0.74rem; color:var(--d10-cream-3); }
+    .d10-foot__award{ color:var(--d10-citron); font-weight:700; letter-spacing:0.03em; }
+    @media (max-width:900px){ .d10-foot__grid{ grid-template-columns:1fr 1fr; } .d10-foot__top{ grid-template-columns:1fr; gap:1.4rem; } }
+    @media (max-width:540px){ .d10-foot__grid{ grid-template-columns:1fr; } }
+
+    /* ===================== CTA MODAL ===================== */
+    .d10-modal{ position:fixed; inset:0; z-index:1300; display:grid; place-items:center; padding:22px; }
+    .d10-modal[hidden]{ display:none; }
+    .d10-modal__scrim{ position:absolute; inset:0; background:rgba(11,8,7,.72); backdrop-filter:blur(4px); opacity:0; transition:opacity var(--d10-t-med) var(--d10-ease); }
+    .d10-modal.is-open .d10-modal__scrim{ opacity:1; }
+    .d10-modal__panel{ position:relative; width:min(580px,100%); background:var(--d10-ink-2); border:1px solid var(--d10-line-2);
+      border-radius:20px; box-shadow:0 40px 100px -30px rgba(0,0,0,.8); overflow:hidden;
+      padding:clamp(1.6rem, 1rem + 2.4vw, 2.8rem);
+      transform:translateY(18px) scale(.98); opacity:0;
+      transition:transform var(--d10-t-med) var(--d10-ease), opacity var(--d10-t-med) var(--d10-ease); }
+    .d10-modal__panel::before{ content:""; position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg, var(--d10-citron), var(--d10-burgundy)); }
+    .d10-modal.is-open .d10-modal__panel{ transform:none; opacity:1; }
+    .d10-modal__close{ position:absolute; top:14px; right:14px; width:44px; height:44px; display:grid; place-items:center; background:none; border:1px solid var(--d10-line); border-radius:50%; color:var(--d10-cream); cursor:pointer; transition:color var(--d10-t-fast), transform var(--d10-t-fast), border-color var(--d10-t-fast); }
+    .d10-modal__close:hover{ color:var(--d10-citron); border-color:var(--d10-citron); transform:rotate(90deg); }
+    .d10-modal__title{ font-size:var(--d10-s-2); margin:0.4em 0 0.9em; }
+    .d10-modal__title em{ color:var(--d10-citron); }
+    .d10-modal__grid{ display:flex; flex-direction:column; gap:2px; }
+    .d10-choice{ display:flex; align-items:center; gap:18px; padding:18px 14px; border-radius:12px; transition:background var(--d10-t-med), padding-left var(--d10-t-fast); }
+    .d10-choice:hover{ background:var(--d10-ink-3); padding-left:20px; }
+    .d10-choice__no{ font-family:var(--d10-display); font-size:1.5rem; color:var(--d10-cream-3); flex:none; width:1.6em; }
+    .d10-choice--feature .d10-choice__no{ color:var(--d10-citron); }
+    .d10-choice__body{ display:flex; flex-direction:column; gap:3px; flex:1; }
+    .d10-choice__k{ font-family:var(--d10-display); font-size:var(--d10-s-1); color:var(--d10-cream); line-height:1.1; }
+    .d10-choice__d{ font-size:var(--d10-s--1); color:var(--d10-cream-3); }
+    .d10-choice__arrow{ color:var(--d10-cream-3); font-size:1.3rem; transition:transform var(--d10-t-fast) var(--d10-ease), color var(--d10-t-fast); }
+    .d10-choice:hover .d10-choice__arrow{ transform:translateX(6px); color:var(--d10-citron); }
+
+    /* ===================== MOTION GUARD ===================== */
+    @media (prefers-reduced-motion: reduce){
+      .d10-html{ scroll-behavior:auto; }
+      .d10 *,.d10 *::before,.d10 *::after{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; }
+      .d10-rv{ opacity:1; transform:none; }
+      .d10-kin .d10-kin__i{ transform:none; }
+    }
+  </style>
+
+  <script>
+    // reveal-on-scroll + kinetic type (transform/opacity only)
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const revEls = document.querySelectorAll('.d10-rv, .d10-kin');
+    if (revEls.length){
+      if (!('IntersectionObserver' in window) || reduce){
+        revEls.forEach((el) => el.classList.add('is-in'));
+      } else {
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((en) => { if (en.isIntersecting){ en.target.classList.add('is-in'); io.unobserve(en.target); } });
+        }, { threshold: 0.14, rootMargin: '0px 0px -6% 0px' });
+        revEls.forEach((el) => io.observe(el));
+      }
+    }
+
+    // count-up numbers on reveal
+    document.querySelectorAll('[data-count]').forEach((el) => {
+      const raw = el.getAttribute('data-count');
+      const num = parseFloat(raw.replace(/[^0-9.]/g, ''));
+      const prefix = raw.startsWith('~') ? '~' : '';
+      const hasComma = raw.includes(',');
+      if (reduce || !('IntersectionObserver' in window) || isNaN(num)){ el.textContent = raw; return; }
+      el.textContent = prefix + '0';
+      const io = new IntersectionObserver((ents) => {
+        ents.forEach((en) => {
+          if (!en.isIntersecting) return; io.unobserve(el);
+          const dur = 1300, t0 = performance.now();
+          const tick = (t) => {
+            const p = Math.min((t - t0) / dur, 1);
+            const eased = 1 - Math.pow(1 - p, 3);
+            const v = Math.round(num * eased);
+            el.textContent = prefix + (hasComma ? v.toLocaleString('en-US') : String(v));
+            if (p < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        });
+      }, { threshold: 0.5 });
+      io.observe(el);
+    });
+
+    // nav: solid-on-scroll
+    const nav = document.getElementById('d10-nav');
+    if (nav){
+      const onScroll = () => { if (window.scrollY > 24) nav.removeAttribute('data-at-top'); else nav.setAttribute('data-at-top',''); };
+      window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+    }
+
+    // parallax (gated behind first scroll, transform-only, reduced-motion aware)
+    const pxEls = Array.from(document.querySelectorAll('[data-parallax]'));
+    if (pxEls.length && !reduce){
+      let ticking = false;
+      const update = () => {
+        const vh = window.innerHeight;
+        pxEls.forEach((el) => {
+          const rect = el.getBoundingClientRect();
+          if (rect.bottom < -200 || rect.top > vh + 200) return;
+          const speed = parseFloat(el.getAttribute('data-parallax')) || 0.08;
+          const centerOffset = (rect.top + rect.height / 2) - vh / 2;
+          el.style.transform = 'translate3d(0,' + (-centerOffset * speed).toFixed(1) + 'px,0)';
+        });
+        ticking = false;
+      };
+      const onScroll = () => { if (!ticking){ ticking = true; requestAnimationFrame(update); } };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll, { passive: true });
+      update();
+    }
+
+    // mobile drawer
+    const burger = document.getElementById('d10-burger');
+    const drawer = document.getElementById('d10-drawer');
+    const setOpen = (open) => {
+      if (!burger || !drawer) return;
+      burger.setAttribute('aria-expanded', String(open));
+      if (open){ drawer.hidden = false; } else { setTimeout(() => { drawer.hidden = true; }, 10); }
+    };
+    burger?.addEventListener('click', () => setOpen(burger.getAttribute('aria-expanded') !== 'true'));
+    drawer?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+
+    // newsletter
+    const nf = document.getElementById('d10-news');
+    nf?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const note = document.getElementById('d10-news-note');
+      if (note){ note.textContent = 'Welcome to the table. First word is on its way.'; }
+      nf.reset();
+    });
+
+    // CTA modal
+    const modal = document.getElementById('d10-modal');
+    if (modal){
+      let lastFocus = null;
+      const open = () => {
+        lastFocus = document.activeElement;
+        modal.hidden = false;
+        requestAnimationFrame(() => modal.classList.add('is-open'));
+        document.documentElement.style.overflow = 'hidden';
+        const first = modal.querySelector('.d10-choice');
+        if (first) first.focus();
+      };
+      const close = () => {
+        modal.classList.remove('is-open');
+        document.documentElement.style.overflow = '';
+        const done = () => { modal.hidden = true; modal.removeEventListener('transitionend', done); };
+        modal.addEventListener('transitionend', done);
+        if (lastFocus && lastFocus.focus) lastFocus.focus();
+      };
+      document.addEventListener('click', (e) => {
+        const trigger = e.target.closest('[data-cta]');
+        if (trigger){ e.preventDefault(); open(); return; }
+        if (e.target.closest('[data-cta-close]')){ close(); }
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !modal.hidden) close();
+        if (e.key === 'Tab' && !modal.hidden){
+          const f = modal.querySelectorAll('a[href],button:not([disabled])');
+          if (!f.length) return;
+          const first = f[0], last = f[f.length - 1];
+          if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+          else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+        }
+      });
+    }
+  </script>
+</body>
+</html>

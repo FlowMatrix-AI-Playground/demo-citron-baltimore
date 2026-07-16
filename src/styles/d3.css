@@ -1,0 +1,145 @@
+/* ===========================================================
+   Citron Baltimore, Design d3 "Lakeside at Dusk"
+   Cinematic, photography-first, moody twilight.
+   Marcellus (display) + Karla (body). Loaded only on /d3 pages.
+   =========================================================== */
+@import '@fontsource/marcellus/400.css';
+@import '@fontsource/karla/400.css';
+@import '@fontsource/karla/500.css';
+@import '@fontsource/karla/700.css';
+
+:root{
+  /* deep twilight base */
+  --d3-bg:#10151C;
+  --d3-bg-2:#151C26;
+  --d3-bg-3:#1C2531;
+  --d3-ink:#080B10;
+
+  /* accents */
+  --d3-amber:#E0A05A;
+  --d3-amber-soft:#ECBB84;
+  --d3-amber-deep:#C9863F;
+  --d3-citron:#B6D63F;
+  --d3-citron-deep:#9FC02A;
+
+  /* text on twilight */
+  --d3-cream:#F2ECDF;
+  --d3-cream-dim:#CFC8BA;
+  --d3-mist:#9AA3AE;
+  --d3-mist-dim:#848E9A;
+
+  --d3-hair:rgba(242,236,223,.12);
+  --d3-hair-2:rgba(242,236,223,.26);
+
+  /* type */
+  --d3-display:'Marcellus', 'Cormorant Garamond', Georgia, serif;
+  --d3-body:'Karla', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* fluid scale */
+  --d3-s--1: clamp(0.82rem, 0.79rem + 0.14vw, 0.9rem);
+  --d3-s-0:  clamp(1rem, 0.96rem + 0.2vw, 1.1rem);
+  --d3-s-1:  clamp(1.2rem, 1.08rem + 0.55vw, 1.5rem);
+  --d3-s-2:  clamp(1.7rem, 1.3rem + 1.8vw, 2.6rem);
+  --d3-s-3:  clamp(2.3rem, 1.5rem + 3.4vw, 4rem);
+  --d3-s-4:  clamp(3rem, 1.6rem + 6.6vw, 6.8rem);
+  --d3-s-5:  clamp(3.4rem, 1.2rem + 9.6vw, 9rem);
+  /* hero display: balanced, does not crowd the image */
+  --d3-hero: clamp(2.85rem, 1.5rem + 6vw, 6.4rem);
+
+  /* space + rhythm */
+  --d3-gutter: clamp(1.25rem, 0.8rem + 2vw, 3rem);
+  --d3-maxw: 1240px;
+  --d3-measure: 62ch;
+  --d3-radius: 4px;
+  --d3-radius-md: 8px;
+  --d3-radius-lg: 12px;
+
+  /* motion */
+  --d3-fast:200ms;
+  --d3-med:420ms;
+  --d3-slow:760ms;
+  --d3-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+*,*::before,*::after{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
+body.d3-body{
+  margin:0;
+  background:var(--d3-bg);
+  color:var(--d3-cream-dim);
+  font-family:var(--d3-body);
+  font-size:var(--d3-s-0);
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+.d3-body img,.d3-body svg,.d3-body canvas{ display:block; max-width:100%; }
+.d3-body a{ color:inherit; text-decoration:none; }
+.d3-body button{ font-family:inherit; }
+.d3-body ul,.d3-body ol{ margin:0; padding:0; list-style:none; }
+.d3-body p{ text-wrap:pretty; }
+.d3-body h1,.d3-body h2,.d3-body h3,.d3-body h4{
+  font-family:var(--d3-display); font-weight:400; margin:0;
+  line-height:1.04; color:var(--d3-cream); letter-spacing:.005em;
+  text-wrap:balance;
+}
+
+/* layout helpers */
+.d3-wrap{ width:100%; max-width:var(--d3-maxw); margin-inline:auto; padding-inline:var(--d3-gutter); }
+.d3-section{ padding-block: clamp(4.5rem, 3rem + 8vw, 9.5rem); position:relative; }
+.d3-measure{ max-width:var(--d3-measure); }
+
+.d3-eyebrow{
+  display:block; font-family:var(--d3-body); font-weight:700;
+  font-size:var(--d3-s--1); letter-spacing:.32em; text-transform:uppercase;
+  color:var(--d3-amber); margin-bottom:1rem;
+}
+.d3-eyebrow--citron{ color:var(--d3-citron); }
+
+/* skip link + focus */
+.d3-skip{ position:absolute; left:-999px; top:0; background:var(--d3-amber); color:var(--d3-ink); padding:12px 20px; z-index:1400; font-weight:700; }
+.d3-skip:focus{ left:12px; top:12px; }
+.d3-body :where(a,button,input,textarea,select,[tabindex]):focus-visible{
+  outline:2px solid var(--d3-amber); outline-offset:3px; border-radius:2px;
+}
+.d3-sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; }
+
+/* buttons */
+.d3-btn{
+  --bg:var(--d3-amber); --fg:var(--d3-ink); --bd:var(--d3-amber);
+  display:inline-flex; align-items:center; justify-content:center; gap:.6em;
+  min-height:54px; padding:0 1.7em;
+  background:var(--bg); color:var(--fg);
+  font-family:var(--d3-body); font-weight:700; font-size:var(--d3-s--1);
+  letter-spacing:.16em; text-transform:uppercase;
+  border:1px solid var(--bd); border-radius:var(--d3-radius);
+  cursor:pointer; position:relative;
+  transition:transform var(--d3-fast) var(--d3-ease), box-shadow var(--d3-med) var(--d3-ease), background var(--d3-med), color var(--d3-med);
+}
+.d3-btn:hover{ transform:translateY(-2px); box-shadow:0 14px 40px -14px color-mix(in oklab, var(--d3-amber) 66%, transparent); }
+.d3-btn--ghost{ --bg:transparent; --fg:var(--d3-cream); --bd:var(--d3-hair-2); }
+.d3-btn--ghost:hover{ --fg:var(--d3-ink); --bg:var(--d3-cream); --bd:var(--d3-cream); box-shadow:none; }
+.d3-btn--citron{ --bg:var(--d3-citron); --fg:var(--d3-ink); --bd:var(--d3-citron); }
+.d3-btn--citron:hover{ box-shadow:0 14px 40px -14px color-mix(in oklab, var(--d3-citron) 66%, transparent); }
+
+/* text link with arrow */
+.d3-arrow{ display:inline-flex; align-items:center; gap:.55em; font-family:var(--d3-body); font-weight:700; font-size:var(--d3-s--1); letter-spacing:.14em; text-transform:uppercase; color:var(--d3-amber); }
+.d3-arrow span{ display:inline-block; transition:transform var(--d3-fast) var(--d3-ease); }
+.d3-arrow:hover span{ transform:translateX(6px); }
+
+/* reveal-on-scroll (transform/opacity only) */
+.d3-reveal{ opacity:0; transform:translateY(26px); transition:opacity var(--d3-slow) var(--d3-ease), transform var(--d3-slow) var(--d3-ease); }
+.d3-reveal.is-in{ opacity:1; transform:none; }
+.d3-reveal[data-delay="1"]{ transition-delay:90ms; }
+.d3-reveal[data-delay="2"]{ transition-delay:180ms; }
+.d3-reveal[data-delay="3"]{ transition-delay:270ms; }
+
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior:auto; }
+  .d3-body *,.d3-body *::before,.d3-body *::after{
+    animation-duration:.001ms !important; animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;
+  }
+  .d3-reveal{ opacity:1; transform:none; }
+}

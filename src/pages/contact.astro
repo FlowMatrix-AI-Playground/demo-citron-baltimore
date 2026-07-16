@@ -1,0 +1,431 @@
+---
+import Base from '../layouts/Base.astro';
+import { Image } from 'astro:assets';
+import exterior from '../assets/img/exterior.jpg';
+import { SITE } from '../data/site.js';
+
+const hours = [
+  { k: 'Dinner', v: 'Wednesday – Sunday, from 4 PM' },
+  { k: 'Happy Hour', v: 'Daily service, 4 – 6:30 PM' },
+  { k: 'Private Events', v: 'Seven days a week, by arrangement' },
+];
+
+const actions = [
+  { label: 'Reserve a Table', href: SITE.reserveUrl, cls: 'btn', ext: true },
+  { label: 'Order Pick-Up', href: SITE.pickupUrl, cls: 'btn btn--ghost', ext: true },
+  { label: 'Plan an Event', href: SITE.portalUrl, cls: 'btn btn--ghost', ext: false },
+];
+---
+<Base
+  title="Contact, Citron Baltimore"
+  description="Visit Citron Baltimore at Quarry Lake, reservations, private events, hours, and directions."
+>
+  <!-- ===== HERO ===== -->
+  <section class="c-hero" aria-labelledby="c-hero-title">
+    <div class="c-hero__media" aria-hidden="true">
+      <Image
+        src={exterior}
+        alt=""
+        widths={[900, 1300, 1600]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+        format="avif"
+        quality={55}
+        class="c-hero__img"
+      />
+      <div class="c-hero__scrim"></div>
+    </div>
+    <div class="wrap c-hero__inner cluster">
+      <p class="eyebrow">Visit &middot; Quarry Lake</p>
+      <h1 id="c-hero-title" class="c-hero__title">Come find us on the water.</h1>
+      <p class="c-hero__lead measure">
+        Reservations, private events, and everything in between, the quickest way to reach the
+        team is right here.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== FORM + DETAILS ===== -->
+  <section class="section c-main">
+    <div class="wrap c-main__grid">
+
+      <!-- LEFT: contact form -->
+      <div class="c-form-col reveal">
+        <p class="eyebrow">Send a note</p>
+        <h2 class="c-form__title">Tell us what you have in mind.</h2>
+        <p class="c-form__sub measure">
+          A short message is plenty. We'll follow up personally, no automated queues, no lists.
+        </p>
+
+        <form class="c-form" id="contact-form" novalidate>
+          <div class="c-field">
+            <label for="cf-name">Name</label>
+            <input id="cf-name" name="name" type="text" autocomplete="name" required placeholder="Your name" />
+          </div>
+
+          <div class="c-field-row">
+            <div class="c-field">
+              <label for="cf-email">Email</label>
+              <input id="cf-email" name="email" type="email" autocomplete="email" required placeholder="you@email.com" />
+            </div>
+            <div class="c-field">
+              <label for="cf-phone">Phone</label>
+              <input id="cf-phone" name="phone" type="tel" autocomplete="tel" placeholder="Optional" />
+            </div>
+          </div>
+
+          <div class="c-field">
+            <label for="cf-type">Inquiry type</label>
+            <div class="c-select">
+              <select id="cf-type" name="type">
+                <option value="Reservation">Reservation</option>
+                <option value="Private Event">Private Event</option>
+                <option value="Catering">Catering</option>
+                <option value="General">General</option>
+              </select>
+              <svg class="c-select__chev" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+                <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+
+          <div class="c-field">
+            <label for="cf-message">Message</label>
+            <textarea id="cf-message" name="message" rows="5" required placeholder="Dates, party size, or anything you'd like us to know."></textarea>
+          </div>
+
+          <button class="btn c-form__btn" type="submit">Send Message</button>
+
+          <p class="c-form__note" id="contact-status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+
+      <!-- RIGHT: details panel -->
+      <aside class="c-details reveal" data-delay="1" aria-label="Visit details">
+        <div class="c-panel">
+          <p class="eyebrow eyebrow--brass">The particulars</p>
+
+          <dl class="c-info">
+            <div class="c-info__row">
+              <dt>Address</dt>
+              <dd>{SITE.address}</dd>
+            </div>
+            <div class="c-info__row">
+              <dt>Phone</dt>
+              <dd><a href={SITE.phoneHref} class="c-link">{SITE.phone}</a></dd>
+            </div>
+            <div class="c-info__row">
+              <dt>Events</dt>
+              <dd><a href={`mailto:${SITE.email}`} class="c-link">{SITE.email}</a></dd>
+            </div>
+          </dl>
+
+          <hr class="hair c-panel__rule" />
+
+          <div class="c-hours">
+            <p class="c-hours__label">Hours</p>
+            <ul class="c-hours__list">
+              {hours.map((h) => (
+                <li class="c-hours__row">
+                  <span class="c-hours__k">{h.k}</span>
+                  <span class="c-hours__v">{h.v}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <hr class="hair c-panel__rule" />
+
+          <div class="c-quick">
+            <p class="c-quick__label">Quick actions</p>
+            <div class="c-quick__btns">
+              {actions.map((a) => (
+                a.ext
+                  ? <a class={a.cls} href={a.href} target="_blank" rel="noopener">{a.label}</a>
+                  : <a class={a.cls} href={a.href}>{a.label}</a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </section>
+
+  <!-- ===== GETTING HERE ===== -->
+  <section class="section c-here on-light">
+    <div class="wrap c-here__grid">
+      <div class="c-here__copy reveal">
+        <p class="eyebrow">Getting here</p>
+        <h2 class="c-here__title">On Quarry Lake, in Baltimore County.</h2>
+        <p class="measure">
+          You'll find us at the water's edge in the Quarry Lake community, just off I-83 at
+          Greenspring Avenue, a few minutes north of the city and easy from either direction.
+          Ample on-site parking sits steps from the door, so the walk in is short and the view
+          starts early.
+        </p>
+        <ul class="c-here__points">
+          <li><span class="c-here__pin" aria-hidden="true"></span>2605 Quarry Lake Dr, Baltimore, MD 21209</li>
+          <li><span class="c-here__pin" aria-hidden="true"></span>Off I-83 &middot; Greenspring Avenue exit</li>
+          <li><span class="c-here__pin" aria-hidden="true"></span>Complimentary on-site parking</li>
+        </ul>
+        <a class="c-here__cta" href={SITE.reserveUrl} target="_blank" rel="noopener">
+          Reserve your table <span aria-hidden="true">→</span>
+        </a>
+      </div>
+
+      <!-- stylized location motif (no external map) -->
+      <figure class="c-map reveal" data-delay="1" aria-label="Stylized map of Citron's location on Quarry Lake">
+        <svg class="c-map__svg" viewBox="0 0 400 340" role="img" xmlns="http://www.w3.org/2000/svg">
+          <title>Citron Baltimore sits on the shore of Quarry Lake, just off I-83 at Greenspring Avenue.</title>
+          <defs>
+            <linearGradient id="lake" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#1B2A25"/>
+              <stop offset="1" stop-color="#0E1714"/>
+            </linearGradient>
+            <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#C7E04B" stop-opacity="0.5"/>
+              <stop offset="1" stop-color="#C7E04B" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+
+          <!-- land -->
+          <rect x="0" y="0" width="400" height="340" fill="#14201C"/>
+
+          <!-- roads -->
+          <path d="M0 250 L400 210" stroke="#2A3A33" stroke-width="10" fill="none"/>
+          <path d="M300 0 L250 340" stroke="#22322C" stroke-width="7" fill="none"/>
+          <path d="M0 250 L400 210" stroke="#3C5047" stroke-width="1.5" stroke-dasharray="7 9" fill="none"/>
+          <text x="20" y="240" fill="#8FA096" font-size="11" letter-spacing="1.5" font-family="Karla, sans-serif">I-83</text>
+          <text x="262" y="60" fill="#8FA096" font-size="10" letter-spacing="1" font-family="Karla, sans-serif" transform="rotate(80 262 60)">GREENSPRING AVE</text>
+
+          <!-- lake -->
+          <path d="M70 60 C150 40 300 55 340 120 C365 165 320 220 240 225 C150 232 90 200 70 150 C56 115 40 70 70 60 Z" fill="url(#lake)" stroke="#3C5047" stroke-width="1.25"/>
+          <!-- shore ripples -->
+          <path d="M110 120 C160 108 240 112 290 135" fill="none" stroke="#6B7A00" stroke-width="1" opacity="0.35"/>
+          <path d="M120 150 C170 140 250 144 285 162" fill="none" stroke="#6B7A00" stroke-width="1" opacity="0.25"/>
+          <text x="150" y="145" fill="#8FA096" font-size="12" letter-spacing="2.5" font-family="Cormorant, serif" font-style="italic">Quarry Lake</text>
+
+          <!-- location glow + pin -->
+          <circle cx="238" cy="196" r="46" fill="url(#glow)"/>
+          <g transform="translate(238 196)">
+            <path d="M0 -26 C14 -26 24 -16 24 -3 C24 14 0 34 0 34 C0 34 -24 14 -24 -3 C-24 -16 -14 -26 0 -26 Z" fill="#C7E04B" stroke="#0B1210" stroke-width="1.5"/>
+            <circle cx="0" cy="-3" r="7" fill="#0B1210"/>
+          </g>
+          <text x="238" y="252" fill="#FBF9F1" font-size="13" text-anchor="middle" font-family="Cormorant, serif" font-weight="600">Citron</text>
+        </svg>
+        <figcaption class="c-map__cap">Quarry Lake &middot; Baltimore County, MD</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ===== FINAL CTA ===== -->
+  <section class="section c-final">
+    <div class="wrap c-final__inner reveal">
+      <p class="eyebrow">Whenever you're ready</p>
+      <h2 class="c-final__title">A table by the water is waiting.</h2>
+      <button class="btn c-final__btn" data-cta data-magnetic>Reserve &middot; Pick-Up &middot; Events</button>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* ===== HERO ===== */
+  .c-hero{
+    position:relative; isolation:isolate; overflow:hidden;
+    min-height:clamp(360px, 52vh, 560px);
+    display:flex; align-items:flex-end;
+    padding-block:clamp(3rem, 2rem + 6vw, 6rem);
+  }
+  .c-hero__media{ position:absolute; inset:0; z-index:-1; }
+  .c-hero__img{ width:100%; height:100%; object-fit:cover; }
+  .c-hero__scrim{
+    position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(8,12,10,.42) 0%, rgba(8,12,10,.55) 45%, rgba(11,18,16,.94) 100%);
+  }
+  .c-hero__inner{ max-width:760px; }
+  .c-hero__title{ font-size:var(--step-4); font-weight:600; margin:0; }
+  .c-hero__lead{ color:var(--mist); font-size:var(--step-1); }
+
+  /* ===== FORM + DETAILS ===== */
+  .c-main__grid{
+    display:grid; grid-template-columns:1.15fr .85fr;
+    gap:clamp(2rem, 1rem + 4vw, 4.5rem);
+    align-items:start;
+  }
+  .c-form__title{ font-size:var(--step-2); margin-top:.15em; }
+  .c-form__sub{ color:var(--mist); margin:.5em 0 0; }
+
+  .c-form{ margin-top:2rem; display:flex; flex-direction:column; gap:1.25rem; }
+  .c-field{ display:flex; flex-direction:column; gap:.5rem; }
+  .c-field-row{ display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; }
+  .c-field label{
+    font-family:var(--sans); font-weight:700; font-size:var(--step--1);
+    letter-spacing:.14em; text-transform:uppercase; color:var(--mist-dim);
+  }
+  .c-form input,
+  .c-form textarea,
+  .c-form select{
+    width:100%; font-family:var(--sans); font-size:var(--step-0);
+    color:var(--cream); background:var(--abyss-2);
+    border:1px solid var(--hair-strong); border-radius:var(--radius);
+    padding:.85em 1em; line-height:1.5;
+    transition:border-color var(--t-med) var(--ease), background var(--t-med), box-shadow var(--t-med);
+  }
+  .c-form textarea{ resize:vertical; min-height:8em; }
+  .c-form input::placeholder,
+  .c-form textarea::placeholder{ color:var(--mist-dim); opacity:.7; }
+  .c-form input:hover,
+  .c-form textarea:hover,
+  .c-form select:hover{ border-color:var(--hair-strong); background:var(--night); }
+  .c-form input:focus,
+  .c-form textarea:focus,
+  .c-form select:focus{
+    outline:none; border-color:var(--citron); background:var(--night);
+    box-shadow:0 0 0 3px color-mix(in oklab, var(--citron) 22%, transparent);
+  }
+  /* keep global focus-visible ring for keyboard users */
+  .c-form input:focus-visible,
+  .c-form textarea:focus-visible,
+  .c-form select:focus-visible{ outline:2px solid var(--citron); outline-offset:3px; }
+
+  .c-select{ position:relative; }
+  .c-select select{
+    appearance:none; -webkit-appearance:none; -moz-appearance:none;
+    padding-right:2.6em; cursor:pointer;
+  }
+  .c-select__chev{
+    position:absolute; right:1em; top:50%; transform:translateY(-50%);
+    color:var(--citron); pointer-events:none;
+  }
+  .c-form select option{ background:var(--abyss-2); color:var(--cream); }
+
+  .c-form__btn{ align-self:flex-start; margin-top:.4rem; }
+  .c-form__note{
+    margin:0; min-height:1.4em; font-size:var(--step--1);
+    color:var(--citron); font-weight:500;
+  }
+  .c-form__note.is-error{ color:var(--brass-light); }
+
+  /* details panel */
+  .c-panel{
+    background:linear-gradient(180deg, var(--night) 0%, var(--abyss-2) 100%);
+    border:1px solid var(--hair); border-radius:6px;
+    padding:clamp(1.6rem, 1rem + 2vw, 2.4rem);
+    position:sticky; top:2rem;
+  }
+  .c-info{ margin:1.4rem 0 0; display:flex; flex-direction:column; gap:1.15rem; }
+  .c-info__row{ display:flex; flex-direction:column; gap:.25rem; }
+  .c-info__row dt{
+    font-size:var(--step--1); font-weight:700; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--mist-dim); margin:0;
+  }
+  .c-info__row dd{ margin:0; font-size:var(--step-0); color:var(--cream); }
+  .c-link{ color:var(--citron); border-bottom:1px solid transparent; transition:border-color var(--t-fast); }
+  .c-link:hover{ border-bottom-color:var(--citron); }
+
+  .c-panel__rule{ margin:1.6rem 0; }
+
+  .c-hours__label,
+  .c-quick__label{
+    font-size:var(--step--1); font-weight:700; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--brass-light); margin:0 0 1rem;
+  }
+  .c-hours__list{ display:flex; flex-direction:column; gap:.85rem; }
+  .c-hours__row{ display:flex; flex-direction:column; gap:.15rem; }
+  .c-hours__k{ font-family:var(--serif); font-size:var(--step-1); color:var(--cream); line-height:1.1; }
+  .c-hours__v{ font-size:var(--step--1); color:var(--mist); }
+
+  .c-quick__btns{ display:flex; flex-direction:column; gap:.75rem; }
+  .c-quick__btns .btn{ justify-content:center; width:100%; }
+
+  /* ===== GETTING HERE ===== */
+  .c-here__grid{
+    display:grid; grid-template-columns:1fr 1fr;
+    gap:clamp(2rem, 1rem + 4vw, 4.5rem); align-items:center;
+  }
+  .c-here__title{ font-size:var(--step-2); margin:.3em 0 .55em; }
+  .c-here__copy p{ color:var(--ink-soft); }
+  .c-here__points{ display:flex; flex-direction:column; gap:.85rem; margin:1.8rem 0 0; }
+  .c-here__points li{
+    display:flex; align-items:center; gap:.75rem;
+    font-size:var(--step-0); color:var(--ink-soft); font-weight:500;
+  }
+  .c-here__pin{
+    flex:0 0 auto; width:10px; height:10px; border-radius:50%;
+    background:var(--olive); box-shadow:0 0 0 4px color-mix(in oklab, var(--olive) 22%, transparent);
+  }
+  .c-here__cta{
+    display:inline-flex; gap:.5em; margin-top:2rem;
+    color:var(--olive-dark); font-weight:700; font-size:var(--step--1);
+    letter-spacing:.1em; text-transform:uppercase;
+  }
+  .c-here__cta span{ display:inline-block; transition:transform var(--t-fast) var(--ease); }
+  .c-here__cta:hover span{ transform:translateX(5px); }
+
+  .c-map{ margin:0; }
+  .c-map__svg{
+    width:100%; height:auto; border-radius:6px;
+    border:1px solid var(--hair-strong);
+    box-shadow:0 30px 70px -34px rgba(0,0,0,.55);
+  }
+  .c-map__cap{
+    margin-top:.9rem; text-align:center;
+    font-size:var(--step--1); letter-spacing:.06em; color:var(--ink-soft);
+  }
+
+  /* ===== FINAL CTA ===== */
+  .c-final{ text-align:center; background:radial-gradient(120% 140% at 50% 0%, var(--night) 0%, var(--abyss) 60%); }
+  .c-final__title{ font-size:var(--step-3); font-weight:500; max-width:18ch; margin:.35em auto .9em; }
+  .c-final__btn{ min-height:58px; font-size:var(--step-0); }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width:900px){
+    .c-main__grid{ grid-template-columns:1fr; }
+    .c-panel{ position:static; }
+    .c-here__grid{ grid-template-columns:1fr; }
+    .c-map{ order:-1; max-width:460px; }
+  }
+  @media (max-width:520px){
+    .c-field-row{ grid-template-columns:1fr; }
+  }
+</style>
+
+<script>
+  const form = document.getElementById('contact-form');
+  const status = document.getElementById('contact-status');
+  if (form && status) {
+    const email = 'events@citronbaltimore.com';
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      const name = String(data.get('name') || '').trim();
+      const from = String(data.get('email') || '').trim();
+      const phone = String(data.get('phone') || '').trim();
+      const type = String(data.get('type') || 'General').trim();
+      const message = String(data.get('message') || '').trim();
+
+      status.classList.remove('is-error');
+      if (!name || !from || !message) {
+        status.textContent = 'Please add your name, email, and a short message so we can reply.';
+        status.classList.add('is-error');
+        return;
+      }
+
+      const subject = `${type} inquiry, ${name}`;
+      const bodyLines = [
+        `Name: ${name}`,
+        `Email: ${from}`,
+        phone ? `Phone: ${phone}` : null,
+        `Inquiry type: ${type}`,
+        '',
+        message,
+      ].filter(Boolean);
+      const href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyLines.join('\n'))}`;
+
+      status.textContent = `Thank you, ${name.split(' ')[0]}, your email is ready to send. If it didn't open, reach us directly at ${email}.`;
+      window.location.href = href;
+    });
+  }
+</script>

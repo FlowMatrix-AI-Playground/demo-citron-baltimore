@@ -1,0 +1,274 @@
+---
+import Base from '../../layouts/D8Base.astro';
+import { Image } from 'astro:assets';
+import exterior from '../../assets/img/exterior.jpg';
+import { SITE } from '../../data/site.js';
+
+const hours = [
+  { k: 'Dinner', v: 'Wednesday – Sunday, from 4 PM' },
+  { k: 'Happy Hour', v: 'Daily service, 4 – 6:30 PM' },
+  { k: 'Private Events', v: 'Seven days a week, by arrangement' },
+];
+
+const actions = [
+  { label: 'Reserve a Table', href: SITE.reserveUrl, cls: 'd8-btn', ext: true },
+  { label: 'Order Pick-Up', href: SITE.pickupUrl, cls: 'd8-btn d8-btn--ghost', ext: true },
+  { label: 'Plan an Event', href: SITE.portalUrl, cls: 'd8-btn d8-btn--ghost', ext: false },
+];
+---
+<Base
+  title="Contact, Citron Baltimore"
+  description="Visit Citron Baltimore at Quarry Lake, reservations, private events, hours, and directions."
+>
+  <!-- ===== HERO ===== -->
+  <section class="d8-chero" aria-labelledby="d8-chero-title">
+    <div class="d8-chero__media" aria-hidden="true">
+      <Image src={exterior} alt="" widths={[900, 1300, 1500]} sizes="100vw" loading="eager" fetchpriority="high" format="avif" quality={52} class="d8-chero__img" />
+      <div class="d8-chero__scrim"></div>
+    </div>
+    <div class="d8-wrap d8-chero__inner">
+      <p class="d8-label d8-label--neon">Visit · Quarry Lake</p>
+      <h1 id="d8-chero-title" class="d8-chero__title">Come find us <span class="d8-h-accent">after dark.</span></h1>
+      <p class="d8-chero__lead">Reservations, private events, and everything in between, the quickest way to reach the team is right here.</p>
+    </div>
+  </section>
+
+  <!-- ===== FORM + DETAILS ===== -->
+  <section class="d8-section d8-cmain">
+    <div class="d8-wrap d8-cmain__grid">
+      <div class="d8-cform-col d8-rv">
+        <p class="d8-label d8-label--mag">Send a note</p>
+        <h2 class="d8-cform__title">Tell us what you have <span class="d8-h-accent">in mind.</span></h2>
+        <p class="d8-cform__sub">A short message is plenty. We will follow up personally, no automated queues, no lists.</p>
+
+        <form class="d8-cform" id="d8-contact-form" novalidate>
+          <div class="d8-field">
+            <label for="d8-cf-name">Name</label>
+            <input id="d8-cf-name" name="name" type="text" autocomplete="name" required placeholder="Your name" />
+          </div>
+          <div class="d8-field-row">
+            <div class="d8-field">
+              <label for="d8-cf-email">Email</label>
+              <input id="d8-cf-email" name="email" type="email" autocomplete="email" required placeholder="you@email.com" />
+            </div>
+            <div class="d8-field">
+              <label for="d8-cf-phone">Phone</label>
+              <input id="d8-cf-phone" name="phone" type="tel" autocomplete="tel" placeholder="Optional" />
+            </div>
+          </div>
+          <div class="d8-field">
+            <label for="d8-cf-type">Inquiry type</label>
+            <div class="d8-select">
+              <select id="d8-cf-type" name="type">
+                <option value="Reservation">Reservation</option>
+                <option value="Private Event">Private Event</option>
+                <option value="Catering">Catering</option>
+                <option value="General">General</option>
+              </select>
+              <svg class="d8-select__chev" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <div class="d8-field">
+            <label for="d8-cf-message">Message</label>
+            <textarea id="d8-cf-message" name="message" rows="5" required placeholder="Dates, party size, or anything you'd like us to know."></textarea>
+          </div>
+          <button class="d8-btn d8-cform__btn" type="submit">Send Message</button>
+          <p class="d8-cform__note" id="d8-contact-status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+
+      <aside class="d8-cdetails d8-rv" data-delay="1" aria-label="Visit details">
+        <div class="d8-card d8-cpanel">
+          <p class="d8-label d8-label--neon">The particulars</p>
+          <dl class="d8-cinfo">
+            <div class="d8-cinfo__row"><dt>Address</dt><dd>{SITE.address}</dd></div>
+            <div class="d8-cinfo__row"><dt>Phone</dt><dd><a href={SITE.phoneHref} class="d8-clink">{SITE.phone}</a></dd></div>
+            <div class="d8-cinfo__row"><dt>Events</dt><dd><a href={`mailto:${SITE.email}`} class="d8-clink">{SITE.email}</a></dd></div>
+          </dl>
+          <hr class="d8-cpanel__rule" />
+          <div class="d8-chours">
+            <p class="d8-chours__label">Hours</p>
+            <ul class="d8-chours__list">
+              {hours.map((h) => (
+                <li class="d8-chours__row"><span class="d8-chours__k">{h.k}</span><span class="d8-chours__v">{h.v}</span></li>
+              ))}
+            </ul>
+          </div>
+          <hr class="d8-cpanel__rule" />
+          <div class="d8-cquick">
+            <p class="d8-chours__label">Quick actions</p>
+            <div class="d8-cquick__btns">
+              {actions.map((a) => (
+                a.ext
+                  ? <a class={a.cls} href={a.href} target="_blank" rel="noopener">{a.label}</a>
+                  : <a class={a.cls} href={a.href}>{a.label}</a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ===== GETTING HERE ===== -->
+  <section class="d8-section d8-section--tint d8-chere">
+    <div class="d8-wrap d8-chere__grid">
+      <div class="d8-chere__copy d8-rv">
+        <p class="d8-label d8-label--mag">Getting here</p>
+        <h2 class="d8-chere__title">On Quarry Lake, in <span class="d8-h-accent">Baltimore County.</span></h2>
+        <p class="d8-p">You will find us at the water’s edge in the Quarry Lake community, just off I-83 at Greenspring Avenue, a few minutes north of the city and easy from either direction. Ample on-site parking sits steps from the door, so the walk in is short and the view starts early.</p>
+        <ul class="d8-chere__points">
+          <li><span class="d8-chere__pin" aria-hidden="true"></span>2605 Quarry Lake Dr, Baltimore, MD 21209</li>
+          <li><span class="d8-chere__pin" aria-hidden="true"></span>Off I-83 · Greenspring Avenue exit</li>
+          <li><span class="d8-chere__pin" aria-hidden="true"></span>Complimentary on-site parking</li>
+        </ul>
+        <a class="d8-chere__cta" href={SITE.reserveUrl} target="_blank" rel="noopener">Reserve your table <span aria-hidden="true">→</span></a>
+      </div>
+
+      <figure class="d8-cmap d8-rv" data-delay="1" aria-label="Stylized map of Citron's location on Quarry Lake">
+        <svg class="d8-cmap__svg" viewBox="0 0 400 340" role="img" xmlns="http://www.w3.org/2000/svg">
+          <title>Citron Baltimore sits on the shore of Quarry Lake, just off I-83 at Greenspring Avenue.</title>
+          <defs>
+            <linearGradient id="d8lake" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#12121A"/><stop offset="1" stop-color="#0A0A0C"/>
+            </linearGradient>
+            <radialGradient id="d8glow" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#C4DE7A" stop-opacity="0.55"/><stop offset="1" stop-color="#C4DE7A" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <rect x="0" y="0" width="400" height="340" fill="#0E0E14"/>
+          <path d="M0 250 L400 210" stroke="#20202C" stroke-width="10" fill="none"/>
+          <path d="M300 0 L250 340" stroke="#1A1A24" stroke-width="7" fill="none"/>
+          <path d="M0 250 L400 210" stroke="#39E7FF" stroke-width="1.5" stroke-dasharray="7 9" fill="none" opacity="0.5"/>
+          <text x="20" y="240" fill="#6C6C7A" font-size="11" letter-spacing="1.5" font-family="Space Mono, monospace">I-83</text>
+          <text x="262" y="60" fill="#6C6C7A" font-size="10" letter-spacing="1" font-family="Space Mono, monospace" transform="rotate(80 262 60)">GREENSPRING AVE</text>
+          <path d="M70 60 C150 40 300 55 340 120 C365 165 320 220 240 225 C150 232 90 200 70 150 C56 115 40 70 70 60 Z" fill="url(#d8lake)" stroke="#2A2A38" stroke-width="1.25"/>
+          <path d="M110 120 C160 108 240 112 290 135" fill="none" stroke="#C4DE7A" stroke-width="1" opacity="0.3"/>
+          <path d="M120 150 C170 140 250 144 285 162" fill="none" stroke="#C4DE7A" stroke-width="1" opacity="0.22"/>
+          <text x="150" y="145" fill="#8888A0" font-size="12" letter-spacing="2.5" font-family="Syne, sans-serif" font-weight="700">Quarry Lake</text>
+          <circle cx="238" cy="196" r="46" fill="url(#d8glow)"/>
+          <g transform="translate(238 196)">
+            <path d="M0 -26 C14 -26 24 -16 24 -3 C24 14 0 34 0 34 C0 34 -24 14 -24 -3 C-24 -16 -14 -26 0 -26 Z" fill="#C4DE7A" stroke="#0A0A0C" stroke-width="1.5"/>
+            <circle cx="0" cy="-3" r="7" fill="#0A0A0C"/>
+          </g>
+          <text x="238" y="256" fill="#F5F5F0" font-size="14" text-anchor="middle" font-family="Syne, sans-serif" font-weight="800">Citron</text>
+        </svg>
+        <figcaption class="d8-cmap__cap">Quarry Lake · Baltimore County, MD</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ===== FINAL CTA ===== -->
+  <section class="d8-section d8-cfinal">
+    <div class="d8-wrap d8-cfinal__inner d8-rv">
+      <p class="d8-label d8-label--mag">Whenever you’re ready</p>
+      <h2 class="d8-cfinal__title">A table by the water <span class="d8-h-accent">is waiting.</span></h2>
+      <button class="d8-btn d8-cfinal__btn" data-cta>Reserve · Pick-Up · Events</button>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .d8-p{ color:var(--d8-mist); max-width:56ch; }
+
+  /* ===== HERO ===== */
+  .d8-chero{ position:relative; isolation:isolate; overflow:hidden; min-height:clamp(360px, 50vh, 540px); display:flex; align-items:flex-end; padding-block:clamp(3rem, 2rem + 6vw, 6rem); }
+  .d8-chero__media{ position:absolute; inset:0; z-index:-1; }
+  .d8-chero__img{ width:100%; height:100%; object-fit:cover; opacity:.5; }
+  .d8-chero__scrim{ position:absolute; inset:0; background:
+    radial-gradient(80% 70% at 80% 4%, rgba(196,222,122,.1) 0%, transparent 46%),
+    linear-gradient(180deg, rgba(10,10,12,.5) 0%, rgba(10,10,12,.5) 45%, rgba(10,10,12,.97) 100%); }
+  .d8-chero__inner{ max-width:760px; position:relative; z-index:1; }
+  .d8-chero__title{ font-size:var(--d8-s-4); font-weight:700; color:var(--d8-white); margin:.28em 0 .3em; }
+  .d8-chero__lead{ color:var(--d8-mist); font-size:var(--d8-s-1); max-width:52ch; }
+
+  /* ===== FORM + DETAILS ===== */
+  .d8-cmain__grid{ display:grid; grid-template-columns:1.15fr .85fr; gap:clamp(2rem, 1rem + 4vw, 4.5rem); align-items:start; }
+  .d8-cform__title{ font-size:var(--d8-s-2); font-weight:700; margin-top:.4em; }
+  .d8-cform__sub{ color:var(--d8-mist); margin:.5em 0 0; max-width:48ch; }
+  .d8-cform{ margin-top:2rem; display:flex; flex-direction:column; gap:1.25rem; }
+  .d8-field{ display:flex; flex-direction:column; gap:.5rem; }
+  .d8-field-row{ display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; }
+  .d8-field label{ font-family:var(--d8-mono); font-weight:700; font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--d8-dim); }
+  .d8-cform input,.d8-cform textarea,.d8-cform select{ width:100%; font-family:var(--d8-body); font-size:var(--d8-s-0); color:var(--d8-white); background:var(--d8-base-3); border:1px solid var(--d8-hair-2); border-radius:10px; padding:.85em 1em; line-height:1.5; transition:border-color var(--d8-t-med) var(--d8-ease), background var(--d8-t-med), box-shadow var(--d8-t-med); }
+  .d8-cform textarea{ resize:vertical; min-height:8em; }
+  .d8-cform input::placeholder,.d8-cform textarea::placeholder{ color:var(--d8-dim); }
+  .d8-cform input:hover,.d8-cform textarea:hover,.d8-cform select:hover{ border-color:var(--d8-hair-2); background:var(--d8-base-2); }
+  .d8-cform input:focus,.d8-cform textarea:focus,.d8-cform select:focus{ outline:none; border-color:var(--d8-neon); background:var(--d8-base-2); box-shadow:0 0 0 3px rgba(196,222,122,.18); }
+  .d8-cform input:focus-visible,.d8-cform textarea:focus-visible,.d8-cform select:focus-visible{ outline:2px solid var(--d8-neon); outline-offset:3px; }
+  .d8-select{ position:relative; }
+  .d8-select select{ appearance:none; -webkit-appearance:none; -moz-appearance:none; padding-right:2.6em; cursor:pointer; }
+  .d8-select__chev{ position:absolute; right:1em; top:50%; transform:translateY(-50%); color:var(--d8-neon); pointer-events:none; }
+  .d8-cform select option{ background:var(--d8-base-3); color:var(--d8-white); }
+  .d8-cform__btn{ align-self:flex-start; margin-top:.4rem; }
+  .d8-cform__note{ margin:0; min-height:1.4em; font-size:var(--d8-s--1); color:var(--d8-neon); }
+  .d8-cform__note.is-error{ color:var(--d8-magenta); }
+
+  /* details panel */
+  .d8-cpanel{ padding:clamp(1.6rem, 1rem + 2vw, 2.4rem); position:sticky; top:6rem; }
+  .d8-cpanel > *{ position:relative; z-index:1; }
+  .d8-cinfo{ margin:1.4rem 0 0; display:flex; flex-direction:column; gap:1.15rem; }
+  .d8-cinfo__row{ display:flex; flex-direction:column; gap:.25rem; }
+  .d8-cinfo__row dt{ font-family:var(--d8-mono); font-size:.7rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--d8-dim); margin:0; }
+  .d8-cinfo__row dd{ margin:0; font-size:var(--d8-s-0); color:var(--d8-white); }
+  .d8-clink{ color:var(--d8-neon); border-bottom:1px solid transparent; transition:border-color var(--d8-t-fast); }
+  .d8-clink:hover{ border-bottom-color:var(--d8-neon); }
+  .d8-cpanel__rule{ margin:1.6rem 0; border:none; border-top:1px solid var(--d8-hair); }
+  .d8-chours__label{ font-family:var(--d8-mono); font-size:.7rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--d8-magenta); margin:0 0 1rem; }
+  .d8-chours__list{ display:flex; flex-direction:column; gap:.85rem; }
+  .d8-chours__row{ display:flex; flex-direction:column; gap:.15rem; }
+  .d8-chours__k{ font-family:var(--d8-display); font-weight:700; font-size:var(--d8-s-1); color:var(--d8-white); line-height:1.1; }
+  .d8-chours__v{ font-size:var(--d8-s--1); color:var(--d8-mist); }
+  .d8-cquick__btns{ display:flex; flex-direction:column; gap:.75rem; }
+  .d8-cquick__btns .d8-btn{ justify-content:center; width:100%; }
+
+  /* ===== GETTING HERE ===== */
+  .d8-chere__grid{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(2rem, 1rem + 4vw, 4.5rem); align-items:center; }
+  .d8-chere__title{ font-size:var(--d8-s-2); font-weight:700; margin:.4em 0 .55em; }
+  .d8-chere__points{ display:flex; flex-direction:column; gap:.85rem; margin:1.8rem 0 0; }
+  .d8-chere__points li{ display:flex; align-items:center; gap:.75rem; font-size:var(--d8-s-0); color:var(--d8-mist); }
+  .d8-chere__pin{ flex:0 0 auto; width:10px; height:10px; border-radius:50%; background:var(--d8-neon); box-shadow:0 0 0 4px rgba(196,222,122,.16), var(--d8-glow-neon); }
+  .d8-chere__cta{ display:inline-flex; gap:.5em; margin-top:2rem; color:var(--d8-neon); font-family:var(--d8-mono); font-weight:700; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; }
+  .d8-chere__cta span{ display:inline-block; transition:transform var(--d8-t-fast) var(--d8-ease); }
+  .d8-chere__cta:hover span{ transform:translateX(5px); }
+  .d8-cmap{ margin:0; }
+  .d8-cmap__svg{ width:100%; height:auto; border-radius:var(--d8-radius); border:1px solid var(--d8-hair-2); box-shadow:0 30px 70px -34px rgba(0,0,0,.7); }
+  .d8-cmap__cap{ margin-top:.9rem; text-align:center; font-family:var(--d8-mono); font-size:var(--d8-s--1); color:var(--d8-dim); }
+
+  /* ===== FINAL ===== */
+  .d8-cfinal{ text-align:center; background:radial-gradient(120% 140% at 50% 0%, var(--d8-base-3) 0%, var(--d8-base) 60%); }
+  .d8-cfinal__inner{ max-width:640px; margin-inline:auto; }
+  .d8-cfinal__title{ font-size:var(--d8-s-3); font-weight:700; max-width:18ch; margin:.4em auto .9em; }
+  .d8-cfinal__btn{ min-height:60px; font-size:var(--d8-s-0); }
+
+  @media (max-width:900px){ .d8-cmain__grid{ grid-template-columns:1fr; } .d8-cpanel{ position:static; } .d8-chere__grid{ grid-template-columns:1fr; } .d8-cmap{ order:-1; max-width:460px; } }
+  @media (max-width:520px){ .d8-field-row{ grid-template-columns:1fr; } }
+</style>
+
+<script>
+  const form = document.getElementById('d8-contact-form');
+  const status = document.getElementById('d8-contact-status');
+  if (form && status){
+    const email = 'events@citronbaltimore.com';
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      const name = String(data.get('name') || '').trim();
+      const from = String(data.get('email') || '').trim();
+      const phone = String(data.get('phone') || '').trim();
+      const type = String(data.get('type') || 'General').trim();
+      const message = String(data.get('message') || '').trim();
+      status.classList.remove('is-error');
+      if (!name || !from || !message){
+        status.textContent = 'Please add your name, email, and a short message so we can reply.';
+        status.classList.add('is-error');
+        return;
+      }
+      const subject = `${type} inquiry, ${name}`;
+      const bodyLines = [`Name: ${name}`, `Email: ${from}`, phone ? `Phone: ${phone}` : null, `Inquiry type: ${type}`, '', message].filter(Boolean);
+      const href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyLines.join('\n'))}`;
+      status.textContent = `Thank you, ${name.split(' ')[0]}, your email is ready to send. If it did not open, reach us directly at ${email}.`;
+      window.location.href = href;
+    });
+  }
+</script>

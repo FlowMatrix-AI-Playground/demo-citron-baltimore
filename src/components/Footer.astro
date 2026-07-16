@@ -1,0 +1,90 @@
+---
+import { SITE, NAV } from '../data/site.js';
+// "hidden" pages, not in the top nav, referenced across the site
+const JOURNAL = [
+  { label: 'The Journal', href: '/journal' },
+  { label: 'Press & Awards', href: '/journal#press' },
+  { label: 'Seasonal Notes', href: '/journal#seasonal' },
+];
+---
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a href="/" class="footer__word">Citron <em>Baltimore</em></a>
+        <p class="footer__blurb">An upscale waterfront restaurant, catering house, and event venue on Quarry Lake. Family-owned by Charles &amp; Susan Levine since 2016. Ten years on the water this November.</p>
+        <div class="footer__news">
+          <p class="eyebrow eyebrow--brass">From our table to yours</p>
+          <form class="footer__form" id="news-form">
+            <label class="sr-only" for="news-email">Email address</label>
+            <input id="news-email" name="email" type="email" placeholder="you@example.com" required />
+            <button class="btn btn--brass" type="submit">Subscribe</button>
+          </form>
+          <p class="footer__note" id="news-note">Seasonal menus, wine dinners, and first word on Cove availability. No mass mail.</p>
+        </div>
+      </div>
+
+      <nav class="footer__col" aria-label="Explore">
+        <h3 class="footer__h">Explore</h3>
+        {NAV.map((i) => (<a href={i.href} class="footer__link">{i.label}</a>))}
+        <a href="/" class="footer__link">Home</a>
+      </nav>
+
+      <nav class="footer__col" aria-label="Journal">
+        <h3 class="footer__h">Journal</h3>
+        {JOURNAL.map((i) => (<a href={i.href} class="footer__link">{i.label}</a>))}
+      </nav>
+
+      <div class="footer__col">
+        <h3 class="footer__h">Visit</h3>
+        <address class="footer__addr">
+          2605 Quarry Lake Dr<br/>Baltimore, MD 21209<br/>
+          <a href={SITE.phoneHref} class="footer__link">{SITE.phone}</a><br/>
+          <a href={`mailto:${SITE.email}`} class="footer__link">{SITE.email}</a>
+        </address>
+        <p class="footer__hours">Dinner: Wed–Sun from 4 PM<br/>Private Events: 7 days</p>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <span>© 2026 Citron Baltimore. Quarry Lake, Baltimore County.</span>
+      <span class="footer__spectator">Wine Spectator Award of Excellence · 2019–2025</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .sr-only{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+  .footer{ background:var(--abyss-2); border-top:1px solid var(--hair); padding-block: clamp(3.5rem,2.4rem + 4vw,5.5rem) 2rem; }
+  .footer__top{ display:grid; grid-template-columns:1.6fr 1fr 1fr 1.2fr; gap:clamp(2rem,1rem + 3vw,4rem); }
+  .footer__word{ font-family:var(--serif); font-size:2rem; color:var(--cream); }
+  .footer__word em{ font-style:normal; color:var(--citron); }
+  .footer__blurb{ color:var(--mist-dim); font-size:var(--step--1); max-width:40ch; margin:.8em 0 1.6em; line-height:1.7; }
+  .footer__news .eyebrow{ margin-bottom:.7em; }
+  .footer__form{ display:flex; gap:8px; max-width:380px; }
+  .footer__form input{ flex:1; min-height:48px; padding:0 14px; background:var(--abyss); border:1px solid var(--hair-strong); border-radius:var(--radius); color:var(--cream); font-family:var(--sans); }
+  .footer__form input::placeholder{ color:var(--mist-dim); }
+  .footer__note{ font-size:.78rem; color:var(--mist-dim); margin:.8em 0 0; }
+  .footer__note.is-ok{ color:var(--citron); }
+  .footer__h{ font-family:var(--sans); font-weight:700; font-size:.68rem; letter-spacing:.2em; text-transform:uppercase; color:var(--brass-light); margin-bottom:1.2em; }
+  .footer__col{ display:flex; flex-direction:column; }
+  .footer__link{ display:inline-flex; align-items:center; min-height:40px; color:var(--mist); font-size:var(--step--1); padding:4px 0; transition:color var(--t-fast); }
+  .footer__link:hover{ color:var(--citron); }
+  .footer__addr{ font-style:normal; color:var(--mist); font-size:var(--step--1); line-height:1.9; }
+  .footer__hours{ color:var(--mist-dim); font-size:.8rem; margin-top:1em; line-height:1.7; }
+  .footer__bottom{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-top:clamp(2.4rem,1.6rem + 3vw,4rem); padding-top:1.6rem; border-top:1px solid var(--hair); font-size:.76rem; color:var(--mist-dim); }
+  .footer__spectator{ color:var(--brass-light); letter-spacing:.04em; }
+  @media (max-width:900px){ .footer__top{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:560px){ .footer__top{ grid-template-columns:1fr; } }
+</style>
+
+<script>
+  const f = document.getElementById('news-form');
+  f?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const note = document.getElementById('news-note');
+    note.textContent = 'Welcome to the table. Look for our first note soon.';
+    note.classList.add('is-ok');
+    f.reset();
+  });
+</script>

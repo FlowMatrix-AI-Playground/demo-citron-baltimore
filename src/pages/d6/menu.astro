@@ -1,0 +1,133 @@
+---
+import D6Base from '../../layouts/D6Base.astro';
+import { Image } from 'astro:assets';
+import { SITE } from '../../data/site.js';
+import { MENU, MENU_NOTES } from '../../data/menu.js';
+
+import heroImg from '../../assets/img/decor-food.jpg';
+
+const title = 'Menu, Citron Baltimore, Waterfront Modern American & Sushi';
+const description = 'The Citron Baltimore dinner card: raw bar and first plates, designer sushi, center-cut entrées, and sides, cooked seasonally on Quarry Lake with a Maryland accent.';
+---
+<D6Base title={title} description={description} ogImage="/lake-poster.jpg">
+  <!-- ===================== PAGE HEAD ===================== -->
+  <section class="d6-phead">
+    <div class="d6-phead__rays" aria-hidden="true">
+      <svg class="d6-sun" viewBox="0 0 440 120" width="440" height="120" fill="none" preserveAspectRatio="xMidYMax meet">
+        {Array.from({ length: 13 }, (_, i) => {
+          const a = Math.PI * (i / 12);
+          return { x2: (220 + 140 * Math.cos(a)).toFixed(1), y2: (118 - 140 * Math.sin(a)).toFixed(1), d: i * 50 };
+        }).map((r) => (
+          <line x1="220" y1="118" x2={r.x2} y2={r.y2} stroke="var(--d6-brass)" stroke-width="1" pathLength="1" style={`transition-delay:${r.d}ms`} />
+        ))}
+      </svg>
+    </div>
+    <div class="d6-wrap d6-phead__inner">
+      <p class="d6-kicker d6-kicker--center d6-rv">The Dinner Card</p>
+      <h1 class="d6-phead__title d6-rv" data-delay="1">The Menu</h1>
+      <p class="d6-phead__lead d6-rv" data-delay="2">
+        Seasonal Modern American, a full designer sushi bar, and a Wine Spectator honored cellar,
+        served Wednesday through Sunday from four on Quarry Lake.
+      </p>
+      <div class="d6-phead__cta d6-rv" data-delay="3">
+        <button class="d6-btn d6-btn--solid" data-cta>Reserve a Table</button>
+        <a class="d6-btn d6-btn--ghost" href={SITE.pickupUrl} target="_blank" rel="noopener">Order Pick-Up</a>
+      </div>
+    </div>
+    <div class="d6-frame d6-phead__fig d6-rv" data-delay="2">
+      <Image src={heroImg} alt="A styled table of Citron dishes and decor" widths={[700, 1100, 1400]} sizes="(max-width:1100px) 92vw, 1100px" loading="eager" fetchpriority="high" format="avif" quality={54} />
+    </div>
+  </section>
+
+  <!-- ===================== MENU BODY ===================== -->
+  <section class="d6-section">
+    <div class="d6-wrap">
+      <div class="d6-menu">
+        {MENU.map((section) => (
+          <section class="d6-mgroup d6-rv" aria-labelledby={`grp-${section.id}`}>
+            <header class="d6-mgroup__head">
+              <h2 class="d6-mgroup__title" id={`grp-${section.id}`}>{section.title}</h2>
+              {section.note && <span class="d6-mgroup__note">{section.note}</span>}
+              <span class="d6-mgroup__rule" aria-hidden="true"></span>
+            </header>
+            <ul class="d6-mlist">
+              {section.items.map((item) => (
+                <li class="d6-mitem">
+                  <div class="d6-mitem__row">
+                    <span class="d6-mitem__name">{item.name}</span>
+                    <span class="d6-mitem__dots" aria-hidden="true"></span>
+                    {item.price != null && <span class="d6-mitem__price">${item.price}</span>}
+                    <a class="d6-mitem__cart" href={SITE.pickupUrl} target="_blank" rel="noopener" aria-label={`Add ${item.name} to pick-up order`}>
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                        <circle cx="9" cy="20" r="1"></circle>
+                        <circle cx="18" cy="20" r="1"></circle>
+                        <path d="M2.5 3h2l2 12h11l2-8H6"></path>
+                      </svg>
+                    </a>
+                  </div>
+                  {item.desc && <p class="d6-mitem__desc">{item.desc}</p>}
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
+      </div>
+
+      <div class="d6-notes d6-rv">
+        <span class="d6-div__gem" aria-hidden="true"></span>
+        <ul>
+          {MENU_NOTES.map((n) => (<li>{n}</li>))}
+        </ul>
+        <p class="d6-notes__meta">Menus change with the season. Full sushi bar nightly. Ask your server about the cellar, honored by Wine Spectator 2019–2025.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CTA ===================== -->
+  <section class="d6-section d6-section--deep d6-mcta">
+    <div class="d6-wrap d6-mcta__inner">
+      <p class="d6-kicker d6-kicker--center d6-rv">Reserve · Pick-Up · Events</p>
+      <h2 class="d6-mcta__title d6-rv" data-delay="1">Come sit on the water.</h2>
+      <button class="d6-btn d6-btn--solid d6-rv" data-delay="2" data-cta>Choose Your Table</button>
+    </div>
+  </section>
+
+  <style>
+    .d6-phead{ position:relative; overflow:hidden; padding-top:clamp(2.4rem, 1.4rem + 4vw, 4.6rem); }
+    .d6-phead__rays{ position:absolute; top:-1rem; left:50%; transform:translateX(-50%); width:min(640px, 120vw); opacity:.4; pointer-events:none; }
+    .d6-phead__rays svg{ width:100%; height:auto; }
+    .d6-phead__inner{ position:relative; z-index:1; text-align:center; display:flex; flex-direction:column; align-items:center; gap:1.1rem; }
+    .d6-phead__title{ font-size:var(--d6-s-5); line-height:0.96; }
+    .d6-phead__lead{ max-width:56ch; color:var(--d6-cream-dim); font-size:var(--d6-s-1); font-weight:300; }
+    .d6-phead__cta{ display:flex; flex-wrap:wrap; justify-content:center; gap:14px; margin-top:0.6rem; }
+    .d6-phead__fig{ position:relative; z-index:1; margin:clamp(2.4rem, 1.4rem + 3vw, 4rem) auto 0; max-width:1100px; aspect-ratio:16/7; }
+
+    .d6-menu{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(2.2rem, 1.2rem + 4vw, 5rem) clamp(2rem, 1rem + 4vw, 5rem); }
+    .d6-mgroup__head{ position:relative; margin-bottom:1.6rem; }
+    .d6-mgroup__title{ font-size:var(--d6-s-2); color:var(--d6-cream); display:inline-block; }
+    .d6-mgroup__note{ font-family:var(--d6-sans); font-weight:400; font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--d6-citron); margin-left:0.8rem; }
+    .d6-mgroup__rule{ display:block; height:1px; margin-top:0.9rem; background:linear-gradient(90deg, var(--d6-hair-2), transparent); }
+    .d6-mlist{ display:flex; flex-direction:column; }
+    .d6-mitem{ padding:0.85rem 0; border-bottom:1px solid var(--d6-hair-soft); }
+    .d6-mitem:last-child{ border-bottom:none; }
+    .d6-mitem__row{ display:flex; align-items:baseline; gap:0.6rem; }
+    .d6-mitem__name{ font-family:var(--d6-display); font-weight:500; font-size:var(--d6-s-1); color:var(--d6-cream); }
+    .d6-mitem__dots{ flex:1; border-bottom:1px dotted var(--d6-hair); transform:translateY(-4px); }
+    .d6-mitem__price{ font-family:var(--d6-display); font-weight:500; font-size:var(--d6-s-1); color:var(--d6-citron); white-space:nowrap; }
+    .d6-mitem__cart{ flex:0 0 auto; align-self:center; display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; margin-right:-6px; border-radius:999px; color:var(--d6-cream-dim); opacity:0.55; transition:color 0.2s ease, opacity 0.2s ease, background-color 0.2s ease; }
+    .d6-mitem__cart:hover, .d6-mitem__cart:focus-visible{ color:var(--d6-citron); opacity:1; background-color:var(--d6-hair-soft); }
+    .d6-mitem__cart:focus-visible{ outline:1px solid var(--d6-citron); outline-offset:2px; }
+    .d6-mitem__cart svg{ display:block; }
+    .d6-mitem__desc{ font-size:var(--d6-s--1); color:var(--d6-cream-soft); margin:0.4rem 0 0; max-width:52ch; }
+    @media (max-width:800px){ .d6-menu{ grid-template-columns:1fr; } }
+
+    .d6-notes{ margin-top:clamp(2.6rem, 1.6rem + 3vw, 4.4rem); padding-top:clamp(1.8rem, 1rem + 2vw, 2.8rem); border-top:1px solid var(--d6-hair); text-align:center; display:flex; flex-direction:column; align-items:center; gap:1rem; }
+    .d6-notes .d6-div__gem{ display:inline-block; }
+    .d6-notes ul{ display:flex; flex-direction:column; gap:0.7rem; max-width:70ch; }
+    .d6-notes li{ font-size:var(--d6-s--1); color:var(--d6-cream-soft); }
+    .d6-notes__meta{ font-size:var(--d6-s--1); color:var(--d6-citron); max-width:60ch; margin:0.4rem 0 0; }
+
+    .d6-mcta__inner{ text-align:center; display:flex; flex-direction:column; align-items:center; gap:1rem; }
+    .d6-mcta__title{ font-size:var(--d6-s-4); }
+  </style>
+</D6Base>

@@ -1,0 +1,783 @@
+---
+import '../../styles/global.css';
+import { Image } from 'astro:assets';
+import { SPACES, VENDORS, bookCall } from '../../data/spaces.js';
+import { SITE } from '../../data/site.js';
+import logo from '../../assets/img/logo-dark.png';
+
+// Room imagery, statically imported for astro:assets optimization.
+import imgFireplace from '../../assets/img/room-fireplace.jpg';
+import imgMirror from '../../assets/img/room-mirror.jpg';
+import imgClub from '../../assets/img/room-club.jpg';
+import imgTerrace from '../../assets/img/room-terrace.jpg';
+import imgBar from '../../assets/img/room-bar.jpg';
+import imgCourtyard from '../../assets/img/room-courtyard.jpg';
+import imgCove from '../../assets/img/room-cove.jpg';
+import imgVenue from '../../assets/img/room-venue.jpg';
+import imgOffpremise from '../../assets/img/room-offpremise.jpg';
+
+const IMG = {
+  'room-fireplace.jpg': imgFireplace,
+  'room-mirror.jpg': imgMirror,
+  'room-club.jpg': imgClub,
+  'room-terrace.jpg': imgTerrace,
+  'room-bar.jpg': imgBar,
+  'room-courtyard.jpg': imgCourtyard,
+  'room-cove.jpg': imgCove,
+  'room-venue.jpg': imgVenue,
+  'room-offpremise.jpg': imgOffpremise,
+};
+
+// Zone geometry on the property map (viewBox 0 0 1000 780).
+const MAP = {
+  venue:      { x: 250, y: 92,  w: 250, h: 44, kind: 'badge' },
+  fireplace:  { x: 275, y: 186, w: 120, h: 94 },
+  mirror:     { x: 410, y: 186, w: 120, h: 94 },
+  club:       { x: 545, y: 186, w: 118, h: 94 },
+  cove:       { x: 275, y: 296, w: 232, h: 168 },
+  bar:        { x: 522, y: 296, w: 141, h: 168 },
+  terrace:    { x: 250, y: 502, w: 252, h: 84 },
+  courtyard:  { x: 700, y: 300, w: 220, h: 286 },
+  offpremise: { x: 812, y: 96,  w: 150, h: 112, kind: 'marker' },
+};
+
+// Numeric capacity + display helpers.
+const numCap = (c) => (typeof c === 'number' ? c : 9999);
+const capText = (c) => (c === '∞' ? 'Off-site, any scale' : `Up to ${c} guests`);
+const capShort = (c) => (c === '∞' ? '∞' : String(c));
+
+const START = 120; // default slider value
+const startFits = SPACES.filter((s) => numCap(s.cap) >= START).length;
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const title = 'The Explorer Map, Citron Baltimore Event Spaces';
+const description = 'Explore all nine Citron Baltimore event spaces on an interactive map of Quarry Lake. Filter by party size from 20 to 500 guests and open any space to plan.';
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <meta name="theme-color" content="#0B1210" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:site_name" content="Citron Baltimore" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org", "@type": "Restaurant",
+    "name": "Citron Baltimore", "servesCuisine": "Modern American",
+    "priceRange": "$$$", "telephone": SITE.phone,
+    "address": { "@type": "PostalAddress", "streetAddress": "2605 Quarry Lake Dr", "addressLocality": "Baltimore", "addressRegion": "MD", "postalCode": "21209" },
+    "url": "https://citronbaltimore.com", "acceptsReservations": "True"
+  })} />
+</head>
+<body class="portal">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <!-- ===== SLIM NAV ===== -->
+  <header class="pnav">
+    <div class="pnav__inner">
+      <a class="pnav__logo" href="/">
+        <Image src={logo} alt="Citron Baltimore" width={132} height={38} loading="eager" class="pnav__logoimg" />
+      </a>
+      <nav class="pnav__links" aria-label="Portal">
+        <a class="pnav__back" href="/">
+          <span aria-hidden="true">&larr;</span> Back to site
+        </a>
+        <a class="pnav__reserve" href={SITE.reserveUrl} target="_blank" rel="noopener">Reserve</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ===== HERO ===== -->
+    <section class="phero">
+      <div class="wrap">
+        <p class="eyebrow reveal">The Explorer Map</p>
+        <h1 class="phero__title reveal" data-delay="1">Find your <em>room</em> on the water.</h1>
+        <p class="phero__lede reveal measure" data-delay="2">
+          Nine ways to gather at Quarry Lake, from a fireside twenty to five hundred under the open sky. Move the slider to your party size, then open any space on the map to plan.
+        </p>
+      </div>
+    </section>
+
+    <!-- ===== EXPLORER ===== -->
+    <section class="section explorer" aria-labelledby="explorer-h">
+      <div class="wrap">
+        <h2 id="explorer-h" class="explorer__h reveal">The property, from above.</h2>
+
+        <!-- Party-size filter -->
+        <form class="filter reveal" data-delay="1" aria-label="Filter spaces by party size">
+          <div class="filter__row">
+            <label class="filter__label" for="guests">Party size</label>
+            <output class="filter__value" id="guest-out" for="guests">{START} guests</output>
+          </div>
+          <input class="filter__range" id="guests" name="guests" type="range"
+                 min="10" max="500" step="5" value={START}
+                 aria-describedby="fit-count" />
+          <div class="filter__ticks" aria-hidden="true">
+            <span>10</span><span>125</span><span>250</span><span>500</span>
+          </div>
+          <p class="filter__count" id="fit-count" role="status" aria-live="polite">
+            {startFits} of 9 spaces fit a party of {START}.
+          </p>
+        </form>
+
+        <!-- Interactive property map -->
+        <div class="map-scroll reveal" data-delay="2">
+          <svg class="map" viewBox="0 0 1000 780" role="group"
+               aria-labelledby="map-title map-desc" preserveAspectRatio="xMidYMid meet">
+            <title id="map-title">Interactive map of Citron Baltimore at Quarry Lake</title>
+            <desc id="map-desc">A stylized top-down plan showing the restaurant building with its interior rooms, the waterfront terrace and courtyard, and an off-premise catering marker. Each space is selectable.</desc>
+
+            <!-- decorative property + water -->
+            <g class="deco" aria-hidden="true">
+              <!-- water -->
+              <path class="water" d="M0 636 Q250 606 500 630 T1000 626 L1000 780 L0 780 Z" />
+              <path class="wave" d="M60 672 Q180 656 300 672 T540 672 T780 672 T1000 672" />
+              <path class="wave wave--2" d="M120 708 Q260 692 400 708 T680 708 T940 708" />
+              <text class="water__label" x="500" y="748">Quarry Lake</text>
+
+              <!-- lake edge -->
+              <path class="edge" d="M40 604 Q260 586 520 600 T980 596" />
+
+              <!-- property boundary -->
+              <rect class="bound" x="46" y="150" width="908" height="452" rx="14" />
+
+              <!-- restaurant building shell -->
+              <rect class="bldg" x="250" y="150" width="430" height="332" rx="10" />
+              <text class="bldg__label" x="465" y="172">The Citron House</text>
+
+              <!-- off-premise connector road -->
+              <path class="road" d="M690 176 C760 150 800 150 840 152" />
+            </g>
+
+            <!-- interactive zones -->
+            {SPACES.map((s) => {
+              const g = MAP[s.key];
+              const cx = g.x + g.w / 2;
+              return (
+                <g class={`zone zone--${g.kind || 'room'}`} data-key={s.key} data-cap={numCap(s.cap)}
+                   role="button" tabindex="0"
+                   aria-label={`${s.name}, ${capText(s.cap)}. Open details.`}>
+                  <rect class="zone__hit" x={g.x} y={g.y} width={g.w} height={g.h} rx="7" />
+                  {g.kind === 'marker' && (
+                    <path class="zone__pin" d={`M${cx} ${g.y + 34} a13 13 0 1 1 0.01 0 M${cx} ${g.y + 34} L${cx} ${g.y + 56}`} />
+                  )}
+                  <text class="zone__name" x={cx} y={g.kind === 'marker' ? g.y + 78 : g.y + g.h / 2 - 4}>{s.name}</text>
+                  <text class="zone__cap" x={cx} y={g.kind === 'marker' ? g.y + 96 : g.y + g.h / 2 + 18}>{capShort(s.cap)}{s.cap === '∞' ? '' : ' guests'}</text>
+                </g>
+              );
+            })}
+          </svg>
+        </div>
+        <p class="map-hint reveal">Tip: use the list below for keyboard or touch. Every space opens the same planner.</p>
+      </div>
+    </section>
+
+    <!-- ===== FALLBACK LIST ===== -->
+    <section class="section spaces" aria-labelledby="list-h">
+      <div class="wrap">
+        <h2 id="list-h" class="spaces__h reveal">All nine spaces</h2>
+        <ul class="spaces__list">
+          {SPACES.map((s, i) => (
+            <li class="reveal" data-delay={String((i % 3) + 1)}>
+              <button class="sp-item" data-key={s.key} data-cap={numCap(s.cap)} type="button"
+                      aria-label={`${s.name}, ${capText(s.cap)}. Open details.`}>
+                <span class="sp-item__cap">{capShort(s.cap)}</span>
+                <span class="sp-item__body">
+                  <span class="sp-item__name">{s.name}</span>
+                  <span class="sp-item__best">{s.best}</span>
+                </span>
+                <span class="sp-item__go" aria-hidden="true">&rarr;</span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== DRAWER ===== -->
+  <div class="drawer" id="drawer" hidden>
+    <div class="drawer__scrim" data-drawer-close></div>
+    <aside class="drawer__panel" role="dialog" aria-modal="true" aria-labelledby="drawer-title" tabindex="-1">
+      <button class="drawer__close" data-drawer-close aria-label="Close space details" type="button">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+
+      <h2 id="drawer-title" class="drawer__live" aria-live="polite">Select a space</h2>
+
+      {SPACES.map((s, i) => (
+        <article class="sp-card" data-card={s.key} hidden>
+          <div class="sp-card__media">
+            <Image src={IMG[s.img]} alt={`${s.name} at Citron Baltimore`} widths={[360, 560, 760]} sizes="(max-width: 520px) 92vw, 440px" format="avif" quality={55} loading="lazy" class="sp-card__img" />
+            <span class="sp-card__badge">{capText(s.cap)}</span>
+          </div>
+
+          <p class="eyebrow sp-card__eyebrow">Space {String(i + 1).padStart(2, '0')} / 09</p>
+          <h3 class="sp-card__name">{s.name}</h3>
+          <p class="sp-card__desc">{s.desc}</p>
+
+          <dl class="sp-card__facts">
+            <div><dt>Best for</dt><dd>{s.best}</dd></div>
+            <div><dt>Layout</dt><dd>{s.layout}</dd></div>
+            <div><dt>Catering</dt><dd>{s.cater}</dd></div>
+          </dl>
+
+          <div class="sp-card__block">
+            <p class="sp-card__sub">A planner will ask</p>
+            <ul class="sp-card__q">
+              {s.q.map((q) => <li>{q}</li>)}
+            </ul>
+          </div>
+
+          <div class="sp-card__block">
+            <p class="sp-card__sub">Add-ons to consider</p>
+            <ul class="addons">
+              {VENDORS.map((v, vi) => (
+                <li class="addon">
+                  <input class="addon__cb" type="checkbox" id={`add-${s.key}-${vi}`} />
+                  <label class="addon__lb" for={`add-${s.key}-${vi}`}>
+                    <span class="addon__name">{v.name}</span>
+                    <span class="addon__note">{v.note}</span>
+                  </label>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div class="sp-card__cta">
+            <button class="btn btn--brass" type="button" data-schedule-open data-schedule-space={s.name}>Schedule a Call</button>
+            <a class="btn btn--ghost" href={bookCall(s.name)}>Email Instead</a>
+            <a class="btn btn--ghost" href={SITE.reserveUrl} target="_blank" rel="noopener">Reserve a Table</a>
+          </div>
+        </article>
+      ))}
+    </aside>
+  </div>
+
+  <!-- ===== PERSISTENT SCHEDULE CTA ===== -->
+  <button class="sched-cta" type="button" data-schedule-open aria-label="Schedule a call with Citron events">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true">
+      <rect x="3" y="4.5" width="18" height="16" rx="2.4" stroke="currentColor" stroke-width="1.6"/>
+      <path d="M3 9h18M8 3v3M16 3v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+      <circle cx="12" cy="14.5" r="2.4" stroke="currentColor" stroke-width="1.5"/>
+    </svg>
+    <span>Schedule a call</span>
+  </button>
+
+  <!-- ===== SCHEDULE SIDEBAR (slide-in, distinct from room drawer) ===== -->
+  <div class="sched" id="sched" hidden>
+    <div class="sched__scrim" data-schedule-close></div>
+    <aside class="sched__panel" role="dialog" aria-modal="true" aria-labelledby="sched-title" tabindex="-1">
+      <div class="sched__head">
+        <div>
+          <p class="eyebrow sched__eyebrow">Final step</p>
+          <h2 id="sched-title" class="sched__title">Schedule your call</h2>
+        </div>
+        <button class="sched__close" data-schedule-close aria-label="Close scheduling panel" type="button">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+
+      <p class="sched__lede" id="sched-lede">Pick a time that suits you and a Citron events planner will call to walk through your space, headcount and menu.</p>
+
+      <div class="sched__frame">
+        <!-- skeleton / loading state, hidden once the embed reports load -->
+        <div class="sched__skeleton" data-sched-skeleton>
+          <span class="sched__spinner" aria-hidden="true"></span>
+          <p class="sched__loading" role="status" aria-live="polite">Loading the scheduler&hellip;</p>
+        </div>
+        <!-- TODO: Temporary live Google Calendar appointment schedule (swap the /schedules/<id> to change it) -->
+        <!-- src is intentionally NOT set here; JS assigns it on open so no third-party request fires on initial page load -->
+        <iframe class="sched__iframe" title="Schedule a call with Citron events" loading="lazy"
+                style="border:0;width:100%;height:100%;min-height:560px"
+                data-sched-src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ2ltBnOZRoXf-MooGc4ac0roHsjC3KkkGEzDKPkL80oZ5SGT6YvkgFM3HLlPUU3z-nmL9WKShdc?gv=true"></iframe>
+      </div>
+
+      <p class="sched__fallback">
+        Trouble with the scheduler? Email us at
+        <a href={`mailto:${SITE.email}`}>{SITE.email}</a> and we will find a time.
+      </p>
+    </aside>
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="pfoot">
+    <div class="wrap pfoot__inner">
+      <div class="pfoot__brand">
+        <p class="pfoot__name">Citron Baltimore</p>
+        <p class="pfoot__addr">{SITE.address}</p>
+      </div>
+      <div class="pfoot__links">
+        <a href={SITE.phoneHref}>{SITE.phone}</a>
+        <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+        <a href="/">Back to main site</a>
+        <a href={SITE.reserveUrl} target="_blank" rel="noopener">Reserve a table</a>
+      </div>
+    </div>
+    <p class="pfoot__fine">Waterfront dining, catering &amp; events at Quarry Lake. Est. 2016.</p>
+  </footer>
+
+  <script>
+    (() => {
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // ---- reveal-on-scroll (transform/opacity only) ----
+      const els = document.querySelectorAll('.reveal');
+      if (els.length) {
+        if (!('IntersectionObserver' in window) || reduce) {
+          els.forEach((el) => el.classList.add('is-in'));
+        } else {
+          const io = new IntersectionObserver((entries) => {
+            entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target); } });
+          }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+          els.forEach((el) => io.observe(el));
+        }
+      }
+
+      // ---- party-size filter ----
+      const range = document.getElementById('guests');
+      const out = document.getElementById('guest-out');
+      const count = document.getElementById('fit-count');
+      const zones = Array.from(document.querySelectorAll('[data-key][data-cap]'));
+
+      const applyFilter = (val) => {
+        const n = Number(val);
+        let fit = 0;
+        const seen = new Set();
+        zones.forEach((z) => {
+          const cap = Number(z.getAttribute('data-cap'));
+          const ok = cap >= n;
+          z.classList.toggle('is-fit', ok);
+          z.classList.toggle('is-unfit', !ok);
+          const key = z.getAttribute('data-key');
+          if (ok && !seen.has(key)) { seen.add(key); fit += 1; }
+        });
+        if (out) out.textContent = `${n} guests`;
+        if (count) count.textContent = `${fit} of 9 spaces fit a party of ${n}.`;
+      };
+      if (range) {
+        range.addEventListener('input', (e) => applyFilter(e.target.value));
+        applyFilter(range.value);
+      }
+
+      // ---- drawer ----
+      const drawer = document.getElementById('drawer');
+      const panel = drawer ? drawer.querySelector('.drawer__panel') : null;
+      const liveTitle = document.getElementById('drawer-title');
+      const cards = drawer ? Array.from(drawer.querySelectorAll('[data-card]')) : [];
+      let lastFocus = null;
+
+      const openDrawer = (key) => {
+        if (!drawer || !panel) return;
+        const card = cards.find((c) => c.getAttribute('data-card') === key);
+        if (!card) return;
+        cards.forEach((c) => { c.hidden = c !== card; });
+        const name = card.querySelector('.sp-card__name');
+        if (liveTitle && name) liveTitle.textContent = name.textContent;
+        lastFocus = document.activeElement;
+        drawer.hidden = false;
+        requestAnimationFrame(() => drawer.classList.add('is-open'));
+        document.documentElement.style.overflow = 'hidden';
+        panel.scrollTop = 0;
+        panel.focus();
+      };
+
+      const closeDrawer = () => {
+        if (!drawer) return;
+        drawer.classList.remove('is-open');
+        document.documentElement.style.overflow = '';
+        const done = () => { drawer.hidden = true; drawer.removeEventListener('transitionend', done); };
+        if (reduce) { drawer.hidden = true; }
+        else { drawer.addEventListener('transitionend', done); }
+        if (lastFocus && lastFocus.focus) lastFocus.focus();
+      };
+
+      // open triggers: any element with data-key (map zones + list buttons)
+      document.addEventListener('click', (e) => {
+        const trigger = e.target.closest('[data-key]');
+        if (trigger) { openDrawer(trigger.getAttribute('data-key')); return; }
+        if (e.target.closest('[data-drawer-close]')) closeDrawer();
+      });
+
+      // keyboard: activate SVG zones with Enter / Space
+      document.addEventListener('keydown', (e) => {
+        const z = e.target.closest && e.target.closest('.zone[data-key]');
+        if (z && (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar')) {
+          e.preventDefault();
+          openDrawer(z.getAttribute('data-key'));
+        }
+      });
+
+      // escape + focus trap
+      document.addEventListener('keydown', (e) => {
+        if (!drawer || drawer.hidden) return;
+        if (e.key === 'Escape') { closeDrawer(); return; }
+        if (e.key === 'Tab') {
+          const f = panel.querySelectorAll('a[href],button:not([disabled]),input:not([disabled]),[tabindex]:not([tabindex="-1"])');
+          const vis = Array.from(f).filter((el) => el.offsetParent !== null || el === panel);
+          if (!vis.length) return;
+          const first = vis[0], last = vis[vis.length - 1];
+          if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+          else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+        }
+      });
+
+      // ---- schedule sidebar (slide-in from the right, separate from the drawer) ----
+      const sched = document.getElementById('sched');
+      const schedPanel = sched ? sched.querySelector('.sched__panel') : null;
+      const schedIframe = sched ? sched.querySelector('.sched__iframe') : null;
+      const schedSkeleton = sched ? sched.querySelector('[data-sched-skeleton]') : null;
+      const schedClose = sched ? sched.querySelector('.sched__close') : null;
+      let schedLastFocus = null;
+      let schedLoaded = false;
+
+      // only hit the third party once, on first open (protects initial-load Lighthouse)
+      const loadSchedule = () => {
+        if (!schedIframe || schedLoaded) return;
+        schedLoaded = true;
+        const src = schedIframe.getAttribute('data-sched-src');
+        if (!src) return;
+        schedIframe.addEventListener('load', () => {
+          if (schedSkeleton) schedSkeleton.hidden = true;
+        }, { once: true });
+        schedIframe.src = src;
+      };
+
+      const openSchedule = () => {
+        if (!sched || !schedPanel) return;
+        schedLastFocus = document.activeElement;
+        sched.hidden = false;
+        requestAnimationFrame(() => sched.classList.add('is-open'));
+        document.documentElement.style.overflow = 'hidden';
+        loadSchedule();
+        if (schedClose) schedClose.focus(); else schedPanel.focus();
+      };
+
+      const closeSchedule = () => {
+        if (!sched) return;
+        sched.classList.remove('is-open');
+        // if the room drawer is still open behind us, keep the scroll lock
+        const drawerOpen = drawer && !drawer.hidden;
+        if (!drawerOpen) document.documentElement.style.overflow = '';
+        const done = () => { sched.hidden = true; sched.removeEventListener('transitionend', done); };
+        if (reduce) { sched.hidden = true; }
+        else { sched.addEventListener('transitionend', done); }
+        if (schedLastFocus && schedLastFocus.focus) schedLastFocus.focus();
+      };
+
+      document.addEventListener('click', (e) => {
+        if (e.target.closest('[data-schedule-open]')) { openSchedule(); return; }
+        if (e.target.closest('[data-schedule-close]')) closeSchedule();
+      });
+
+      // escape + focus trap for the schedule sidebar
+      document.addEventListener('keydown', (e) => {
+        if (!sched || sched.hidden) return;
+        if (e.key === 'Escape') { closeSchedule(); return; }
+        if (e.key === 'Tab') {
+          const f = schedPanel.querySelectorAll('a[href],button:not([disabled]),iframe,[tabindex]:not([tabindex="-1"])');
+          const vis = Array.from(f).filter((el) => el.offsetParent !== null || el === schedPanel);
+          if (!vis.length) return;
+          const first = vis[0], last = vis[vis.length - 1];
+          if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+          else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+        }
+      });
+    })();
+  </script>
+
+  <style>
+    /* ============ PORTAL 2 : THE EXPLORER MAP ============ */
+    .portal{ background:
+      radial-gradient(120% 80% at 80% -10%, rgba(176,141,62,.10), transparent 60%),
+      radial-gradient(90% 70% at 0% 0%, rgba(199,224,75,.06), transparent 55%),
+      var(--abyss);
+      min-height:100vh; }
+
+    /* ---- slim nav ---- */
+    .pnav{ position:sticky; top:0; z-index:40;
+      background:color-mix(in oklab, var(--abyss) 82%, transparent);
+      backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--hair); }
+    .pnav__inner{ width:100%; max-width:var(--maxw); margin-inline:auto;
+      padding:0 var(--gutter); min-height:66px;
+      display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+    .pnav__logoimg{ height:34px; width:auto; opacity:.96; }
+    .pnav__links{ display:flex; align-items:center; gap:clamp(.9rem, .4rem + 1.6vw, 1.8rem); }
+    .pnav__back{ font-size:var(--step--1); color:var(--mist-dim); letter-spacing:.04em;
+      transition:color var(--t-fast) var(--ease); }
+    .pnav__back:hover{ color:var(--cream); }
+    .pnav__reserve{ font-family:var(--sans); font-weight:700; font-size:var(--step--1);
+      letter-spacing:.14em; text-transform:uppercase;
+      color:var(--abyss); background:var(--citron);
+      padding:.62em 1.2em; border-radius:var(--radius);
+      transition:transform var(--t-fast) var(--ease), box-shadow var(--t-med) var(--ease); }
+    .pnav__reserve:hover{ transform:translateY(-2px); box-shadow:0 10px 26px -12px color-mix(in oklab, var(--citron) 70%, transparent); }
+
+    /* ---- hero ---- */
+    .phero{ padding:clamp(3rem, 2rem + 6vw, 6.5rem) 0 clamp(1rem, 0rem + 2vw, 2rem); }
+    .phero__title{ font-size:var(--step-4); line-height:.98; margin-top:.5rem; }
+    .phero__title em{ font-style:italic; color:var(--brass-light); }
+    .phero__lede{ margin-top:1.4rem; color:var(--mist); font-size:var(--step-1); line-height:1.5; }
+
+    /* ---- filter ---- */
+    .explorer__h, .spaces__h{ font-size:var(--step-2); margin-bottom:1.4rem; }
+    .filter{ max-width:640px; margin-bottom:clamp(1.6rem, 1rem + 2vw, 2.6rem);
+      background:linear-gradient(180deg, var(--night) 0%, var(--abyss-2) 100%);
+      border:1px solid var(--hair-strong); border-radius:8px;
+      padding:clamp(1.1rem, .7rem + 1.4vw, 1.6rem); }
+    .filter__row{ display:flex; align-items:baseline; justify-content:space-between; gap:1rem; }
+    .filter__label{ font-family:var(--sans); font-weight:700; font-size:var(--step--1);
+      letter-spacing:.22em; text-transform:uppercase; color:var(--mist-dim); }
+    .filter__value{ font-family:var(--serif); font-size:var(--step-2); color:var(--brass-light); line-height:1; }
+    .filter__range{ -webkit-appearance:none; appearance:none; width:100%; height:6px;
+      margin-top:1rem; border-radius:99px; background:var(--night-2);
+      background-image:linear-gradient(90deg, var(--olive), var(--citron)); cursor:pointer; }
+    .filter__range::-webkit-slider-thumb{ -webkit-appearance:none; appearance:none;
+      width:26px; height:26px; border-radius:50%; background:var(--cream);
+      border:3px solid var(--citron); box-shadow:0 4px 14px -4px rgba(0,0,0,.7);
+      transition:transform var(--t-fast) var(--ease); }
+    .filter__range::-webkit-slider-thumb:hover{ transform:scale(1.1); }
+    .filter__range::-moz-range-thumb{ width:22px; height:22px; border-radius:50%;
+      background:var(--cream); border:3px solid var(--citron); cursor:pointer; }
+    .filter__ticks{ display:flex; justify-content:space-between; margin-top:.55rem;
+      font-size:.72rem; letter-spacing:.06em; color:var(--mist-dim); }
+    .filter__count{ margin-top:1rem; padding-top:1rem; border-top:1px solid var(--hair);
+      font-size:var(--step-0); color:var(--cream); }
+
+    /* ---- map ---- */
+    .map-scroll{ overflow-x:auto; -webkit-overflow-scrolling:touch;
+      border:1px solid var(--hair); border-radius:12px;
+      background:radial-gradient(120% 90% at 50% 0%, rgba(27,42,37,.6), var(--abyss-2));
+      padding:clamp(.5rem, 0rem + 1vw, 1rem); }
+    .map{ width:100%; height:auto; display:block; }
+    @media (max-width:600px){ .map{ min-width:540px; } }
+
+    /* decorative map layer */
+    .water{ fill:rgba(27,42,37,.55); }
+    .wave{ fill:none; stroke:rgba(203,216,207,.10); stroke-width:2; }
+    .wave--2{ stroke:rgba(203,216,207,.06); }
+    .water__label{ fill:var(--mist-dim); font-family:var(--serif); font-style:italic;
+      font-size:22px; text-anchor:middle; letter-spacing:.08em; }
+    .edge{ fill:none; stroke:var(--brass); stroke-width:1.5; stroke-dasharray:2 6;
+      stroke-linecap:round; opacity:.55; }
+    .bound{ fill:none; stroke:var(--hair-strong); stroke-width:1.4; stroke-dasharray:5 8; }
+    .bldg{ fill:rgba(20,32,28,.85); stroke:var(--hair-strong); stroke-width:1.5; }
+    .bldg__label{ fill:var(--mist-dim); font-family:var(--sans); font-size:13px;
+      letter-spacing:.24em; text-transform:uppercase; text-anchor:middle; }
+    .road{ fill:none; stroke:var(--brass); stroke-width:1.4; stroke-dasharray:3 6; opacity:.5; }
+
+    /* interactive zones */
+    .zone{ cursor:pointer; }
+    .zone__hit{ fill:rgba(107,122,0,.16); stroke:var(--hair-strong); stroke-width:1.4;
+      transition:fill var(--t-med) var(--ease), stroke var(--t-med) var(--ease), opacity var(--t-med) var(--ease); }
+    .zone__name{ fill:var(--cream); font-family:var(--serif); font-size:19px; font-weight:600;
+      text-anchor:middle; pointer-events:none; }
+    .zone__cap{ fill:var(--mist-dim); font-family:var(--sans); font-size:12px;
+      letter-spacing:.08em; text-anchor:middle; pointer-events:none; }
+    .zone__pin{ fill:none; stroke:var(--brass-light); stroke-width:2.4; stroke-linecap:round; }
+    .zone--room .zone__name{ font-size:17px; }
+    .zone--marker .zone__hit{ fill:rgba(176,141,62,.14); stroke-dasharray:5 6; }
+    .zone--badge .zone__hit{ fill:rgba(176,141,62,.18); }
+    .zone--badge .zone__name{ font-size:18px; }
+
+    .zone:hover .zone__hit,
+    .zone:focus-visible .zone__hit{ fill:rgba(199,224,75,.24); stroke:var(--citron); }
+    .zone:focus-visible{ outline:none; }
+    .zone:focus-visible .zone__hit{ stroke-width:2.5; }
+
+    .zone.is-fit .zone__hit{ fill:rgba(199,224,75,.22); stroke:var(--citron); stroke-width:2; }
+    .zone.is-fit .zone__cap{ fill:var(--citron); }
+    .zone.is-unfit{ opacity:.34; }
+    .zone.is-unfit .zone__hit{ fill:rgba(203,216,207,.05); stroke:var(--hair); }
+
+    .map-hint{ margin-top:1rem; font-size:var(--step--1); color:var(--mist-dim); }
+
+    /* ---- fallback list ---- */
+    .spaces{ padding-top:clamp(2.5rem, 1.5rem + 4vw, 5rem); }
+    .spaces__list{ display:grid; gap:.8rem;
+      grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); }
+    .sp-item{ width:100%; display:flex; align-items:center; gap:1rem; text-align:left;
+      padding:1rem 1.1rem; background:rgba(255,255,255,.015);
+      border:1px solid var(--hair); border-radius:8px; cursor:pointer;
+      transition:border-color var(--t-med) var(--ease), background var(--t-med) var(--ease), transform var(--t-fast) var(--ease); }
+    .sp-item:hover{ border-color:var(--citron); background:rgba(199,224,75,.05); transform:translateY(-2px); }
+    .sp-item__cap{ flex:none; width:54px; height:54px; display:grid; place-items:center;
+      font-family:var(--serif); font-size:1.35rem; color:var(--brass-light);
+      border:1px solid var(--hair-strong); border-radius:50%; }
+    .sp-item__body{ display:flex; flex-direction:column; gap:.2rem; flex:1; }
+    .sp-item__name{ font-family:var(--serif); font-size:var(--step-1); color:var(--cream); line-height:1.1; }
+    .sp-item__best{ font-size:var(--step--1); color:var(--mist-dim); }
+    .sp-item__go{ color:var(--mist-dim); font-size:1.2rem; transition:transform var(--t-fast) var(--ease), color var(--t-fast); }
+    .sp-item:hover .sp-item__go{ transform:translateX(4px); color:var(--citron); }
+    .sp-item.is-unfit{ opacity:.5; }
+    .sp-item.is-fit{ border-color:color-mix(in oklab, var(--citron) 55%, transparent); }
+
+    /* ---- drawer ---- */
+    .drawer{ position:fixed; inset:0; z-index:1200; }
+    .drawer[hidden]{ display:none; }
+    .drawer__scrim{ position:absolute; inset:0; background:rgba(6,10,9,.72);
+      backdrop-filter:blur(6px); opacity:0; transition:opacity var(--t-med) var(--ease); }
+    .drawer.is-open .drawer__scrim{ opacity:1; }
+    .drawer__panel{ position:absolute; top:0; right:0; height:100%;
+      width:min(480px, 100%);
+      background:linear-gradient(180deg, var(--night) 0%, var(--abyss-2) 100%);
+      border-left:1px solid var(--hair-strong);
+      box-shadow:-40px 0 120px -30px rgba(0,0,0,.8);
+      padding:clamp(1.4rem, 1rem + 1.6vw, 2.2rem);
+      overflow-y:auto; overflow-x:hidden;
+      transform:translateX(100%); transition:transform var(--t-med) var(--ease); }
+    .drawer.is-open .drawer__panel{ transform:none; }
+    .drawer__close{ position:absolute; top:12px; right:12px; width:44px; height:44px;
+      display:grid; place-items:center; background:none; border:none;
+      color:var(--mist-dim); cursor:pointer; transition:color var(--t-fast); z-index:2; }
+    .drawer__close:hover{ color:var(--cream); }
+    .drawer__live{ position:absolute; width:1px; height:1px; overflow:hidden;
+      clip:rect(0 0 0 0); white-space:nowrap; }
+
+    /* space card inside drawer */
+    .sp-card[hidden]{ display:none; }
+    .sp-card__media{ position:relative; border-radius:8px; overflow:hidden; margin-bottom:1.3rem; }
+    .sp-card__img{ width:100%; height:auto; aspect-ratio:16/10; object-fit:cover; }
+    .sp-card__badge{ position:absolute; left:12px; bottom:12px;
+      font-family:var(--sans); font-weight:700; font-size:.72rem; letter-spacing:.12em;
+      text-transform:uppercase; color:var(--abyss); background:var(--citron);
+      padding:.4em .8em; border-radius:99px; }
+    .sp-card__eyebrow{ color:var(--brass-light); }
+    .sp-card__name{ font-size:var(--step-3); line-height:1; margin:.4rem 0 .8rem; }
+    .sp-card__desc{ color:var(--mist); font-size:var(--step-0); line-height:1.6; }
+    .sp-card__facts{ margin:1.4rem 0; display:grid; gap:.7rem;
+      border-top:1px solid var(--hair); border-bottom:1px solid var(--hair);
+      padding:1.1rem 0; }
+    .sp-card__facts > div{ display:grid; grid-template-columns:104px 1fr; gap:1rem; align-items:baseline; }
+    .sp-card__facts dt{ font-size:.72rem; letter-spacing:.18em; text-transform:uppercase;
+      color:var(--mist-dim); }
+    .sp-card__facts dd{ margin:0; color:var(--cream); font-size:var(--step--1); }
+    .sp-card__block{ margin-top:1.4rem; }
+    .sp-card__sub{ font-family:var(--sans); font-weight:700; font-size:.72rem;
+      letter-spacing:.2em; text-transform:uppercase; color:var(--citron); margin-bottom:.7rem; }
+    .sp-card__q{ display:grid; gap:.5rem; }
+    .sp-card__q li{ position:relative; padding-left:1.3rem; color:var(--mist);
+      font-size:var(--step--1); line-height:1.45; }
+    .sp-card__q li::before{ content:''; position:absolute; left:0; top:.55em;
+      width:7px; height:7px; border-radius:50%; background:var(--brass); }
+
+    .addons{ display:grid; gap:.5rem; }
+    .addon{ display:flex; }
+    .addon__cb{ position:absolute; opacity:0; width:0; height:0; }
+    .addon__lb{ flex:1; display:flex; flex-direction:column; gap:.15rem; cursor:pointer;
+      padding:.7rem .9rem; border:1px solid var(--hair); border-radius:6px;
+      transition:border-color var(--t-med) var(--ease), background var(--t-med) var(--ease); }
+    .addon__lb:hover{ border-color:var(--hair-strong); }
+    .addon__cb:checked + .addon__lb{ border-color:var(--citron); background:rgba(199,224,75,.06); }
+    .addon__cb:focus-visible + .addon__lb{ outline:2px solid var(--citron); outline-offset:2px; }
+    .addon__name{ font-family:var(--serif); font-size:var(--step-0); color:var(--cream); }
+    .addon__note{ font-size:.78rem; color:var(--mist-dim); }
+
+    .sp-card__cta{ display:flex; flex-wrap:wrap; gap:.7rem; margin-top:1.8rem; }
+    .sp-card__cta .btn{ flex:1; min-width:150px; justify-content:center; }
+
+    /* ---- footer ---- */
+    .pfoot{ border-top:1px solid var(--hair); margin-top:clamp(3rem, 2rem + 4vw, 6rem);
+      padding:clamp(2.4rem, 1.5rem + 3vw, 4rem) 0 clamp(1.6rem, 1rem + 2vw, 2.4rem); }
+    .pfoot__inner{ display:flex; flex-wrap:wrap; gap:1.6rem 2rem; justify-content:space-between; }
+    .pfoot__name{ font-family:var(--serif); font-size:var(--step-2); color:var(--cream); }
+    .pfoot__addr{ color:var(--mist-dim); font-size:var(--step--1); margin-top:.3rem; }
+    .pfoot__links{ display:flex; flex-wrap:wrap; gap:.8rem 1.6rem; align-items:center; }
+    .pfoot__links a{ color:var(--mist); font-size:var(--step--1);
+      transition:color var(--t-fast) var(--ease); }
+    .pfoot__links a:hover{ color:var(--citron); }
+    .pfoot__fine{ margin-top:1.6rem; color:var(--mist-dim); font-size:.78rem; letter-spacing:.04em; }
+
+    /* ---- persistent schedule CTA ---- */
+    .sched-cta{ position:fixed; right:clamp(1rem, .4rem + 1.6vw, 1.8rem);
+      bottom:clamp(1rem, .4rem + 1.6vw, 1.8rem); z-index:1100;
+      display:inline-flex; align-items:center; gap:.55rem;
+      font-family:var(--sans); font-weight:700; font-size:var(--step--1);
+      letter-spacing:.1em; text-transform:uppercase;
+      color:var(--abyss); background:var(--citron);
+      border:none; border-radius:99px; cursor:pointer;
+      padding:.85em 1.25em;
+      box-shadow:0 14px 34px -14px color-mix(in oklab, var(--citron) 70%, transparent), 0 4px 12px -6px rgba(0,0,0,.6);
+      transition:transform var(--t-fast) var(--ease), box-shadow var(--t-med) var(--ease); }
+    .sched-cta:hover{ transform:translateY(-2px);
+      box-shadow:0 20px 44px -14px color-mix(in oklab, var(--citron) 78%, transparent), 0 6px 16px -6px rgba(0,0,0,.6); }
+    .sched-cta:focus-visible{ outline:2px solid var(--cream); outline-offset:3px; }
+    .sched-cta svg{ flex:none; }
+
+    /* ---- schedule sidebar (slide-in, sits above the room drawer) ---- */
+    .sched{ position:fixed; inset:0; z-index:1300; }
+    .sched[hidden]{ display:none; }
+    .sched__scrim{ position:absolute; inset:0; background:rgba(6,10,9,.74);
+      backdrop-filter:blur(6px); opacity:0; transition:opacity var(--t-med) var(--ease); }
+    .sched.is-open .sched__scrim{ opacity:1; }
+    .sched__panel{ position:absolute; top:0; right:0; height:100%;
+      width:min(460px, 100%);
+      display:flex; flex-direction:column;
+      background:linear-gradient(180deg, var(--night) 0%, var(--abyss-2) 100%);
+      border-left:1px solid var(--hair-strong);
+      box-shadow:-40px 0 120px -30px rgba(0,0,0,.85);
+      padding:clamp(1.4rem, 1rem + 1.6vw, 2.2rem);
+      transform:translateX(100%); transition:transform var(--t-med) var(--ease); }
+    .sched.is-open .sched__panel{ transform:none; }
+    .sched__head{ display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; }
+    .sched__eyebrow{ color:var(--brass-light); }
+    .sched__title{ font-size:var(--step-3); line-height:1; margin-top:.35rem; }
+    .sched__close{ flex:none; width:44px; height:44px; display:grid; place-items:center;
+      background:none; border:none; color:var(--mist-dim); cursor:pointer;
+      transition:color var(--t-fast); }
+    .sched__close:hover{ color:var(--cream); }
+    .sched__close:focus-visible{ outline:2px solid var(--citron); outline-offset:2px; border-radius:6px; }
+    .sched__lede{ margin-top:1rem; color:var(--mist); font-size:var(--step--1); line-height:1.55; }
+    .sched__frame{ position:relative; flex:1; margin-top:1.3rem;
+      min-height:560px; border-radius:8px; overflow:hidden;
+      border:1px solid var(--hair); background:var(--abyss-2); }
+    .sched__iframe{ position:relative; z-index:1; display:block; background:transparent; }
+    .sched__skeleton{ position:absolute; inset:0; z-index:2;
+      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1rem;
+      background:linear-gradient(180deg, var(--night) 0%, var(--abyss-2) 100%); }
+    .sched__skeleton[hidden]{ display:none; }
+    .sched__spinner{ width:34px; height:34px; border-radius:50%;
+      border:3px solid var(--hair-strong); border-top-color:var(--citron);
+      animation:sched-spin .9s linear infinite; }
+    .sched__loading{ font-size:var(--step--1); color:var(--mist-dim); letter-spacing:.04em; }
+    .sched__fallback{ margin-top:1.1rem; font-size:.82rem; color:var(--mist-dim); line-height:1.5; }
+    .sched__fallback a{ color:var(--citron); }
+    .sched__fallback a:hover{ text-decoration:underline; }
+
+    @keyframes sched-spin{ to{ transform:rotate(360deg); } }
+
+    @media (max-width:520px){
+      .sched__panel{ width:100%; }
+      .sched-cta span{ position:absolute; width:1px; height:1px; overflow:hidden;
+        clip:rect(0 0 0 0); white-space:nowrap; }
+      .sched-cta{ padding:.9em; border-radius:50%; }
+    }
+
+    @media (max-width:520px){
+      .drawer__panel{ width:100%; }
+      .sp-card__facts > div{ grid-template-columns:1fr; gap:.15rem; }
+      .sp-card__cta .btn{ flex:1 1 100%; }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .reveal{ opacity:1; transform:none; }
+      .drawer__panel{ transition:none; }
+      .drawer__scrim{ transition:none; }
+      .sched__panel{ transition:none; }
+      .sched__scrim{ transition:none; }
+      .sched-cta{ transition:none; }
+      .sched__spinner{ animation-duration:1.6s; }
+      *{ scroll-behavior:auto; }
+    }
+  </style>
+</body>
+</html>

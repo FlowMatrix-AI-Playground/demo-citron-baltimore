@@ -1,0 +1,204 @@
+---
+import D6Base from '../../layouts/D6Base.astro';
+import { Image } from 'astro:assets';
+import { SITE } from '../../data/site.js';
+
+import heroImg from '../../assets/img/main-entry.jpg';
+
+const title = 'Contact, Citron Baltimore, Reservations & Events on Quarry Lake';
+const description = 'Reach Citron Baltimore: call, email, or send our team an inquiry for dinner reservations, private events, and off-premise catering at 2605 Quarry Lake Dr, Baltimore, MD 21209.';
+---
+<D6Base title={title} description={description} ogImage="/lake-poster.jpg">
+  <!-- ===================== HEAD ===================== -->
+  <section class="d6-phead d6-phead--slim">
+    <div class="d6-phead__rays" aria-hidden="true">
+      <svg class="d6-sun" viewBox="0 0 440 120" width="440" height="120" fill="none" preserveAspectRatio="xMidYMax meet">
+        {Array.from({ length: 13 }, (_, i) => {
+          const a = Math.PI * (i / 12);
+          return { x2: (220 + 140 * Math.cos(a)).toFixed(1), y2: (118 - 140 * Math.sin(a)).toFixed(1), d: i * 50 };
+        }).map((r) => (
+          <line x1="220" y1="118" x2={r.x2} y2={r.y2} stroke="var(--d6-brass)" stroke-width="1" pathLength="1" style={`transition-delay:${r.d}ms`} />
+        ))}
+      </svg>
+    </div>
+    <div class="d6-wrap d6-phead__inner">
+      <p class="d6-kicker d6-kicker--center d6-rv">Say Hello</p>
+      <h1 class="d6-phead__title d6-rv" data-delay="1">Contact</h1>
+      <p class="d6-phead__lead d6-rv" data-delay="2">
+        For dinner, call or reserve online. For an event or catering, send our team the details below and we will
+        write back with dates, capacities, and menus.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===================== BODY ===================== -->
+  <section class="d6-section">
+    <div class="d6-wrap">
+      <div class="d6-contact">
+        <!-- form -->
+        <div class="d6-cform d6-rv">
+          <div class="d6-cform__panel">
+            <span class="d6-modal__fan d6-modal__fan--tl" aria-hidden="true"></span>
+            <span class="d6-modal__fan d6-modal__fan--br" aria-hidden="true"></span>
+            <p class="d6-kicker">Send an Inquiry</p>
+            <h2 class="d6-cform__title">Tell us about your evening.</h2>
+            <form id="d6-contact-form" class="d6-form" novalidate>
+              <div class="d6-field">
+                <label for="cf-name">Name</label>
+                <input id="cf-name" name="name" type="text" autocomplete="name" required />
+              </div>
+              <div class="d6-field d6-field--split">
+                <div>
+                  <label for="cf-email">Email</label>
+                  <input id="cf-email" name="email" type="email" autocomplete="email" required />
+                </div>
+                <div>
+                  <label for="cf-phone">Phone</label>
+                  <input id="cf-phone" name="phone" type="tel" autocomplete="tel" />
+                </div>
+              </div>
+              <div class="d6-field d6-field--split">
+                <div>
+                  <label for="cf-type">Inquiry</label>
+                  <select id="cf-type" name="type">
+                    <option>Dinner reservation</option>
+                    <option>Private event</option>
+                    <option>Wedding</option>
+                    <option>Off-premise catering</option>
+                    <option>Corporate event</option>
+                    <option>Something else</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="cf-guests">Guests</label>
+                  <input id="cf-guests" name="guests" type="text" inputmode="numeric" placeholder="e.g. 120" />
+                </div>
+              </div>
+              <div class="d6-field">
+                <label for="cf-date">Preferred date</label>
+                <input id="cf-date" name="date" type="text" placeholder="Month, day, year" />
+              </div>
+              <div class="d6-field">
+                <label for="cf-message">Details</label>
+                <textarea id="cf-message" name="message" rows="4" placeholder="Occasion, timing, anything we should know."></textarea>
+              </div>
+              <button class="d6-btn d6-btn--solid d6-form__submit" type="submit">Send Inquiry</button>
+              <p class="d6-form__note" id="d6-form-note">Opens your mail app, addressed to our events team. We reply within one business day.</p>
+            </form>
+          </div>
+        </div>
+
+        <!-- details -->
+        <aside class="d6-cdetails">
+          <div class="d6-frame d6-cdetails__fig d6-rv">
+            <Image src={heroImg} alt="The entrance to Citron Baltimore at Quarry Lake" widths={[500, 800]} sizes="(max-width:820px) 90vw, 40vw" loading="eager" fetchpriority="high" format="avif" quality={56} />
+          </div>
+
+          <ul class="d6-cinfo d6-rv" data-delay="1">
+            <li>
+              <span class="d6-cinfo__k">Call</span>
+              <a class="d6-cinfo__v" href={SITE.phoneHref}>{SITE.phone}</a>
+            </li>
+            <li>
+              <span class="d6-cinfo__k">Email</span>
+              <a class="d6-cinfo__v" href={`mailto:${SITE.email}`}>{SITE.email}</a>
+            </li>
+            <li>
+              <span class="d6-cinfo__k">Visit</span>
+              <span class="d6-cinfo__v">2605 Quarry Lake Dr<br />Baltimore, MD 21209</span>
+            </li>
+            <li>
+              <span class="d6-cinfo__k">Dinner</span>
+              <span class="d6-cinfo__v">Wednesday–Sunday, from 4 PM</span>
+            </li>
+            <li>
+              <span class="d6-cinfo__k">Private Events</span>
+              <span class="d6-cinfo__v">Seven days a week</span>
+            </li>
+          </ul>
+
+          <div class="d6-cbook d6-rv" data-delay="2">
+            <a class="d6-btn d6-btn--ghost" href={SITE.reserveUrl} target="_blank" rel="noopener">Reserve on OpenTable</a>
+            <a class="d6-btn d6-btn--ghost" href={SITE.pickupUrl} target="_blank" rel="noopener">Order Pick-Up</a>
+            <a class="d6-btn d6-btn--ghost" href={SITE.portalUrl}>Plan an Event</a>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .d6-phead--slim{ padding-bottom:0; }
+    .d6-phead--slim .d6-phead__lead{ max-width:58ch; }
+
+    .d6-contact{ display:grid; grid-template-columns:1.15fr 0.85fr; gap:clamp(1.6rem, 0.8rem + 3vw, 3.6rem); align-items:start; }
+
+    .d6-cform__panel{ position:relative; padding:clamp(1.6rem, 1rem + 2.4vw, 2.8rem); border:1px solid var(--d6-brass); background:linear-gradient(180deg, var(--d6-bg-2), var(--d6-panel)); box-shadow:inset 0 0 0 6px rgba(201,162,75,.05); }
+    .d6-cform__title{ font-size:var(--d6-s-2); margin:0.5rem 0 1.5rem; }
+    .d6-form{ display:flex; flex-direction:column; gap:1.1rem; }
+    .d6-field{ display:flex; flex-direction:column; gap:0.45rem; }
+    .d6-field--split{ display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .d6-field--split > div{ display:flex; flex-direction:column; gap:0.45rem; }
+    .d6-form label{ font-size:0.66rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--d6-citron); }
+    .d6-form input,.d6-form select,.d6-form textarea{
+      width:100%; min-height:50px; padding:0 14px; background:rgba(239,231,211,.03);
+      border:1px solid var(--d6-hair); border-radius:0; color:var(--d6-cream);
+      font-family:var(--d6-sans); font-size:var(--d6-s-0); font-weight:300;
+      transition:border-color var(--d6-t-fast), background var(--d6-t-fast);
+    }
+    .d6-form textarea{ padding:12px 14px; min-height:auto; resize:vertical; line-height:1.6; }
+    .d6-form select{ appearance:none; cursor:pointer; }
+    .d6-form input::placeholder,.d6-form textarea::placeholder{ color:var(--d6-cream-soft); }
+    .d6-form input:focus,.d6-form select:focus,.d6-form textarea:focus{ border-color:var(--d6-citron); background:var(--d6-citron-tint); outline:none; }
+    .d6-form__submit{ margin-top:0.5rem; align-self:flex-start; }
+    .d6-form__note{ font-size:0.78rem; color:var(--d6-cream-soft); margin:0; }
+    .d6-form__note.is-ok{ color:var(--d6-citron); }
+    @media (max-width:480px){ .d6-field--split{ grid-template-columns:1fr; } }
+
+    .d6-cdetails{ display:flex; flex-direction:column; gap:1.6rem; }
+    .d6-cdetails__fig{ aspect-ratio:4/3; }
+    .d6-cinfo{ display:flex; flex-direction:column; }
+    .d6-cinfo li{ display:flex; flex-direction:column; gap:4px; padding:1rem 0; border-top:1px solid var(--d6-hair-soft); }
+    .d6-cinfo li:last-child{ border-bottom:1px solid var(--d6-hair-soft); }
+    .d6-cinfo__k{ font-size:0.64rem; letter-spacing:0.24em; text-transform:uppercase; color:var(--d6-citron); }
+    .d6-cinfo__v{ font-family:var(--d6-display); font-weight:500; font-size:var(--d6-s-1); color:var(--d6-cream); line-height:1.4; }
+    a.d6-cinfo__v{ transition:color var(--d6-t-fast); }
+    a.d6-cinfo__v:hover{ color:var(--d6-citron); }
+    .d6-cbook{ display:flex; flex-direction:column; gap:10px; }
+    .d6-cbook .d6-btn{ width:100%; }
+
+    @media (max-width:820px){ .d6-contact{ grid-template-columns:1fr; } }
+  </style>
+
+  <script is:inline define:vars={{ email: SITE.email }}>
+    const form = document.getElementById('d6-contact-form');
+    if (form) {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const note = document.getElementById('d6-form-note');
+        const get = (id) => (document.getElementById(id)?.value || '').trim();
+        const name = get('cf-name');
+        const mail = get('cf-email');
+        if (!name || !mail) {
+          if (note) { note.textContent = 'Please add your name and email so we can write back.'; note.classList.remove('is-ok'); }
+          return;
+        }
+        const type = get('cf-type');
+        const lines = [
+          'Name: ' + name,
+          'Email: ' + mail,
+          'Phone: ' + (get('cf-phone') || '(not given)'),
+          'Inquiry: ' + type,
+          'Guests: ' + (get('cf-guests') || '(not given)'),
+          'Preferred date: ' + (get('cf-date') || '(not given)'),
+          '',
+          get('cf-message') || '(no additional details)',
+        ];
+        const subject = 'Citron inquiry: ' + type + ' for ' + name;
+        const href = 'mailto:' + email + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(lines.join('\n'));
+        window.location.href = href;
+        if (note) { note.textContent = 'Opening your mail app now. If nothing happens, email ' + email + ' directly.'; note.classList.add('is-ok'); }
+      });
+    }
+  </script>
+</D6Base>

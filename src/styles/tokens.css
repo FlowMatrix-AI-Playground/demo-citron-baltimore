@@ -1,0 +1,58 @@
+/* ===========================================================
+   Citron Baltimore, Flagship #1 "After Dark on the Water"
+   Design tokens
+   =========================================================== */
+:root{
+  /* base, cinematic dark, lake-charcoal */
+  --abyss:#0B1210;
+  --abyss-2:#0E1714;
+  --night:#14201C;
+  --night-2:#1B2A25;
+
+  /* accents */
+  --citron:#C7E04B;        /* luminous accent */
+  --citron-deep:#A8C40A;
+  --olive:#6B7A00;         /* deep brand tie */
+  --olive-dark:#586500;
+  --brass:#B08D3E;         /* luxury metal, wine, awards */
+  --brass-light:#D8B978;
+
+  /* neutrals / light breaks */
+  --cream:#FBF9F1;
+  --paper:#F4F2EC;
+  --paper-deep:#EDEAE0;
+  --ink:#141414;
+  --ink-soft:#2A2A28;
+
+  /* text on dark */
+  --mist:#CDD8CF;          /* body on dark */
+  --mist-dim:#8FA096;      /* muted on dark */
+  --hair:rgba(203,216,207,.14);
+  --hair-strong:rgba(203,216,207,.28);
+
+  /* type */
+  --serif:'Cormorant', 'Cormorant Garamond', Georgia, serif;
+  --sans:'Karla', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* fluid type scale */
+  --step--1: clamp(0.83rem, 0.80rem + 0.15vw, 0.92rem);
+  --step-0:  clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+  --step-1:  clamp(1.2rem, 1.1rem + 0.5vw, 1.5rem);
+  --step-2:  clamp(1.6rem, 1.3rem + 1.5vw, 2.4rem);
+  --step-3:  clamp(2.2rem, 1.6rem + 3vw, 3.8rem);
+  --step-4:  clamp(3rem, 1.8rem + 6vw, 6.5rem);
+  --step-5:  clamp(3.6rem, 1.6rem + 9vw, 9rem);
+
+  /* spacing / rhythm */
+  --gutter: clamp(1.25rem, 0.8rem + 2vw, 3rem);
+  --measure: 66ch;
+  --maxw: 1240px;
+  --radius: 3px;
+
+  /* motion */
+  --t-fast:180ms;
+  --t-med:340ms;
+  --t-slow:640ms;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);   /* easeOutExpo-ish */
+  --ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
+}

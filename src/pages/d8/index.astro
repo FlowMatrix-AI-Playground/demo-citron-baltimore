@@ -1,0 +1,439 @@
+---
+import Base from '../../layouts/D8Base.astro';
+import { Image } from 'astro:assets';
+import { SITE } from '../../data/site.js';
+import heroImg from '../../assets/img/dining-room.jpg';
+import dining from '../../assets/img/dining-room.jpg';
+import crab from '../../assets/img/food-crabcake.jpg';
+import tuna from '../../assets/img/food-tuna.jpg';
+import tent from '../../assets/img/room-offpremise.jpg';
+import cove from '../../assets/img/room-cove.jpg';
+import courtyard from '../../assets/img/courtyard-gathering.jpg';
+import terrace from '../../assets/img/terrace-event.jpg';
+import venue from '../../assets/img/room-venue.jpg';
+import couple from '../../assets/img/charles-susan.jpg';
+
+const spaces = [
+  { key: 'cove', name: 'The Cove', cap: 'Up to 200', img: cove, blurb: 'Our signature indoor room, staged for galas, weddings, and speaker dinners.' },
+  { key: 'courtyard', name: 'Waterfront Courtyard', cap: 'Up to 200', img: courtyard, blurb: 'Open sky and the lake as backdrop for the largest outdoor celebrations.' },
+  { key: 'terrace', name: 'Waterfront Terrace', cap: 'Up to 50', img: terrace, blurb: 'A heated, open-air terrace at the water’s edge where the sunset decorates.' },
+  { key: 'venue', name: 'The Entire Venue', cap: 'Up to 500', img: venue, blurb: 'The whole property, indoors and out, given over to your night.' },
+];
+const spacesMeta = spaces.map(({ key, name, cap, blurb }) => ({ key, name, cap, blurb }));
+
+const stats = [
+  { n: '10', l: 'years on the water' },
+  { n: '~14,000', l: 'events catered' },
+  { n: '7', l: 'Wine Spectator awards' },
+  { n: '500', l: 'guests, at the largest' },
+];
+
+const pillars = [
+  { k: 'Dine', num: '01', img: dining, alt: 'The main dining room at Citron Baltimore', copy: 'Seasonal Modern American and a full sushi bar, 300 seats against Quarry Lake.', href: '/d8/menu', cta: 'The Menu' },
+  { k: 'Cater', num: '02', img: tent, alt: 'Tented off-premise catering by Citron', copy: 'Forty years of off-premise catering, your tent, home, or office, at any scale.', href: '/d8/events', cta: 'Catering' },
+  { k: 'Celebrate', num: '03', img: cove, alt: 'A gala set in The Cove event space', copy: 'Nine private spaces, from a fireside twenty to the whole venue at five hundred.', href: '/d8/events', cta: 'Private Events' },
+];
+---
+<Base title="Citron Baltimore, Nightfall on Quarry Lake">
+  <!-- ===== HERO (signature canvas light field) ===== -->
+  <section class="d8-hero" id="d8-hero">
+    <div class="d8-hero__media" aria-hidden="true">
+      <Image src={heroImg} alt="" class="d8-hero__img" widths={[768, 1200, 1500]} sizes="100vw" loading="eager" fetchpriority="high" format="avif" quality={54} />
+      <canvas class="d8-hero__canvas" id="d8-canvas" aria-hidden="true"></canvas>
+      <div class="d8-hero__scrim"></div>
+    </div>
+
+    <div class="d8-wrap d8-hero__content">
+      <p class="d8-label d8-label--neon d8-hero__eyebrow">Quarry Lake · Baltimore County</p>
+      <h1 class="d8-hero__title">
+        <span class="d8-hero__line">Dinner on the water,</span>
+        <span class="d8-hero__line d8-hero__line--accent">after dark.</span>
+      </h1>
+      <p class="d8-hero__sub">Waterfront dining, a catering house forty years deep, and an event venue for twenty to five hundred guests. Ten years on the water this November.</p>
+      <div class="d8-hero__cta">
+        <button class="d8-btn" data-cta>Reserve · Pick-Up · Events</button>
+        <a class="d8-btn d8-btn--ghost" href="/d8/menu">Explore the Menu</a>
+      </div>
+    </div>
+
+    <a class="d8-hero__scroll" href="#story" aria-label="Scroll to story"><span></span></a>
+  </section>
+
+  <!-- ===== INTRO + KINETIC STATS ===== -->
+  <section class="d8-section d8-intro" id="story">
+    <div class="d8-wrap d8-intro__grid">
+      <div class="d8-intro__lead">
+        <p class="d8-label d8-label--neon d8-rv">Est. 2016 · Quarry Lake</p>
+        <h2 class="d8-intro__head d8-rv" data-delay="1">A caterer from Pimlico built a restaurant on the water, and Baltimore has been <span class="d8-h-accent">celebrating here</span> ever since.</h2>
+        <p class="d8-intro__body d8-rv" data-delay="2">Charles and Susan Levine spent thirty years bringing a fine-dining standard to other people’s rooms. In 2016 they finally built one of their own, on Quarry Lake, and gave it a kitchen good enough to stand on its own every night. This November marks ten years.</p>
+        <a class="d8-link d8-rv" data-delay="3" href="/d8/about">Read our story <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <ul class="d8-wrap d8-stats" aria-label="By the numbers">
+      {stats.map((s, i) => (
+        <li class="d8-stat d8-rv" data-delay={String((i % 3) + 1)}>
+          <span class="d8-stat__n" data-count={s.n}>{s.n}</span>
+          <span class="d8-stat__l">{s.l}</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- ===== KINETIC MARQUEE ===== -->
+  <section class="d8-marquee" id="marquee" aria-label="What we do">
+    <div class="d8-marquee__track" aria-hidden="true">
+      <span>Waterfront Dining <b>·</b> Full Sushi Bar <b>·</b> Off-Premise Catering <b>·</b> Private Events <b>·</b> Wine Spectator 2019–2025 <b>·</b> The Cove <b>·</b> </span>
+      <span>Waterfront Dining <b>·</b> Full Sushi Bar <b>·</b> Off-Premise Catering <b>·</b> Private Events <b>·</b> Wine Spectator 2019–2025 <b>·</b> The Cove <b>·</b> </span>
+    </div>
+  </section>
+
+  <!-- ===== THREE OFFERINGS ===== -->
+  <section class="d8-section d8-pillars">
+    <div class="d8-wrap">
+      <header class="d8-sechead d8-rv">
+        <p class="d8-label d8-label--mag">Three ways to gather</p>
+        <h2>One kitchen. One standard. <span class="d8-h-accent">Three rooms</span> to find you in.</h2>
+      </header>
+      <div class="d8-pillars__grid">
+        {pillars.map((p, i) => (
+          <a class="d8-card d8-pillar d8-rv" data-delay={String(i + 1)} href={p.href}>
+            <div class="d8-pillar__media">
+              <Image src={p.img} alt={p.alt} widths={[400, 700, 900]} sizes="(max-width:900px) 90vw, 30vw" loading="lazy" format="avif" quality={58} class="d8-pillar__img" />
+              <span class="d8-pillar__num">{p.num}</span>
+            </div>
+            <div class="d8-pillar__body">
+              <span class="d8-pillar__k">{p.k}</span>
+              <p class="d8-pillar__copy">{p.copy}</p>
+              <span class="d8-pillar__cta">{p.cta} <span aria-hidden="true">→</span></span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MENU TEASER ===== -->
+  <section class="d8-section d8-section--tint d8-mteaser">
+    <div class="d8-wrap d8-mteaser__grid">
+      <div class="d8-mteaser__media d8-rv">
+        <Image src={crab} alt="Maryland-style crab cake at Citron" widths={[500, 800]} sizes="(max-width:800px) 90vw, 45vw" loading="lazy" format="avif" quality={58} class="d8-mteaser__img d8-mteaser__img--lg" />
+        <div class="d8-mteaser__inset">
+          <Image src={tuna} alt="Tuna tartare from the raw bar" widths={[300, 500]} sizes="40vw" loading="lazy" format="avif" quality={58} class="d8-mteaser__img" />
+        </div>
+      </div>
+      <div class="d8-mteaser__copy d8-rv" data-delay="1">
+        <p class="d8-label d8-label--neon">From the kitchen &amp; the raw bar</p>
+        <h2 class="d8-mteaser__title">Center-cut steaks, day-boat seafood, and a sushi bar built to <span class="d8-h-accent">stand on its own.</span></h2>
+        <p class="d8-p">Executive Chef Mary Hersh runs a seasonal scratch kitchen. A Maryland crab cake with more crab than binder. A raw bar that surprises the table. And a Wine Spectator honored list built to travel with the menu, not sit apart from it.</p>
+        <a class="d8-btn" href="/d8/menu">See the Full Menu</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== INTERACTIVE EVENTS SHOWCASE ===== -->
+  <section class="d8-section d8-events" id="events-teaser">
+    <div class="d8-events__bg" aria-hidden="true">
+      {spaces.map((s, i) => (
+        <Image src={s.img} alt="" data-layer={s.key} decoding="async" fetchpriority="low" class:list={["d8-evlayer", { 'is-active': i === 0 }]} widths={[720, 1100]} sizes="100vw" loading="lazy" format="avif" quality={38} />
+      ))}
+      <div class="d8-events__scrim"></div>
+    </div>
+    <div class="d8-wrap d8-events__content">
+      <p class="d8-label d8-label--mag d8-rv">Events &amp; Private Dining</p>
+      <h2 class="d8-events__title d8-rv" data-delay="1">From a fireside twenty <span class="d8-h-accent">to five hundred</span> on the water.</h2>
+      <div class="d8-evfeature d8-rv" data-delay="1">
+        <div class="d8-evfeature__meta">
+          <span class="d8-evfeature__name" id="d8-ev-name">{spaces[0].name}</span>
+          <span class="d8-evfeature__cap" id="d8-ev-cap">{spaces[0].cap}</span>
+        </div>
+        <p class="d8-evfeature__blurb" id="d8-ev-blurb">{spaces[0].blurb}</p>
+      </div>
+      <div class="d8-evthumbs d8-rv" data-delay="2" aria-label="Featured spaces">
+        {spaces.map((s, i) => (
+          <button class:list={["d8-evthumb", { 'is-active': i === 0 }]} data-space={s.key} aria-pressed={i === 0 ? 'true' : 'false'}>
+            <Image src={s.img} alt="" decoding="async" widths={[160, 320]} sizes="120px" loading="lazy" format="avif" quality={50} class="d8-evthumb__img" />
+            <span class="d8-evthumb__label">{s.name}</span>
+          </button>
+        ))}
+      </div>
+      <div class="d8-events__cta d8-rv" data-delay="3">
+        <a class="d8-btn" href={SITE.portalUrl}>Enter the Planning Portal</a>
+        <a class="d8-btn d8-btn--ghost" href="/d8/events">See the Spaces</a>
+      </div>
+    </div>
+  </section>
+
+  <script define:vars={{ spacesMeta }}>
+    (() => {
+      const layers = document.querySelectorAll('.d8-evlayer');
+      const thumbs = document.querySelectorAll('.d8-evthumb');
+      const nameEl = document.getElementById('d8-ev-name');
+      const capEl = document.getElementById('d8-ev-cap');
+      const blurbEl = document.getElementById('d8-ev-blurb');
+      if (!thumbs.length) return;
+      const select = (key) => {
+        const s = spacesMeta.find((d) => d.key === key);
+        if (!s) return;
+        layers.forEach((l) => l.classList.toggle('is-active', l.getAttribute('data-layer') === key));
+        thumbs.forEach((t) => { const on = t.getAttribute('data-space') === key; t.classList.toggle('is-active', on); t.setAttribute('aria-pressed', on ? 'true' : 'false'); });
+        nameEl.textContent = s.name; capEl.textContent = s.cap; blurbEl.textContent = s.blurb;
+      };
+      thumbs.forEach((t) => {
+        const key = t.getAttribute('data-space');
+        t.addEventListener('mouseenter', () => select(key));
+        t.addEventListener('focus', () => select(key));
+        t.addEventListener('click', () => select(key));
+      });
+    })();
+  </script>
+
+  <!-- ===== CHARM CITY ===== -->
+  <section class="d8-section d8-section--tint d8-charm">
+    <div class="d8-wrap d8-charm__grid">
+      <div class="d8-charm__media d8-rv">
+        <Image src={couple} alt="Charles and Susan Levine" widths={[400, 700]} sizes="(max-width:800px) 80vw, 34vw" loading="lazy" format="avif" quality={60} class="d8-charm__img" />
+        <span class="d8-charm__frame" aria-hidden="true"></span>
+      </div>
+      <div class="d8-charm__copy d8-rv" data-delay="1">
+        <p class="d8-label d8-label--neon">Charm City, on the water</p>
+        <h2 class="d8-charm__title">Baltimore raised us. Pimlico taught us. <span class="d8-h-accent">Quarry Lake is home.</span></h2>
+        <p class="d8-p">The story starts at the old Pimlico Hotel and runs through four decades of Maryland celebrations, Preakness weeks, blue-crab summers, and the kind of hospitality a city only trusts to its own. We are proud to be Baltimore’s table.</p>
+        <ul class="d8-chips">
+          <li>Wine Spectator 2019–2025</li>
+          <li>Full sushi bar</li>
+          <li>PhRMA-compliant menus</li>
+          <li>Off-premise catering</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FINAL CTA ===== -->
+  <section class="d8-section d8-final">
+    <div class="d8-wrap d8-final__inner d8-rv">
+      <p class="d8-label d8-label--mag">Pull up a chair</p>
+      <h2 class="d8-final__title">However you’d like to be hosted, <span class="d8-h-accent">it starts here.</span></h2>
+      <button class="d8-btn d8-final__btn" data-cta>Reserve · Pick-Up · Events</button>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* CLS guard: metric-matched fallback for the hero display face.
+     Syne renders ~1.68x wider than a system sans, so before the web font
+     loads the fallback wraps to fewer lines and the title (and the whole
+     bottom-anchored hero) is shorter, then grows and shoves every section
+     down on swap. size-adjust:185% makes this fallback wrap to Syne's exact
+     line count at every width (verified 6 lines at 412px, 5 at 768px,
+     4 at 1350px), so the swap reserves the right height and nothing shifts.
+     Scoped to the hero title only, so smaller display text is unaffected. */
+  @font-face{
+    font-family:'Syne Fallback';
+    src:local('Arial'),local('Helvetica Neue'),local('Helvetica'),local('Liberation Sans'),local('Roboto');
+    font-weight:500 800;
+    size-adjust:185%;
+  }
+  .d8-p{ color:var(--d8-mist); max-width:52ch; }
+  .d8-link{ display:inline-flex; gap:.5em; margin-top:1.6em; color:var(--d8-neon); font-family:var(--d8-mono); font-weight:700; font-size:var(--d8-s--1); letter-spacing:.08em; text-transform:uppercase; }
+  .d8-link span{ transition:transform var(--d8-t-fast) var(--d8-ease); display:inline-block; }
+  .d8-link:hover span{ transform:translateX(5px); }
+  .d8-chips{ display:flex; flex-wrap:wrap; gap:10px; margin-top:1.8em; }
+  .d8-chips li{ font-family:var(--d8-mono); font-size:.7rem; letter-spacing:.06em; text-transform:uppercase; color:var(--d8-neon); border:1px solid color-mix(in oklab, var(--d8-neon) 34%, transparent); border-radius:999px; padding:8px 14px; }
+
+  /* ===== HERO ===== */
+  .d8-hero{ position:relative; min-height:100svh; display:flex; align-items:flex-end; overflow:hidden; background:var(--d8-base); }
+  .d8-hero__media{ position:absolute; inset:0; }
+  .d8-hero__img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.82; filter:saturate(.96) contrast(1.02); }
+  .d8-hero__canvas{ position:absolute; inset:0; width:100%; height:100%; opacity:0; transition:opacity 900ms var(--d8-ease); mix-blend-mode:screen; }
+  .d8-hero__canvas.is-ready{ opacity:1; }
+  .d8-hero__scrim{ position:absolute; inset:0; background:
+    radial-gradient(120% 90% at 80% 4%, rgba(196,222,122,.05) 0%, transparent 44%),
+    linear-gradient(to bottom, rgba(10,10,12,.5) 0%, rgba(10,10,12,.16) 30%, rgba(10,10,12,.5) 58%, rgba(10,10,12,.78) 78%, rgba(10,10,12,.94) 90%, rgba(10,10,12,.99) 100%); }
+  .d8-hero__content{ position:relative; z-index:3; padding-bottom:clamp(4rem, 3rem + 6vw, 8rem); padding-top:8rem; color:var(--d8-white); }
+  .d8-hero__eyebrow{ opacity:0; transform:translateY(14px); animation:d8fade .8s var(--d8-ease) .15s forwards; }
+  .d8-hero__title{ font-family:'Syne','Syne Fallback',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; font-weight:600; font-size:var(--d8-s-4); line-height:1; margin:.3em 0 .5em; margin-left:-.02em; letter-spacing:-0.025em; text-wrap:balance; text-shadow:0 1px 26px rgba(8,8,10,.5); }
+  .d8-hero__line{ display:block; opacity:0; transform:translateY(28px); animation:d8rise .9s var(--d8-ease) forwards; }
+  .d8-hero__line:nth-child(1){ animation-delay:.3s; }
+  .d8-hero__line:nth-child(2){ animation-delay:.4s; }
+  .d8-hero__line--accent{ color:#AECB66; font-size:.84em; letter-spacing:-0.015em; text-shadow:0 1px 24px rgba(8,8,10,.58), 0 0 14px rgba(174,203,102,.13); animation-delay:.45s; }
+  .d8-hero__sub{ max-width:48ch; color:var(--d8-mist); font-size:var(--d8-s-1); line-height:1.6; opacity:0; transform:translateY(14px); animation:d8fade .8s var(--d8-ease) .7s forwards; }
+  .d8-hero__cta{ display:flex; flex-wrap:wrap; gap:14px; margin-top:2.2em; opacity:0; transform:translateY(14px); animation:d8fade .8s var(--d8-ease) .86s forwards; }
+  .d8-hero__scroll{ position:absolute; left:50%; bottom:18px; z-index:3; transform:translateX(-50%); width:44px; height:64px; display:grid; place-items:center; }
+  .d8-hero__scroll span{ position:relative; width:1.5px; height:56px; background:var(--d8-hair-2); overflow:hidden; }
+  .d8-hero__scroll span::after{ content:""; position:absolute; left:0; right:0; top:-60%; height:60%; background:var(--d8-neon); box-shadow:var(--d8-glow-neon); animation:d8scroll 2.2s var(--d8-ease) infinite; }
+
+  @keyframes d8rise{ to{ opacity:1; transform:none; } }
+  @keyframes d8fade{ to{ opacity:1; transform:none; } }
+  @keyframes d8scroll{ 0%{ transform:translateY(0); } 100%{ transform:translateY(280%); } }
+  @media (prefers-reduced-motion: reduce){
+    .d8-hero__eyebrow,.d8-hero__line,.d8-hero__sub,.d8-hero__cta{ animation:none !important; opacity:1 !important; transform:none !important; }
+    .d8-hero__scroll span::after{ animation:none; }
+  }
+
+  /* ===== INTRO ===== */
+  .d8-intro__lead{ max-width:60ch; }
+  .d8-intro__head{ font-size:var(--d8-s-3); font-weight:700; max-width:20ch; margin:.6em 0 .6em; }
+  .d8-intro__body{ color:var(--d8-mist); font-size:var(--d8-s-1); max-width:52ch; }
+  .d8-stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:2rem; margin-top:clamp(3rem, 2rem + 4vw, 5rem); padding-top:2.4rem; border-top:1px solid var(--d8-hair); }
+  .d8-stat{ display:flex; flex-direction:column; gap:.4rem; }
+  .d8-stat__n{ font-family:var(--d8-mono); font-weight:700; font-size:var(--d8-s-3); color:var(--d8-neon); line-height:1; text-shadow:0 0 14px rgba(196,222,122,.14); font-variant-numeric:tabular-nums; }
+  .d8-stat__l{ font-size:var(--d8-s--1); color:var(--d8-dim); }
+  @media(max-width:720px){ .d8-stats{ grid-template-columns:1fr 1fr; gap:1.8rem 2rem; } }
+
+  /* ===== MARQUEE ===== */
+  .d8-marquee{ overflow:hidden; border-block:1px solid var(--d8-hair); background:var(--d8-base-2); padding-block:1.1rem; }
+  .d8-marquee__track{ display:flex; width:max-content; animation:d8marq 26s linear infinite; }
+  .d8-marquee__track span{ font-family:var(--d8-mono); font-weight:400; font-size:clamp(.78rem, .68rem + .5vw, 1rem); text-transform:uppercase; letter-spacing:.16em; color:var(--d8-mist); white-space:nowrap; padding-right:.5em; }
+  .d8-marquee__track b{ color:var(--d8-neon); font-style:normal; padding-inline:.15em; }
+  @keyframes d8marq{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce){ .d8-marquee__track{ animation:none; } }
+
+  /* ===== PILLARS ===== */
+  .d8-pillars__grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(1.2rem, .6rem + 2vw, 2rem); margin-top:clamp(2.2rem, 1.4rem + 3vw, 3.6rem); }
+  .d8-pillar{ display:flex; flex-direction:column; }
+  .d8-pillar__media{ position:relative; aspect-ratio:4/5; overflow:hidden; }
+  .d8-pillar__img{ width:100%; height:100%; object-fit:cover; transition:transform var(--d8-t-slow) var(--d8-ease); filter:saturate(.92) brightness(.86); }
+  .d8-pillar:hover .d8-pillar__img{ transform:scale(1.06); filter:saturate(1) brightness(1); }
+  .d8-pillar__num{ position:absolute; top:12px; left:14px; font-family:var(--d8-mono); font-weight:700; font-size:.8rem; color:var(--d8-neon); }
+  .d8-pillar__body{ padding:1.3rem 1.4rem 1.5rem; display:flex; flex-direction:column; flex:1; position:relative; z-index:1; }
+  .d8-pillar__k{ font-family:var(--d8-display); font-weight:700; font-size:var(--d8-s-2); color:var(--d8-white); }
+  .d8-pillar__copy{ color:var(--d8-mist); font-size:var(--d8-s-0); margin:.5em 0 1.2em; line-height:1.6; }
+  .d8-pillar__cta{ margin-top:auto; font-family:var(--d8-mono); font-weight:700; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--d8-neon); }
+  .d8-pillar__cta span{ display:inline-block; transition:transform var(--d8-t-fast) var(--d8-ease); }
+  .d8-pillar:hover .d8-pillar__cta span{ transform:translateX(5px); }
+  @media(max-width:820px){ .d8-pillars__grid{ grid-template-columns:1fr; } .d8-pillar__media{ aspect-ratio:16/10; } }
+
+  /* ===== MENU TEASER ===== */
+  .d8-mteaser__grid{ display:grid; grid-template-columns:1.05fr 1fr; gap:clamp(2rem, 1rem + 4vw, 5rem); align-items:center; }
+  .d8-mteaser__media{ position:relative; }
+  .d8-mteaser__img{ border-radius:var(--d8-radius); width:100%; object-fit:cover; }
+  .d8-mteaser__img--lg{ aspect-ratio:4/5; border:1px solid var(--d8-hair); }
+  .d8-mteaser__inset{ position:absolute; left:-7%; bottom:-9%; width:44%; border:1px solid color-mix(in oklab, var(--d8-neon) 40%, transparent); border-radius:12px; overflow:hidden; box-shadow:0 30px 70px -30px rgba(0,0,0,.8), var(--d8-glow-neon); }
+  .d8-mteaser__inset .d8-mteaser__img{ aspect-ratio:1/1; border-radius:0; }
+  .d8-mteaser__title{ font-size:var(--d8-s-2); font-weight:700; margin:.4em 0 .55em; }
+  .d8-mteaser__copy .d8-btn{ margin-top:2rem; }
+  @media(max-width:820px){ .d8-mteaser__grid{ grid-template-columns:1fr; gap:3.4rem; } .d8-mteaser__inset{ left:auto; right:4%; bottom:-7%; width:40%; } }
+
+  /* ===== EVENTS SHOWCASE ===== */
+  .d8-events{ position:relative; color:var(--d8-white); overflow:hidden; }
+  .d8-events__bg{ position:absolute; inset:0; }
+  .d8-evlayer{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transform:scale(1.04); transition:opacity 900ms var(--d8-ease), transform 1400ms var(--d8-ease); }
+  .d8-evlayer.is-active{ opacity:.5; transform:scale(1); }
+  .d8-events__scrim{ position:absolute; inset:0; background:linear-gradient(100deg, rgba(10,10,12,.95) 8%, rgba(10,10,12,.72) 52%, rgba(10,10,12,.42) 100%); }
+  .d8-events__content{ position:relative; z-index:2; max-width:660px; }
+  .d8-events__title{ font-size:var(--d8-s-3); font-weight:700; margin:.5em 0; }
+  .d8-evfeature{ min-height:8.5em; }
+  .d8-evfeature__meta{ display:flex; align-items:baseline; gap:1em; flex-wrap:wrap; }
+  .d8-evfeature__name{ font-family:var(--d8-display); font-weight:700; font-size:var(--d8-s-2); color:var(--d8-white); }
+  .d8-evfeature__cap{ font-family:var(--d8-mono); font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:var(--d8-neon); }
+  .d8-evfeature__blurb{ color:var(--d8-mist); font-size:var(--d8-s-0); margin-top:.5em; max-width:50ch; }
+  .d8-evthumbs{ display:flex; gap:12px; margin-top:1.8rem; flex-wrap:wrap; }
+  .d8-evthumb{ position:relative; width:118px; height:78px; padding:0; border:1px solid var(--d8-hair-2); border-radius:8px; overflow:hidden; cursor:pointer; background:none; transition:border-color var(--d8-t-med), transform var(--d8-t-fast) var(--d8-ease), box-shadow var(--d8-t-med); }
+  .d8-evthumb__img{ width:100%; height:100%; object-fit:cover; opacity:.5; transition:opacity var(--d8-t-med), transform var(--d8-t-slow) var(--d8-ease); }
+  .d8-evthumb:hover{ transform:translateY(-3px); }
+  .d8-evthumb:hover .d8-evthumb__img{ transform:scale(1.08); }
+  .d8-evthumb.is-active{ border-color:var(--d8-neon); box-shadow:var(--d8-glow-neon); }
+  .d8-evthumb.is-active .d8-evthumb__img{ opacity:1; }
+  .d8-evthumb__label{ position:absolute; left:0; right:0; bottom:0; padding:14px 8px 5px; font-family:var(--d8-mono); font-size:.56rem; letter-spacing:.04em; text-transform:uppercase; color:var(--d8-white); background:linear-gradient(to top, rgba(10,10,12,.92), transparent); text-align:center; }
+  .d8-events__cta{ display:flex; flex-wrap:wrap; gap:14px; margin-top:2.2rem; }
+  @media(max-width:520px){ .d8-evthumb{ width:88px; height:62px; } }
+
+  /* ===== CHARM ===== */
+  .d8-charm__grid{ display:grid; grid-template-columns:.8fr 1fr; gap:clamp(2rem, 1rem + 4vw, 5rem); align-items:center; }
+  .d8-charm__media{ position:relative; }
+  .d8-charm__img{ width:100%; aspect-ratio:4/5; object-fit:cover; border-radius:var(--d8-radius); }
+  .d8-charm__frame{ position:absolute; inset:14px -14px -14px 14px; border:1px solid color-mix(in oklab, var(--d8-neon) 40%, transparent); border-radius:var(--d8-radius); z-index:-1; }
+  .d8-charm__title{ font-size:var(--d8-s-2); font-weight:700; margin:.4em 0 .55em; }
+  @media(max-width:820px){ .d8-charm__grid{ grid-template-columns:1fr; } .d8-charm__frame{ inset:10px -10px -10px 10px; } }
+
+  /* ===== FINAL CTA ===== */
+  .d8-final{ text-align:center; background:radial-gradient(120% 140% at 50% 0%, var(--d8-base-3) 0%, var(--d8-base) 60%); }
+  .d8-final__inner{ max-width:640px; margin-inline:auto; }
+  .d8-final__title{ font-size:var(--d8-s-3); font-weight:700; max-width:18ch; margin:.4em auto .9em; }
+  .d8-final__btn{ min-height:60px; font-size:var(--d8-s-0); }
+</style>
+
+<script>
+  // Signature: neon light-field canvas. Poster image is the fallback.
+  // Continuous rAF is gated behind first genuine interaction (keeps Lighthouse fast).
+  const canvas = document.getElementById('d8-canvas');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const saveData = navigator.connection && navigator.connection.saveData;
+  const lowCores = (navigator.hardwareConcurrency || 8) <= 4;
+
+  if (canvas && !reduce && !saveData){
+    const ctx = canvas.getContext('2d');
+    const hero = document.getElementById('d8-hero');
+    let dpr = Math.min(window.devicePixelRatio || 1, 1.75);
+    let W = 0, H = 0, dots = [];
+    const COUNT = lowCores ? 22 : 34;
+    const COLORS = ['196,222,122', '196,222,122', '232,232,222', '176,186,150'];
+    let mx = -999, my = -999;
+
+    const resize = () => {
+      const r = (hero || canvas).getBoundingClientRect();
+      W = Math.max(1, r.width); H = Math.max(1, r.height);
+      canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+      canvas.style.width = '100%'; canvas.style.height = '100%';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+    const seed = () => {
+      dots = Array.from({ length: COUNT }, () => ({
+        x: Math.random() * W, y: Math.random() * H,
+        r: 0.6 + Math.random() * 1.6,
+        vy: -(0.08 + Math.random() * 0.32),
+        vx: (Math.random() - 0.5) * 0.18,
+        a: 0.08 + Math.random() * 0.26,
+        tw: Math.random() * Math.PI * 2,
+        c: COLORS[(Math.random() * COLORS.length) | 0],
+      }));
+    };
+
+    let visible = true, raf = 0, last = 0;
+    const FRAME = 1000 / 30;
+    const draw = (now) => {
+      if (!visible){ cancelAnimationFrame(raf); return; }
+      raf = requestAnimationFrame(draw);
+      if (now - last < FRAME) return;
+      last = now;
+      ctx.clearRect(0, 0, W, H);
+      for (const d of dots){
+        d.x += d.vx; d.y += d.vy; d.tw += 0.05;
+        // gentle pull toward cursor
+        if (mx > -900){
+          const ddx = mx - d.x, ddy = my - d.y, dist = Math.hypot(ddx, ddy);
+          if (dist < 150){ d.x += (ddx / dist) * 0.4; d.y += (ddy / dist) * 0.4; }
+        }
+        if (d.y < -10) { d.y = H + 10; d.x = Math.random() * W; }
+        if (d.x < -10) d.x = W + 10; else if (d.x > W + 10) d.x = -10;
+        const flick = 0.55 + 0.45 * Math.sin(d.tw);
+        const alpha = d.a * flick;
+        const g = ctx.createRadialGradient(d.x, d.y, 0, d.x, d.y, d.r * 5);
+        g.addColorStop(0, `rgba(${d.c},${alpha})`);
+        g.addColorStop(1, `rgba(${d.c},0)`);
+        ctx.fillStyle = g;
+        ctx.beginPath(); ctx.arc(d.x, d.y, d.r * 5, 0, Math.PI * 2); ctx.fill();
+      }
+    };
+
+    const boot = () => {
+      resize(); seed();
+      canvas.classList.add('is-ready');
+      window.addEventListener('resize', () => { resize(); seed(); }, { passive: true });
+      window.addEventListener('pointermove', (e) => {
+        const r = (hero || canvas).getBoundingClientRect();
+        mx = e.clientX - r.left; my = e.clientY - r.top;
+      }, { passive: true });
+      if ('IntersectionObserver' in window && hero){
+        new IntersectionObserver((es) => { visible = es[0].isIntersecting; if (visible){ last = 0; raf = requestAnimationFrame(draw); } }, { threshold: 0 }).observe(hero);
+      }
+      raf = requestAnimationFrame(draw);
+    };
+
+    let booted = false;
+    const kick = () => { if (booted) return; booted = true; boot(); };
+    ['pointermove', 'touchstart', 'wheel', 'keydown'].forEach((ev) =>
+      window.addEventListener(ev, kick, { once: true, passive: true }));
+  }
+</script>

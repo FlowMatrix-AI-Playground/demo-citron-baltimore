@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <rect width="1024" height="1024" fill="#0F1115"/>
+
+  <g fill="#F7F7F5">
+    <!-- 3 left input channels -->
+    <rect x="80" y="112" width="468" height="120" rx="16" ry="16"/>
+    <rect x="80" y="452" width="468" height="120" rx="16" ry="16"/>
+    <rect x="80" y="792" width="468" height="120" rx="16" ry="16"/>
+
+    <!-- 2 right output channels -->
+    <rect x="488" y="288" width="456" height="120" rx="16" ry="16"/>
+    <rect x="488" y="572" width="324" height="120" rx="16" ry="16"/>
+
+    <!-- spine (120px wide, same as bar height) -->
+    <rect x="428" y="112" width="120" height="800" rx="16" ry="16"/>
+  </g>
+
+  <!-- accent: terminal cap on lower-right output -->
+  <rect x="824" y="572" width="120" height="120" rx="16" ry="16" fill="#4F6F8F"/>
+
+</svg>

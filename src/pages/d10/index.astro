@@ -1,0 +1,436 @@
+---
+import D10Base from '../../layouts/D10Base.astro';
+import Kin from '../../designs/d10/Kin.astro';
+import { Image } from 'astro:assets';
+import { SITE } from '../../data/site.js';
+import crab from '../../assets/img/food-crabcake.jpg';
+import tuna from '../../assets/img/food-tuna.jpg';
+import wine from '../../assets/img/wine.jpg';
+import appetizers from '../../assets/img/food-appetizers.jpg';
+import dining from '../../assets/img/main-dining.jpg';
+import tent from '../../assets/img/room-offpremise.jpg';
+import cove from '../../assets/img/room-cove.jpg';
+import courtyard from '../../assets/img/courtyard-gathering.jpg';
+import terrace from '../../assets/img/terrace-event.jpg';
+import venue from '../../assets/img/room-venue.jpg';
+import couple from '../../assets/img/charles-susan.jpg';
+
+const offerings = [
+  { k: 'Dine', img: dining, alt: 'The main dining room at Citron Baltimore', copy: 'Seasonal Modern American and a full sushi bar, 300 seats against Quarry Lake.', href: '/d10/menu', cta: 'The Menu' },
+  { k: 'Cater', img: tent, alt: 'Tented off-premise catering by Citron', copy: 'Forty years of off-premise catering, your tent, home, or office, at any scale.', href: '/d10/events', cta: 'Catering' },
+  { k: 'Celebrate', img: cove, alt: 'A gala set in The Cove event space', copy: 'Private spaces from a fireside twenty to the whole venue at five hundred.', href: '/d10/events', cta: 'Private Events' },
+];
+
+// scroll-driven tasting-menu sequence (real dishes, no extra heavy images)
+const courses = [
+  { no: '01', course: 'To Begin', name: 'Ahi Tuna Tartare', price: 26, desc: 'Sesame black garlic vinaigrette, cucumber radish, avocado, wonton crisps.' },
+  { no: '02', course: 'From the Bar', name: 'Goyang Roll', price: 48, desc: 'Jumbo lump crab, shrimp tempura, ginger tobiko, avocado, eel sauce.' },
+  { no: '03', course: 'The Center', name: '8 oz Citron Jumbo Lump Crab Cake', price: 64, desc: 'Fresh asparagus, heirloom tomato cucumber salad, remoulade. More crab than binder.' },
+  { no: '04', course: 'The Cellar', name: 'Wine Spectator, 2019 to 2025', price: null, desc: 'Seven straight years of the Award of Excellence, built to travel with the plate.' },
+];
+
+const stats = [
+  { n: '10', l: 'years on the water' },
+  { n: '~14,000', l: 'events catered' },
+  { n: '7', l: 'Wine Spectator awards' },
+  { n: '300', l: 'seats at the lake' },
+];
+
+const spaces = [
+  { key: 'cove', name: 'The Cove', cap: 'Up to 200', img: cove, blurb: 'Our signature indoor room, staged for galas, weddings, and speaker dinners.' },
+  { key: 'courtyard', name: 'Waterfront Courtyard', cap: 'Up to 200', img: courtyard, blurb: 'Open sky and the lake as backdrop for the largest outdoor celebrations.' },
+  { key: 'terrace', name: 'Waterfront Terrace', cap: 'Up to 50', img: terrace, blurb: 'A heated, open-air terrace at the water’s edge, where the sunset decorates.' },
+  { key: 'venue', name: 'The Entire Venue', cap: 'Up to 500', img: venue, blurb: 'The whole property, indoors and out, given over to your night.' },
+];
+const spacesMeta = spaces.map(({ key, name, cap, blurb }) => ({ key, name, cap, blurb }));
+---
+<D10Base title="Citron Baltimore, Waterfront Dining, Catering & Events at Quarry Lake">
+  <!-- ===================== HERO ===================== -->
+  <section class="d10-hero">
+    <figure class="d10-hero__media" data-parallax="0.06">
+      <Image src={crab} alt="A Citron jumbo lump crab cake plated with fresh asparagus and remoulade" widths={[768, 1100, 1500]} sizes="100vw" loading="eager" fetchpriority="high" format="avif" quality={60} class="d10-hero__img" />
+    </figure>
+    <div class="d10-hero__scrim" aria-hidden="true"></div>
+    <div class="d10-hero__glow" aria-hidden="true"></div>
+
+    <div class="d10-wrap d10-hero__inner">
+      <p class="d10-eyebrow d10-eyebrow--citron d10-rv">Quarry Lake · Est. 2016 · Baltimore</p>
+      <h1 class="d10-hero__title">
+        <Kin text="A restaurant that" tag="span" class="d10-hero__l1" />
+        <span class="d10-hero__l2"><span class="d10-hero__accent">eats</span> like a</span>
+        <Kin text="celebration." tag="span" class="d10-hero__l3" />
+      </h1>
+      <p class="d10-hero__lede d10-rv" data-delay="2">Modern American cooking, a full sushi bar, and a Wine Spectator honored list, plated against the water in Baltimore County. Dinner Wednesday through Sunday. Celebrations, seven days a week.</p>
+      <div class="d10-hero__cta d10-rv" data-delay="3">
+        <button class="d10-btn" data-cta>Reserve · Pick-Up · Events</button>
+        <a class="d10-btn d10-btn--ghost" href="/d10/menu">See the Menu</a>
+      </div>
+    </div>
+
+    <figcaption class="d10-hero__cap d10-rv" data-delay="3">
+      <span class="d10-hero__cap-k">Signature</span>
+      <span class="d10-hero__cap-v">8 oz Jumbo Lump Crab Cake</span>
+    </figcaption>
+
+    <div class="d10-hero__ticker" aria-hidden="true">
+      <div class="d10-hero__track">
+        <span>Modern American</span><span>✦</span><span>Full Sushi Bar</span><span>✦</span><span>Wine Spectator 2019–2025</span><span>✦</span><span>Waterfront Events</span><span>✦</span><span>Off-Premise Catering</span><span>✦</span>
+        <span>Modern American</span><span>✦</span><span>Full Sushi Bar</span><span>✦</span><span>Wine Spectator 2019–2025</span><span>✦</span><span>Waterfront Events</span><span>✦</span><span>Off-Premise Catering</span><span>✦</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== STORY / STATS ===================== -->
+  <section class="d10-section d10-story">
+    <div class="d10-wrap d10-story__grid">
+      <div class="d10-story__lead">
+        <p class="d10-eyebrow d10-rv">The house on Quarry Lake</p>
+        <h2 class="d10-story__head d10-rv" data-delay="1">A caterer from Pimlico built a kitchen on the water, and <em>Baltimore has been celebrating here ever since.</em></h2>
+      </div>
+      <div class="d10-story__body d10-rv" data-delay="2">
+        <p>Charles and Susan Levine spent thirty years bringing a fine-dining standard to other people's rooms. In 2016 they finally built one of their own, on Quarry Lake, and gave it a kitchen good enough to stand on its own every night.</p>
+        <p>This November marks ten years. The plates are generous, the sushi bar is the real thing, and the wine list has held the Award of Excellence every year running.</p>
+        <a class="d10-story__link" href="/d10/about">Read our story <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+    <ul class="d10-wrap d10-stats" aria-label="By the numbers">
+      {stats.map((s, i) => (
+        <li class="d10-stats__item d10-rv" data-delay={String((i % 3) + 1)}>
+          <span class="d10-stats__n" data-count={s.n}>{s.n}</span>
+          <span class="d10-stats__l">{s.l}</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- ===================== THREE OFFERINGS ===================== -->
+  <section class="d10-section d10-section--cream d10-offer">
+    <div class="d10-wrap">
+      <header class="d10-offer__head d10-rv">
+        <p class="d10-eyebrow">Three ways to gather</p>
+        <h2 class="d10-offer__title">One kitchen. One standard. <em>Three</em> rooms to find you in.</h2>
+      </header>
+      <div class="d10-offer__grid">
+        {offerings.map((o, i) => (
+          <a class="d10-offer__card d10-rv" data-delay={String(i + 1)} href={o.href}>
+            <div class="d10-media d10-offer__media">
+              <Image src={o.img} alt={o.alt} widths={[400, 640, 820]} sizes="(max-width:820px) 90vw, 31vw" loading="lazy" format="avif" quality={56} />
+              <span class="d10-offer__badge">0{i + 1}</span>
+            </div>
+            <h3 class="d10-offer__k">{o.k}</h3>
+            <p class="d10-offer__copy">{o.copy}</p>
+            <span class="d10-offer__cta">{o.cta} <span aria-hidden="true">→</span></span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TASTING MENU SEQUENCE ===================== -->
+  <section class="d10-section d10-tasting" aria-labelledby="d10-tasting-h">
+    <div class="d10-wrap d10-tasting__grid">
+      <aside class="d10-tasting__aside">
+        <p class="d10-eyebrow d10-eyebrow--citron d10-rv">A tasting, from the top</p>
+        <h2 class="d10-tasting__title d10-rv" id="d10-tasting-h" data-delay="1">Four courses that tell you<br />who we are.</h2>
+        <div class="d10-tasting__media d10-rv" data-delay="2">
+          <div class="d10-media">
+            <Image src={appetizers} alt="A spread of Citron appetizers and small plates" widths={[420, 680]} sizes="(max-width:900px) 90vw, 40vw" loading="lazy" format="avif" quality={54} />
+          </div>
+        </div>
+        <a class="d10-btn d10-btn--wine d10-tasting__btn d10-rv" data-delay="2" href="/d10/menu">Read the Full Menu</a>
+      </aside>
+      <ol class="d10-tasting__list">
+        {courses.map((c, i) => (
+          <li class="d10-course d10-rv" data-delay={String((i % 3) + 1)}>
+            <span class="d10-course__no" aria-hidden="true">{c.no}</span>
+            <div class="d10-course__body">
+              <p class="d10-course__course">{c.course}</p>
+              <h3 class="d10-course__name">
+                {c.name}
+                {c.price !== null && <span class="d10-course__price">${c.price}</span>}
+              </h3>
+              <p class="d10-course__desc">{c.desc}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- ===================== MENU FEATURE (dramatic crop) ===================== -->
+  <section class="d10-section d10-feature">
+    <div class="d10-wrap d10-feature__grid">
+      <div class="d10-feature__media">
+        <div class="d10-media d10-feature__lg" data-parallax="0.04">
+          <Image src={tuna} alt="Ahi tuna tartare from the raw bar at Citron" widths={[440, 720]} sizes="(max-width:820px) 90vw, 44vw" loading="lazy" format="avif" quality={56} />
+        </div>
+        <div class="d10-media d10-feature__inset">
+          <Image src={wine} alt="A pour from the Wine Spectator honored list" widths={[240, 420]} sizes="30vw" loading="lazy" format="avif" quality={54} />
+        </div>
+      </div>
+      <div class="d10-feature__copy">
+        <p class="d10-eyebrow d10-rv">From the kitchen &amp; the raw bar</p>
+        <h2 class="d10-feature__title d10-rv" data-delay="1">Center-cut steaks, day-boat seafood, and a sushi bar built to <em>stand on its own.</em></h2>
+        <p class="d10-feature__lead d10-measure d10-rv" data-delay="2">Executive Chef Mary Hersh runs a seasonal scratch kitchen. A Maryland crab cake with more crab than binder. A raw bar that surprises the table. And a Wine Spectator honored list built to travel with the menu, not sit apart from it.</p>
+        <div class="d10-feature__cta d10-rv" data-delay="3">
+          <a class="d10-btn" href="/d10/menu">See the Full Menu</a>
+          <a class="d10-btn d10-btn--ghost" href={SITE.pickupUrl} target="_blank" rel="noopener">Order Pick-Up</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== INTERACTIVE EVENTS SHOWCASE ===================== -->
+  <section class="d10-section d10-events" id="events-teaser">
+    <div class="d10-events__bg" aria-hidden="true">
+      {spaces.map((s, i) => (
+        <Image src={s.img} alt="" data-layer={s.key} decoding="async" fetchpriority="low" class:list={["d10-ev-layer", { 'is-active': i === 0 }]} widths={[720, 1100]} sizes="100vw" loading="lazy" format="avif" quality={38} />
+      ))}
+      <div class="d10-events__scrim"></div>
+    </div>
+    <div class="d10-wrap d10-events__content">
+      <p class="d10-eyebrow d10-eyebrow--citron d10-rv">Events &amp; Private Dining</p>
+      <h2 class="d10-events__title d10-rv" data-delay="1">From a fireside twenty <em>to five hundred</em> on the water.</h2>
+      <div class="d10-ev-feature d10-rv" data-delay="1">
+        <div class="d10-ev-feature__meta">
+          <span class="d10-ev-feature__name" id="d10-ev-name">{spaces[0].name}</span>
+          <span class="d10-ev-feature__cap" id="d10-ev-cap">{spaces[0].cap}</span>
+        </div>
+        <p class="d10-ev-feature__blurb d10-measure" id="d10-ev-blurb">{spaces[0].blurb}</p>
+      </div>
+      <div class="d10-ev-thumbs d10-rv" data-delay="2" aria-label="Featured spaces">
+        {spaces.map((s, i) => (
+          <button class:list={["d10-ev-thumb", { 'is-active': i === 0 }]} data-space={s.key} aria-pressed={i === 0 ? 'true' : 'false'}>
+            <Image src={s.img} alt="" decoding="async" widths={[160, 320]} sizes="120px" loading="lazy" format="avif" quality={48} class="d10-ev-thumb__img" />
+            <span class="d10-ev-thumb__label">{s.name}</span>
+          </button>
+        ))}
+      </div>
+      <div class="d10-events__cta d10-rv" data-delay="3">
+        <a class="d10-btn" href={SITE.portalUrl}>Enter the Planning Portal</a>
+        <a class="d10-btn d10-btn--ghost" href="/d10/events">Explore the Spaces</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CHARM CITY ===================== -->
+  <section class="d10-section d10-section--wine d10-charm">
+    <div class="d10-wrap d10-charm__grid">
+      <div class="d10-charm__media d10-rv">
+        <div class="d10-media">
+          <Image src={couple} alt="Charles and Susan Levine, owners of Citron Baltimore" data-parallax="0.05" widths={[380, 640]} sizes="(max-width:820px) 80vw, 36vw" loading="lazy" format="avif" quality={58} />
+        </div>
+      </div>
+      <div class="d10-charm__copy d10-rv" data-delay="1">
+        <p class="d10-eyebrow d10-eyebrow--citron">Charm City, on the water</p>
+        <h2 class="d10-charm__title">Baltimore raised us. Pimlico taught us. <em>Quarry Lake is home.</em></h2>
+        <p class="d10-charm__lead d10-measure">The story starts at the old Pimlico Hotel and runs through four decades of Maryland celebrations, Preakness weeks, blue-crab summers, and the kind of hospitality a city only trusts to its own. We are proud to be Baltimore's table.</p>
+        <ul class="d10-charm__chips">
+          <li>Wine Spectator 2019–2025</li>
+          <li>Full sushi bar</li>
+          <li>PhRMA-compliant menus</li>
+          <li>Off-premise catering</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FINAL CTA ===================== -->
+  <section class="d10-section d10-final">
+    <div class="d10-wrap d10-final__inner">
+      <p class="d10-eyebrow d10-eyebrow--citron d10-rv">Pull up a chair</p>
+      <h2 class="d10-final__title d10-rv" data-delay="1">However you'd like to be hosted, <em>it starts here.</em></h2>
+      <button class="d10-btn d10-final__btn d10-rv" data-delay="2" data-cta>Reserve · Pick-Up · Events</button>
+    </div>
+  </section>
+
+  <script define:vars={{ spacesMeta }}>
+    (() => {
+      const layers = document.querySelectorAll('.d10-ev-layer');
+      const thumbs = document.querySelectorAll('.d10-ev-thumb');
+      const nameEl = document.getElementById('d10-ev-name');
+      const capEl = document.getElementById('d10-ev-cap');
+      const blurbEl = document.getElementById('d10-ev-blurb');
+      if (!thumbs.length) return;
+      const select = (key) => {
+        const s = spacesMeta.find((d) => d.key === key);
+        if (!s) return;
+        layers.forEach((l) => l.classList.toggle('is-active', l.getAttribute('data-layer') === key));
+        thumbs.forEach((t) => { const on = t.getAttribute('data-space') === key; t.classList.toggle('is-active', on); t.setAttribute('aria-pressed', on ? 'true' : 'false'); });
+        nameEl.textContent = s.name; capEl.textContent = s.cap; blurbEl.textContent = s.blurb;
+      };
+      thumbs.forEach((t) => {
+        const key = t.getAttribute('data-space');
+        t.addEventListener('mouseenter', () => select(key));
+        t.addEventListener('focus', () => select(key));
+        t.addEventListener('click', () => select(key));
+      });
+    })();
+  </script>
+
+  <style>
+    /* ===================== HERO (full-bleed, food-forward) ===================== */
+    .d10-hero{
+      position:relative; overflow:hidden;
+      display:grid; grid-template-rows:1fr auto;
+      min-height:clamp(600px, 92svh, 980px);
+      isolation:isolate;
+      background:var(--d10-ink);
+    }
+    .d10-hero__media{
+      position:absolute; inset:0; margin:0; z-index:0;
+      will-change:transform;
+    }
+    .d10-hero__img{ width:100%; height:100%; object-fit:cover; object-position:center 42%; }
+    .d10-hero__scrim{
+      position:absolute; inset:0; z-index:1; pointer-events:none;
+      background:
+        linear-gradient(to top, rgba(19,14,12,.97) 0%, rgba(19,14,12,.74) 24%, rgba(19,14,12,.28) 50%, rgba(19,14,12,.12) 74%, rgba(19,14,12,.42) 100%),
+        linear-gradient(100deg, rgba(19,14,12,.9) 0%, rgba(43,20,29,.5) 38%, rgba(23,18,16,.05) 66%, transparent 88%);
+    }
+    .d10-hero__glow{
+      position:absolute; top:-14%; right:-6%; width:56vw; height:56vw; max-width:720px; max-height:720px; z-index:1;
+      background:radial-gradient(circle, rgba(220,228,63,.18), transparent 62%); pointer-events:none; mix-blend-mode:screen;
+    }
+    .d10-hero__inner{
+      grid-row:1; align-self:end; position:relative; z-index:2; width:100%;
+      padding-block:clamp(3rem, 1.6rem + 5vw, 5.5rem) clamp(2rem, 1.2rem + 3vw, 3.5rem);
+    }
+    .d10-hero__title{
+      font-size:var(--d10-s-5); line-height:0.92; letter-spacing:-0.018em;
+      margin:0.34em 0 0.5em; max-width:15ch;
+      text-shadow:0 2px 40px rgba(11,8,7,.5);
+      overflow-wrap:break-word;
+    }
+    .d10-hero__title span{ display:block; }
+    .d10-hero__l2{ font-style:italic; }
+    .d10-hero__accent{ color:var(--d10-citron); font-style:italic; }
+    .d10-hero__lede{ color:var(--d10-cream-2); font-size:var(--d10-s-1); max-width:48ch; line-height:1.5; margin-top:0.2em; text-shadow:0 1px 20px rgba(11,8,7,.5); }
+    .d10-hero__cta{ display:flex; flex-wrap:wrap; gap:14px; margin-top:clamp(1.7rem, 1.1rem + 2vw, 2.2rem); }
+
+    .d10-hero__cap{
+      position:absolute; right:var(--d10-gutter); bottom:calc(64px + clamp(1.4rem, 0.8rem + 2vw, 2.6rem)); z-index:2;
+      display:flex; flex-direction:column; gap:3px; text-align:right;
+      padding-right:16px; border-right:2px solid var(--d10-citron);
+    }
+    .d10-hero__cap-k{ font-size:0.6rem; font-weight:800; letter-spacing:0.26em; text-transform:uppercase; color:var(--d10-citron); }
+    .d10-hero__cap-v{ font-family:var(--d10-display); font-size:1.25rem; color:var(--d10-cream); line-height:1.1; text-shadow:0 2px 16px rgba(11,8,7,.7); }
+
+    .d10-hero__ticker{ grid-row:2; position:relative; z-index:2; overflow:hidden; border-top:1px solid var(--d10-line-2); background:rgba(19,14,12,.7); backdrop-filter:blur(6px); padding-block:16px; }
+    .d10-hero__track{ display:inline-flex; align-items:center; gap:2.4rem; white-space:nowrap; will-change:transform; animation:d10-marquee 34s linear infinite; }
+    .d10-hero__track span{ font-family:var(--d10-display); font-size:clamp(1.1rem, 0.9rem + 0.8vw, 1.6rem); color:var(--d10-cream-2); }
+    .d10-hero__track span:nth-child(even){ color:var(--d10-citron); font-size:0.8em; }
+    @keyframes d10-marquee{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+    @media (prefers-reduced-motion: reduce){ .d10-hero__track{ animation:none; } }
+    @media (max-width:900px){
+      .d10-hero{ min-height:clamp(560px, 88svh, 820px); }
+      .d10-hero__img{ object-position:center 38%; }
+      .d10-hero__cap{ display:none; }
+    }
+    @media (max-width:560px){
+      .d10-hero__title{ font-size:clamp(2.6rem, 1.5rem + 5.4vw, 3.4rem); line-height:0.96; max-width:18ch; }
+      .d10-hero__lede{ font-size:var(--d10-s-0); }
+      .d10-hero__cta{ width:100%; }
+      .d10-hero__cta .d10-btn{ flex:1 1 auto; }
+    }
+
+    /* ===================== STORY ===================== */
+    .d10-story__grid{ display:grid; grid-template-columns:1.1fr 0.9fr; gap:clamp(1.5rem, 0.6rem + 4vw, 4.5rem); align-items:start; }
+    .d10-story__head{ font-size:var(--d10-s-3); line-height:1.05; margin-top:0.5em; }
+    .d10-story__head em{ color:var(--d10-cream); }
+    .d10-story__body p{ color:var(--d10-cream-2); font-size:var(--d10-s-0); margin-bottom:1.1em; }
+    .d10-story__link{ display:inline-flex; gap:0.5em; margin-top:0.6em; color:var(--d10-citron); font-weight:800; font-size:var(--d10-s--1); letter-spacing:0.06em; text-transform:uppercase; }
+    .d10-story__link span{ transition:transform var(--d10-t-fast) var(--d10-ease); }
+    .d10-story__link:hover span{ transform:translateX(5px); }
+    .d10-stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:2rem; margin-top:clamp(2.6rem, 1.6rem + 4vw, 5rem); padding-top:2.4rem; border-top:1px solid var(--d10-line); }
+    .d10-stats__item{ display:flex; flex-direction:column; gap:0.3rem; }
+    .d10-stats__n{ font-family:var(--d10-display); font-size:var(--d10-s-3); color:var(--d10-citron); line-height:1; }
+    .d10-stats__l{ font-size:var(--d10-s--1); color:var(--d10-cream-3); }
+    @media (max-width:820px){ .d10-story__grid{ grid-template-columns:1fr; } .d10-stats{ grid-template-columns:1fr 1fr; gap:1.6rem 2rem; } }
+
+    /* ===================== OFFERINGS ===================== */
+    .d10-offer__head{ max-width:36ch; margin-bottom:clamp(2rem, 1rem + 3vw, 3.4rem); }
+    .d10-offer__title{ font-size:var(--d10-s-2); margin-top:0.35em; }
+    .d10-offer__title em{ color:var(--d10-wine-2); }
+    .d10-offer__grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(1.4rem, 0.6rem + 2.4vw, 2.8rem); }
+    .d10-offer__card{ display:flex; flex-direction:column; }
+    .d10-offer__media{ aspect-ratio:4/5; margin-bottom:1.3rem; }
+    .d10-offer__badge{ position:absolute; top:14px; left:14px; z-index:2; font-family:var(--d10-display); font-size:1.2rem; color:var(--d10-ink); background:var(--d10-citron); width:2.2em; height:2.2em; display:grid; place-items:center; border-radius:50%; }
+    .d10-offer__k{ font-size:var(--d10-s-2); color:var(--d10-ink); }
+    .d10-offer__copy{ color:#4A3B32; font-size:var(--d10-s-0); margin:0.4em 0 1em; line-height:1.6; }
+    .d10-offer__cta{ margin-top:auto; font-weight:800; font-size:var(--d10-s--1); letter-spacing:0.1em; text-transform:uppercase; color:var(--d10-burgundy); }
+    .d10-offer__cta span{ display:inline-block; transition:transform var(--d10-t-fast) var(--d10-ease); }
+    .d10-offer__card:hover .d10-offer__cta span{ transform:translateX(5px); }
+    @media (max-width:820px){ .d10-offer__grid{ grid-template-columns:1fr; gap:2.4rem; } .d10-offer__media{ aspect-ratio:16/10; } }
+
+    /* ===================== TASTING SEQUENCE ===================== */
+    .d10-tasting__grid{ display:grid; grid-template-columns:0.85fr 1.15fr; gap:clamp(1.6rem, 0.6rem + 4vw, 4.5rem); align-items:start; }
+    .d10-tasting__aside{ position:sticky; top:100px; }
+    .d10-tasting__title{ font-size:var(--d10-s-2); margin:0.5em 0 1.2em; line-height:1.05; }
+    .d10-tasting__media{ margin-bottom:1.6rem; }
+    .d10-tasting__media .d10-media{ aspect-ratio:5/4; }
+    .d10-tasting__list{ display:flex; flex-direction:column; }
+    .d10-course{ display:grid; grid-template-columns:auto 1fr; gap:clamp(1rem, 0.4rem + 2vw, 2.2rem); padding:clamp(1.6rem, 1rem + 2vw, 2.6rem) 0; border-top:1px solid var(--d10-line); }
+    .d10-course:last-child{ border-bottom:1px solid var(--d10-line); }
+    .d10-course__no{ font-family:var(--d10-display); font-size:var(--d10-s-2); color:var(--d10-wine-2); line-height:0.9; }
+    .d10-course__course{ font-size:0.68rem; font-weight:800; letter-spacing:0.24em; text-transform:uppercase; color:var(--d10-citron); margin-bottom:0.5em; }
+    .d10-course__name{ font-size:var(--d10-s-1); color:var(--d10-cream); line-height:1.15; display:flex; flex-wrap:wrap; align-items:baseline; gap:0.5em; }
+    .d10-course__price{ font-family:var(--d10-sans); font-weight:700; font-size:0.7em; color:var(--d10-cream-3); }
+    .d10-course__desc{ color:var(--d10-cream-2); font-size:var(--d10-s-0); margin-top:0.5em; max-width:52ch; }
+    @media (max-width:820px){ .d10-tasting__grid{ grid-template-columns:1fr; } .d10-tasting__aside{ position:static; } .d10-tasting__btn{ margin-bottom:1rem; } }
+
+    /* ===================== FEATURE ===================== */
+    .d10-feature__grid{ display:grid; grid-template-columns:1fr 1.02fr; gap:clamp(2rem, 1rem + 4vw, 5rem); align-items:center; }
+    .d10-feature__media{ position:relative; }
+    .d10-feature__lg{ aspect-ratio:4/5; will-change:transform; }
+    .d10-feature__inset{ position:absolute; right:-6%; bottom:-8%; width:42%; aspect-ratio:3/4; border:6px solid var(--d10-ink); box-shadow:0 30px 60px -28px rgba(0,0,0,.8); }
+    .d10-feature__title{ font-size:var(--d10-s-2); margin:0.4em 0 0.6em; }
+    .d10-feature__title em{ color:var(--d10-citron); }
+    .d10-feature__lead{ color:var(--d10-cream-2); }
+    .d10-feature__cta{ display:flex; flex-wrap:wrap; gap:14px; margin-top:2rem; }
+    @media (max-width:820px){ .d10-feature__grid{ grid-template-columns:1fr; gap:3rem; } .d10-feature__inset{ right:4%; bottom:-7%; width:38%; } }
+
+    /* ===================== EVENTS SHOWCASE ===================== */
+    .d10-events{ position:relative; overflow:hidden; }
+    .d10-events__bg{ position:absolute; inset:0; }
+    .d10-ev-layer{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transform:scale(1.05); transition:opacity 900ms var(--d10-ease), transform 1400ms var(--d10-ease); }
+    .d10-ev-layer.is-active{ opacity:1; transform:scale(1); }
+    .d10-events__scrim{ position:absolute; inset:0; background:linear-gradient(100deg, rgba(23,18,16,.95) 8%, rgba(23,18,16,.72) 52%, rgba(67,20,29,.4) 100%); }
+    .d10-events__content{ position:relative; z-index:2; max-width:680px; }
+    .d10-events__title{ font-size:var(--d10-s-3); margin:0.4em 0 0.7em; line-height:1.02; }
+    .d10-events__title em{ color:var(--d10-citron); font-style:italic; }
+    .d10-ev-feature{ min-height:8.4em; }
+    .d10-ev-feature__meta{ display:flex; align-items:baseline; gap:1em; flex-wrap:wrap; }
+    .d10-ev-feature__name{ font-family:var(--d10-display); font-size:var(--d10-s-2); color:var(--d10-cream); }
+    .d10-ev-feature__cap{ font-size:0.72rem; font-weight:800; letter-spacing:0.14em; text-transform:uppercase; color:var(--d10-citron); }
+    .d10-ev-feature__blurb{ color:var(--d10-cream-2); font-size:var(--d10-s-0); margin-top:0.5em; }
+    .d10-ev-thumbs{ display:flex; gap:12px; margin-top:1.8rem; flex-wrap:wrap; }
+    .d10-ev-thumb{ position:relative; width:120px; height:80px; padding:0; border:1px solid var(--d10-line-2); border-radius:10px; overflow:hidden; cursor:pointer; background:none; transition:border-color var(--d10-t-med), transform var(--d10-t-fast) var(--d10-ease); }
+    .d10-ev-thumb__img{ width:100%; height:100%; object-fit:cover; opacity:0.5; transition:opacity var(--d10-t-med), transform var(--d10-t-slow) var(--d10-ease); }
+    .d10-ev-thumb:hover{ transform:translateY(-3px); }
+    .d10-ev-thumb:hover .d10-ev-thumb__img{ transform:scale(1.08); }
+    .d10-ev-thumb.is-active{ border-color:var(--d10-citron); }
+    .d10-ev-thumb.is-active .d10-ev-thumb__img{ opacity:1; }
+    .d10-ev-thumb__label{ position:absolute; left:0; right:0; bottom:0; padding:14px 6px 5px; font-size:0.58rem; font-weight:800; letter-spacing:0.05em; text-transform:uppercase; color:var(--d10-cream); background:linear-gradient(to top, rgba(11,8,7,.92), transparent); text-align:center; }
+    .d10-events__cta{ display:flex; flex-wrap:wrap; gap:14px; margin-top:2.2rem; }
+    @media (max-width:520px){ .d10-ev-thumb{ width:88px; height:62px; } }
+
+    /* ===================== CHARM ===================== */
+    .d10-charm__grid{ display:grid; grid-template-columns:0.8fr 1fr; gap:clamp(2rem, 1rem + 4vw, 5rem); align-items:center; }
+    .d10-charm__media .d10-media{ aspect-ratio:4/5; }
+    .d10-charm__media img{ will-change:transform; height:112%; margin-top:-6%; }
+    .d10-charm__title{ font-size:var(--d10-s-2); margin:0.4em 0 0.6em; }
+    .d10-charm__title em{ color:var(--d10-citron); }
+    .d10-charm__lead{ color:var(--d10-cream-2); }
+    .d10-charm__chips{ display:flex; flex-wrap:wrap; gap:10px; margin-top:1.8em; }
+    .d10-charm__chips li{ font-size:0.72rem; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:var(--d10-cream); border:1px solid var(--d10-line-2); border-radius:40px; padding:9px 15px; }
+    @media (max-width:820px){ .d10-charm__grid{ grid-template-columns:1fr; } }
+
+    /* ===================== FINAL CTA ===================== */
+    .d10-final{ text-align:center; background:radial-gradient(120% 150% at 50% 0%, var(--d10-ink-3) 0%, var(--d10-ink) 62%); }
+    .d10-final__inner{ display:flex; flex-direction:column; align-items:center; }
+    .d10-final__title{ font-size:var(--d10-s-3); max-width:20ch; margin:0.4em 0 1em; line-height:1.04; }
+    .d10-final__title em{ color:var(--d10-citron); }
+    .d10-final__btn{ min-height:60px; font-size:var(--d10-s-0); }
+  </style>
+</D10Base>

@@ -1,0 +1,981 @@
+---
+import '../../styles/global.css';
+import { Image } from 'astro:assets';
+import { SPACES, VENDORS } from '../../data/spaces.js';
+import { SITE } from '../../data/site.js';
+import logo from '../../assets/img/logo-dark.png';
+import hero from '../../assets/img/sunset.jpg';
+
+// Optimised room images, resolved by the filename stored in each space record.
+const imgModules = import.meta.glob('../../assets/img/*.jpg', { eager: true });
+const imgFor = (name) => imgModules[`../../assets/img/${name}`].default;
+
+// Occasion chips for the opening question.
+const OCCASIONS = [
+  { id: 'wedding', label: 'A wedding' },
+  { id: 'milestone', label: 'A milestone birthday' },
+  { id: 'anniversary', label: 'An anniversary' },
+  { id: 'shower', label: 'A shower or luncheon' },
+  { id: 'rehearsal', label: 'A rehearsal dinner' },
+  { id: 'corporate', label: 'A corporate dinner' },
+  { id: 'cocktail', label: 'A cocktail reception' },
+  { id: 'gala', label: 'A gala or fundraiser' },
+  { id: 'offpremise', label: 'Catering at my place' },
+  { id: 'other', label: 'Something else lovely' },
+];
+
+// Client-side data (trimmed, safe to serialise).
+const SPACE_DATA = SPACES.map((s) => ({
+  key: s.key, name: s.name, cap: s.cap, band: s.band, best: s.best, q: s.q,
+}));
+const VENDOR_DATA = VENDORS.map((v) => ({ name: v.name, note: v.note }));
+
+const canonical = new URL('/portals/5', Astro.site);
+const pageTitle = 'Plan Your Event, Citron Baltimore Concierge';
+const pageDesc =
+  'A guided, one-question-at-a-time way to plan your waterfront celebration at Citron Baltimore, from a fireside twenty to five hundred guests on Quarry Lake.';
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{pageTitle}</title>
+  <meta name="description" content={pageDesc} />
+  <link rel="canonical" href={canonical} />
+  <meta name="theme-color" content="#0B1210" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={pageTitle} />
+  <meta property="og:description" content={pageDesc} />
+  <meta property="og:site_name" content="Citron Baltimore" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context":"https://schema.org","@type":"Restaurant",
+    "name":"Citron Baltimore","servesCuisine":"Modern American",
+    "priceRange":"$$$","telephone":SITE.phone,
+    "address":{"@type":"PostalAddress","streetAddress":"2605 Quarry Lake Dr","addressLocality":"Baltimore","addressRegion":"MD","postalCode":"21209"},
+    "url":"https://citronbaltimore.com","acceptsReservations":"True"
+  })} />
+</head>
+<body class="p5">
+  <a class="skip" href="#concierge">Skip to the planner</a>
+
+  <!-- ===== SLIM NAV ===== -->
+  <header class="p5-nav">
+    <div class="p5-nav__in">
+      <a class="p5-nav__logo" href="/">
+        <Image src={logo} alt="Citron Baltimore" width={120} height={40} loading="lazy" class="p5-nav__logo-img" />
+      </a>
+      <nav class="p5-nav__links" aria-label="Primary">
+        <a class="p5-nav__link" href="/">Back to site</a>
+        <a class="p5-nav__cta" href={SITE.reserveUrl} target="_blank" rel="noopener">Reserve a table</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="concierge">
+    <!-- ===== HERO / GREETING ===== -->
+    <section class="p5-hero" aria-labelledby="p5-h1">
+      <div class="p5-hero__bg" aria-hidden="true">
+        <Image src={hero} alt="" widths={[768, 1200, 1500]} sizes="100vw" loading="eager" fetchpriority="high" format="avif" quality={50} class="p5-hero__img" />
+        <div class="p5-hero__scrim"></div>
+      </div>
+      <div class="p5-hero__in">
+        <p class="eyebrow">The Citron Concierge</p>
+        <h1 id="p5-h1" class="p5-hero__title">Let's plan your evening on the water.</h1>
+        <p class="p5-hero__lede">A few gentle questions, one at a time, and we'll match your celebration to the right room at Quarry Lake. No forms to wrestle, just a conversation.</p>
+      </div>
+    </section>
+
+    <!-- ===== THE GUIDED WIZARD ===== -->
+    <section class="p5-stage" aria-label="Event planning concierge">
+      <div class="p5-card" id="p5-card">
+
+        <!-- progress -->
+        <div class="p5-progress" aria-hidden="true">
+          <div class="p5-progress__bar"><span class="p5-progress__fill" id="p5-fill"></span></div>
+          <p class="p5-progress__label" id="p5-progress-label">Step 1 of 6</p>
+        </div>
+
+        <!-- live region for screen readers -->
+        <p class="p5-sr" id="p5-live" aria-live="polite"></p>
+
+        <div class="p5-steps" id="p5-steps">
+
+          <!-- STEP 1 : Occasion -->
+          <div class="p5-step is-active" data-step="1" role="group" aria-labelledby="q1-title">
+            <p class="p5-step__eyebrow">To begin</p>
+            <h2 class="p5-step__q" id="q1-title" tabindex="-1">What are we celebrating?</h2>
+            <p class="p5-step__hint">Pick whatever feels closest. There are no wrong answers.</p>
+            <div class="p5-chips" role="listbox" aria-label="Occasion">
+              {OCCASIONS.map((o) => (
+                <button type="button" class="p5-chip" data-occasion={o.id} role="option" aria-selected="false">{o.label}</button>
+              ))}
+            </div>
+          </div>
+
+          <!-- STEP 2 : Guest count -->
+          <div class="p5-step" data-step="2" role="group" aria-labelledby="q2-title" hidden>
+            <p class="p5-step__eyebrow">Roughly</p>
+            <h2 class="p5-step__q" id="q2-title" tabindex="-1">How many guests?</h2>
+            <p class="p5-step__hint">Slide to an estimate. We'll suggest a room that fits, from a fireside twenty to a five hundred guest buyout.</p>
+            <div class="p5-guests">
+              <div class="p5-guests__read">
+                <span class="p5-guests__num" id="p5-guest-num">80</span>
+                <span class="p5-guests__unit">guests</span>
+              </div>
+              <label class="p5-sr" for="p5-guest-slider">Estimated number of guests</label>
+              <input type="range" id="p5-guest-slider" min="2" max="500" step="2" value="80"
+                     aria-describedby="p5-guest-suggest" class="p5-range" />
+              <div class="p5-guests__scale" aria-hidden="true"><span>2</span><span>125</span><span>250</span><span>500</span></div>
+              <p class="p5-guests__suggest" id="p5-guest-suggest">A good fit: <strong>The COVE</strong></p>
+            </div>
+          </div>
+
+          <!-- STEP 3 : Space -->
+          <div class="p5-step" data-step="3" role="group" aria-labelledby="q3-title" hidden>
+            <p class="p5-step__eyebrow">Now the fun part</p>
+            <h2 class="p5-step__q" id="q3-title" tabindex="-1">Which space feels right?</h2>
+            <p class="p5-step__hint">Here are the rooms best suited to your party. Choose one, or reveal all nine.</p>
+            <div class="p5-rooms" id="p5-rooms">
+              {SPACES.map((s) => (
+                <article class="p5-room" data-key={s.key} data-cap={s.cap} data-band={s.band}>
+                  <button type="button" class="p5-room__pick" data-room-pick={s.key} aria-pressed="false">
+                    <span class="p5-room__media">
+                      <Image src={imgFor(s.img)} alt={s.name} widths={[280, 400]} sizes="(max-width: 640px) 90vw, 320px" loading="lazy" format="avif" quality={52} class="p5-room__img" />
+                      <span class="p5-room__cap">{s.cap === '∞' ? 'Any size' : `Up to ${s.cap}`}</span>
+                    </span>
+                    <span class="p5-room__body">
+                      <span class="p5-room__name">{s.name}</span>
+                      <span class="p5-room__best">{s.best}</span>
+                    </span>
+                    <span class="p5-room__check" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M5 12.5l4.2 4.2L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </span>
+                  </button>
+                  <div class="p5-room__q" data-room-q={s.key} hidden>
+                    <p class="p5-room__q-head">A few things worth thinking about:</p>
+                    {s.q.map((question, i) => (
+                      <div class="p5-field">
+                        <label class="p5-field__label" for={`q-${s.key}-${i}`}>{question}</label>
+                        <input type="text" id={`q-${s.key}-${i}`} class="p5-input" data-room-answer={s.key} data-qi={i} placeholder="Optional, a note for us" autocomplete="off" />
+                      </div>
+                    ))}
+                  </div>
+                </article>
+              ))}
+            </div>
+            <button type="button" class="p5-seeall" id="p5-seeall" aria-expanded="false">See all nine spaces</button>
+          </div>
+
+          <!-- STEP 4 : Date -->
+          <div class="p5-step" data-step="4" role="group" aria-labelledby="q4-title" hidden>
+            <p class="p5-step__eyebrow">Timing</p>
+            <h2 class="p5-step__q" id="q4-title" tabindex="-1">When are you thinking?</h2>
+            <p class="p5-step__hint">A date, or your best guess. Spring and fall weekends book early, so the sooner the better.</p>
+            <div class="p5-datewrap">
+              <label class="p5-field__label" for="p5-date">Preferred date</label>
+              <input type="date" id="p5-date" class="p5-input p5-input--date" />
+              <div class="p5-flex-note">
+                <input type="checkbox" id="p5-flex" class="p5-check" />
+                <label for="p5-flex">My date is flexible</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 5 : Services -->
+          <div class="p5-step" data-step="5" role="group" aria-labelledby="q5-title" hidden>
+            <p class="p5-step__eyebrow">Optional touches</p>
+            <h2 class="p5-step__q" id="q5-title" tabindex="-1">Any services we should arrange?</h2>
+            <p class="p5-step__hint">We can coordinate as much or as little as you'd like. Tap any that appeal.</p>
+            <div class="p5-services" role="group" aria-label="Optional services">
+              {VENDORS.map((v) => (
+                <button type="button" class="p5-service" data-service={v.name} aria-pressed="false">
+                  <span class="p5-service__name">{v.name}</span>
+                  <span class="p5-service__note">{v.note}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <!-- STEP 6 : Contact -->
+          <div class="p5-step" data-step="6" role="group" aria-labelledby="q6-title" hidden>
+            <p class="p5-step__eyebrow">Last thing</p>
+            <h2 class="p5-step__q" id="q6-title" tabindex="-1">Where should we reach you?</h2>
+            <p class="p5-step__hint">So a real planner, not a robot, can follow up with your options.</p>
+            <div class="p5-contact">
+              <div class="p5-field">
+                <label class="p5-field__label" for="p5-name">Your name</label>
+                <input type="text" id="p5-name" class="p5-input" autocomplete="name" placeholder="Jane Levine" />
+              </div>
+              <div class="p5-field">
+                <label class="p5-field__label" for="p5-email">Email</label>
+                <input type="email" id="p5-email" class="p5-input" autocomplete="email" placeholder="you@example.com" />
+              </div>
+            </div>
+          </div>
+
+          <!-- SUMMARY -->
+          <div class="p5-step p5-summary" data-step="7" role="group" aria-labelledby="q7-title" hidden>
+            <p class="p5-step__eyebrow">Beautifully done</p>
+            <h2 class="p5-step__q" id="q7-title" tabindex="-1">Here's what we heard.</h2>
+            <p class="p5-step__hint">Look it over, then send it to our events team and we'll take it from here.</p>
+            <dl class="p5-recap" id="p5-recap"></dl>
+
+            <!-- ADD-TO-CALENDAR : hold the planning call -->
+            <div class="p5-cal" aria-labelledby="p5-cal-head">
+              <p class="p5-cal__eyebrow" id="p5-cal-head">Hold your planning call</p>
+              <p class="p5-cal__lede">Drop a tentative half hour with our events team onto your calendar. A real planner confirms the time once we see your notes.</p>
+              <div class="p5-cal__btns" role="group" aria-label="Add planning call to your calendar">
+                <a class="p5-calbtn" id="p5-cal-google" href="#" target="_blank" rel="noopener">
+                  <span class="p5-calbtn__ico" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><rect x="3" y="4.5" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3 9h18M8 3v3M16 3v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                  </span>
+                  Add to Google Calendar
+                </a>
+                <a class="p5-calbtn" id="p5-cal-apple" href="#" download="citron-planning-call.ics">
+                  <span class="p5-calbtn__ico" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M16 3.5c0 1.4-1.1 2.6-2.5 2.6.1-1.4 1.2-2.6 2.5-2.6ZM18 16.4c-.4 1-.6 1.4-1.1 2.2-.7 1.2-1.7 2.6-3 2.6-1.1 0-1.4-.7-2.9-.7s-1.9.7-2.9.7c-1.3 0-2.2-1.3-3-2.4C3 18.4 2 15.4 3.1 13.2c.7-1.4 1.9-2.2 3.1-2.2 1.2 0 2 .8 3 .8 1 0 1.6-.8 3-.8 1 0 2.1.6 2.9 1.6-2.5 1.4-2.1 5 .9 3.8Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+                  </span>
+                  Add to Apple Calendar
+                </a>
+                <a class="p5-calbtn" id="p5-cal-outlook" href="#" target="_blank" rel="noopener">
+                  <span class="p5-calbtn__ico" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><rect x="3" y="4.5" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3 9h18M8 3v3M16 3v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="8.5" cy="14.5" r="2.2" stroke="currentColor" stroke-width="1.4"/></svg>
+                  </span>
+                  Add to Outlook
+                </a>
+                <a class="p5-calbtn p5-calbtn--ghost" id="p5-cal-ics" href="#" download="citron-planning-call.ics">
+                  <span class="p5-calbtn__ico" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M12 3v11m0 0 4-4m-4 4-4-4M4 20h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
+                  Download .ics
+                </a>
+              </div>
+
+              <button type="button" class="p5-cal__pick" id="p5-cal-pick" aria-expanded="false" aria-controls="p5-cal-embed">Prefer to pick a time?</button>
+              <div class="p5-cal__embed" id="p5-cal-embed" hidden></div>
+            </div>
+
+            <div class="p5-summary__cta">
+              <a class="btn p5-book" id="p5-book" href="#">Email our planner instead</a>
+              <button type="button" class="p5-restart" id="p5-restart">Start over</button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- nav controls -->
+        <div class="p5-controls" id="p5-controls">
+          <button type="button" class="p5-back" id="p5-back" hidden>
+            <span aria-hidden="true">&larr;</span> Back
+          </button>
+          <button type="button" class="p5-next" id="p5-next" disabled>
+            Continue <span aria-hidden="true">&rarr;</span>
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="p5-foot">
+    <div class="p5-foot__in">
+      <div class="p5-foot__brand">
+        <p class="p5-foot__name">Citron Baltimore</p>
+        <p class="p5-foot__meta">{SITE.address}</p>
+        <p class="p5-foot__meta"><a href={SITE.phoneHref}>{SITE.phone}</a> &middot; <a href={`mailto:${SITE.email}`}>{SITE.email}</a></p>
+      </div>
+      <nav class="p5-foot__links" aria-label="Footer">
+        <a href="/">Back to main site</a>
+        <a href={SITE.reserveUrl} target="_blank" rel="noopener">Reserve a table</a>
+        <a href={SITE.portalUrl}>Events &amp; private dining</a>
+      </nav>
+      <p class="p5-foot__fine">Waterfront dining, catering &amp; events on Quarry Lake. Est. 2016.</p>
+    </div>
+  </footer>
+
+  <script define:vars={{ SPACE_DATA, VENDOR_DATA, EMAIL: SITE.email }}>
+    (function () {
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const TOTAL = 6; // question steps (summary is step 7)
+
+      const capNum = (c) => (c === '∞' ? Infinity : Number(c));
+      const ORDER = SPACE_DATA.slice().sort((a, b) => capNum(a.cap) - capNum(b.cap));
+
+      const state = {
+        step: 1,
+        occasion: null,
+        occasionLabel: null,
+        guests: 80,
+        space: null,
+        spaceAnswers: {},
+        date: '',
+        flexible: false,
+        services: [],
+        name: '',
+        email: '',
+      };
+
+      const steps = Array.from(document.querySelectorAll('.p5-step'));
+      const fill = document.getElementById('p5-fill');
+      const progressLabel = document.getElementById('p5-progress-label');
+      const live = document.getElementById('p5-live');
+      const backBtn = document.getElementById('p5-back');
+      const nextBtn = document.getElementById('p5-next');
+      const controls = document.getElementById('p5-controls');
+
+      function announce(msg) { live.textContent = msg; }
+
+      function showStep(n, dir) {
+        const from = steps.find((s) => s.classList.contains('is-active'));
+        const to = steps.find((s) => Number(s.dataset.step) === n);
+        if (!to) return;
+        state.step = n;
+
+        steps.forEach((s) => {
+          if (s === to) return;
+          s.classList.remove('is-active');
+          s.hidden = true;
+        });
+
+        to.hidden = false;
+        if (reduce) {
+          to.classList.add('is-active');
+        } else {
+          to.classList.remove('is-active');
+          to.classList.add(dir === 'back' ? 'enter-back' : 'enter-fwd');
+          requestAnimationFrame(() => {
+            to.classList.remove('enter-fwd', 'enter-back');
+            to.classList.add('is-active');
+          });
+        }
+
+        // progress
+        const shown = Math.min(n, TOTAL);
+        const pct = ((shown - 1) / (TOTAL - 1)) * 100;
+        fill.style.width = (n >= 7 ? 100 : pct) + '%';
+        progressLabel.textContent = n >= 7 ? 'All set' : 'Step ' + n + ' of ' + TOTAL;
+
+        // controls
+        backBtn.hidden = n === 1;
+        controls.style.display = n >= 7 ? 'none' : '';
+        nextBtn.textContent = '';
+        nextBtn.append('Continue ');
+        const arr = document.createElement('span');
+        arr.setAttribute('aria-hidden', 'true');
+        arr.textContent = '→';
+        nextBtn.append(arr);
+        if (n === 6) { nextBtn.firstChild.textContent = 'See my summary '; }
+
+        refreshNext();
+        if (n === 7) buildSummary();
+
+        // focus management
+        const heading = to.querySelector('.p5-step__q');
+        if (heading) heading.focus({ preventScroll: true });
+        announce(n >= 7 ? 'Summary ready.' : 'Step ' + n + ' of ' + TOTAL + '. ' + (heading ? heading.textContent : ''));
+      }
+
+      // ---- validation: can we advance from the current step? ----
+      function stepValid(n) {
+        if (n === 1) return !!state.occasion;
+        if (n === 2) return true;
+        if (n === 3) return !!state.space;
+        if (n === 4) return true; // date optional
+        if (n === 5) return true; // services optional
+        if (n === 6) return isEmail(state.email) && state.name.trim().length > 0;
+        return true;
+      }
+      function isEmail(v) { return /.+@.+\..+/.test(v); }
+      function refreshNext() { nextBtn.disabled = !stepValid(state.step); }
+
+      // ---- STEP 1: occasions ----
+      document.querySelectorAll('.p5-chip').forEach((chip) => {
+        chip.addEventListener('click', () => {
+          document.querySelectorAll('.p5-chip').forEach((c) => { c.classList.remove('is-on'); c.setAttribute('aria-selected', 'false'); });
+          chip.classList.add('is-on');
+          chip.setAttribute('aria-selected', 'true');
+          state.occasion = chip.dataset.occasion;
+          state.occasionLabel = chip.textContent.trim();
+          if (state.occasion === 'offpremise') state.guests = Math.max(state.guests, 60);
+          refreshNext();
+          announce(state.occasionLabel + ' selected.');
+        });
+      });
+
+      // ---- STEP 2: guests ----
+      const slider = document.getElementById('p5-guest-slider');
+      const guestNum = document.getElementById('p5-guest-num');
+      const guestSuggest = document.getElementById('p5-guest-suggest');
+
+      function suggestKeys(guests, occasion) {
+        if (occasion === 'offpremise') {
+          return ['offpremise', 'courtyard', 'venue'];
+        }
+        const fits = ORDER.filter((s) => capNum(s.cap) >= guests).map((s) => s.key);
+        let picks = fits.slice(0, 3);
+        if (picks.length < 2) picks = ORDER.slice(-3).map((s) => s.key);
+        return picks;
+      }
+      function nameFor(key) { const s = SPACE_DATA.find((x) => x.key === key); return s ? s.name : ''; }
+
+      function updateGuests() {
+        state.guests = Number(slider.value);
+        guestNum.textContent = state.guests;
+        const keys = suggestKeys(state.guests, state.occasion);
+        guestSuggest.innerHTML = 'A good fit: <strong>' + nameFor(keys[0]) + '</strong>';
+        slider.setAttribute('aria-valuetext', state.guests + ' guests, suggested ' + nameFor(keys[0]));
+      }
+      slider.addEventListener('input', updateGuests);
+
+      // ---- STEP 3: rooms ----
+      const roomsWrap = document.getElementById('p5-rooms');
+      const seeAll = document.getElementById('p5-seeall');
+      let showingAll = false;
+
+      function applySuggestions() {
+        if (showingAll) return;
+        const keys = suggestKeys(state.guests, state.occasion);
+        document.querySelectorAll('.p5-room').forEach((room) => {
+          const on = keys.includes(room.dataset.key);
+          room.classList.toggle('is-shown', on);
+          room.hidden = !on;
+        });
+      }
+      seeAll.addEventListener('click', () => {
+        showingAll = !showingAll;
+        seeAll.setAttribute('aria-expanded', String(showingAll));
+        seeAll.textContent = showingAll ? 'Show only my best matches' : 'See all nine spaces';
+        if (showingAll) {
+          document.querySelectorAll('.p5-room').forEach((room) => { room.classList.add('is-shown'); room.hidden = false; });
+          announce('Showing all nine spaces.');
+        } else {
+          applySuggestions();
+          announce('Showing your best matches.');
+        }
+      });
+
+      document.querySelectorAll('[data-room-pick]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const key = btn.dataset.roomPick;
+          const already = state.space === key;
+          state.space = already ? null : key;
+          document.querySelectorAll('.p5-room').forEach((room) => {
+            const chosen = state.space === room.dataset.key;
+            room.classList.toggle('is-picked', chosen);
+            const pick = room.querySelector('[data-room-pick]');
+            pick.setAttribute('aria-pressed', String(chosen));
+            const q = room.querySelector('[data-room-q]');
+            if (q) q.hidden = !chosen;
+          });
+          refreshNext();
+          if (state.space) announce(nameFor(state.space) + ' selected.');
+        });
+      });
+
+      document.querySelectorAll('[data-room-answer]').forEach((inp) => {
+        inp.addEventListener('input', () => {
+          const key = inp.dataset.roomAnswer;
+          state.spaceAnswers[key] = state.spaceAnswers[key] || {};
+          state.spaceAnswers[key][inp.dataset.qi] = inp.value;
+        });
+      });
+
+      // ---- STEP 4: date ----
+      const dateInput = document.getElementById('p5-date');
+      const flexInput = document.getElementById('p5-flex');
+      dateInput.addEventListener('input', () => { state.date = dateInput.value; });
+      flexInput.addEventListener('change', () => { state.flexible = flexInput.checked; });
+
+      // ---- STEP 5: services ----
+      document.querySelectorAll('[data-service]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const name = btn.dataset.service;
+          const on = !btn.classList.contains('is-on');
+          btn.classList.toggle('is-on', on);
+          btn.setAttribute('aria-pressed', String(on));
+          if (on) { if (!state.services.includes(name)) state.services.push(name); }
+          else { state.services = state.services.filter((s) => s !== name); }
+        });
+      });
+
+      // ---- STEP 6: contact ----
+      const nameInput = document.getElementById('p5-name');
+      const emailInput = document.getElementById('p5-email');
+      nameInput.addEventListener('input', () => { state.name = nameInput.value; refreshNext(); });
+      emailInput.addEventListener('input', () => { state.email = emailInput.value; refreshNext(); });
+
+      // ---- SUMMARY ----
+      function humanDate(v) {
+        if (!v) return null;
+        const d = new Date(v + 'T00:00:00');
+        if (isNaN(d)) return v;
+        return d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+      }
+      function summaryRows() {
+        const rows = [];
+        rows.push(['Occasion', state.occasionLabel || 'To be discussed']);
+        rows.push(['Guests', 'About ' + state.guests]);
+        rows.push(['Space', state.space ? nameFor(state.space) : 'Open to suggestions']);
+        const d = humanDate(state.date);
+        rows.push(['Date', d ? (d + (state.flexible ? ' (flexible)' : '')) : (state.flexible ? 'Flexible' : 'To be decided')]);
+        rows.push(['Services', state.services.length ? state.services.join(', ') : 'None for now']);
+        // space-specific answered notes
+        const sa = state.spaceAnswers[state.space];
+        if (state.space && sa) {
+          const sp = SPACE_DATA.find((x) => x.key === state.space);
+          sp.q.forEach((q, i) => { if (sa[i] && sa[i].trim()) rows.push([q, sa[i].trim()]); });
+        }
+        rows.push(['Name', state.name || '']);
+        rows.push(['Email', state.email || '']);
+        return rows;
+      }
+      function buildSummary() {
+        const recap = document.getElementById('p5-recap');
+        recap.innerHTML = '';
+        summaryRows().forEach(([k, v]) => {
+          if (!v) return;
+          const dt = document.createElement('dt'); dt.textContent = k;
+          const dd = document.createElement('dd'); dd.textContent = v;
+          recap.append(dt, dd);
+        });
+        document.getElementById('p5-book').setAttribute('href', buildMailto());
+        buildCalendarLinks();
+      }
+
+      // ---- ADD-TO-CALENDAR ----
+      function callTitle() {
+        return 'Citron Planning Call' + (state.name ? ' with ' + state.name.trim() : '');
+      }
+      function callDetails() {
+        const lines = ['Planning call for your celebration at Citron Baltimore.', ''];
+        summaryRows().forEach(([k, v]) => { if (v) lines.push(k + ': ' + v); });
+        lines.push('', 'A Citron planner will confirm the final time with you.');
+        return lines.join('\n');
+      }
+      const LOCATION = 'Citron Baltimore, 2605 Quarry Lake Dr, Baltimore, MD 21209';
+
+      // Two decimal pad + UTC stamp in the YYYYMMDDTHHMMSSZ form calendars expect.
+      function pad(n) { return String(n).padStart(2, '0'); }
+      function stampUTC(d) {
+        return d.getUTCFullYear() + pad(d.getUTCMonth() + 1) + pad(d.getUTCDate()) +
+          'T' + pad(d.getUTCHours()) + pad(d.getUTCMinutes()) + pad(d.getUTCSeconds()) + 'Z';
+      }
+      // Placeholder hold: base off the chosen event date at 11am local when present,
+      // otherwise the next day. Thirty minute call.
+      function callTimes() {
+        let start;
+        if (state.date) {
+          start = new Date(state.date + 'T11:00:00');
+          if (isNaN(start)) start = new Date(Date.now() + 864e5);
+        } else {
+          start = new Date(Date.now() + 864e5);
+          start.setHours(11, 0, 0, 0);
+        }
+        const end = new Date(start.getTime() + 30 * 60 * 1000);
+        return { start, end };
+      }
+
+      function icsContent() {
+        const { start, end } = callTimes();
+        const uid = 'citron-' + start.getTime() + '@citronbaltimore.com';
+        // Escape per RFC 5545: backslash, comma, semicolon, newlines.
+        const esc = (s) => String(s).replace(/\\/g, '\\\\').replace(/,/g, '\\,').replace(/;/g, '\\;').replace(/\r?\n/g, '\\n');
+        return [
+          'BEGIN:VCALENDAR',
+          'VERSION:2.0',
+          'PRODID:-//Citron Baltimore//Concierge//EN',
+          'CALSCALE:GREGORIAN',
+          'METHOD:PUBLISH',
+          'BEGIN:VEVENT',
+          'UID:' + uid,
+          'DTSTAMP:' + stampUTC(new Date()),
+          'DTSTART:' + stampUTC(start),
+          'DTEND:' + stampUTC(end),
+          'SUMMARY:' + esc(callTitle()),
+          'DESCRIPTION:' + esc(callDetails()),
+          'LOCATION:' + esc(LOCATION),
+          'STATUS:TENTATIVE',
+          'END:VEVENT',
+          'END:VCALENDAR',
+        ].join('\r\n');
+      }
+
+      let icsUrl = null;
+      function buildCalendarLinks() {
+        const { start, end } = callTimes();
+        const title = callTitle();
+        const details = callDetails();
+
+        // Google Calendar template link.
+        const g = 'https://calendar.google.com/calendar/render?action=TEMPLATE' +
+          '&text=' + encodeURIComponent(title) +
+          '&dates=' + stampUTC(start) + '/' + stampUTC(end) +
+          '&details=' + encodeURIComponent(details) +
+          '&location=' + encodeURIComponent(LOCATION);
+        document.getElementById('p5-cal-google').setAttribute('href', g);
+
+        // Outlook web deep link.
+        const o = 'https://outlook.live.com/calendar/0/deeplink/compose?path=/calendar/action/compose&rru=addevent' +
+          '&subject=' + encodeURIComponent(title) +
+          '&body=' + encodeURIComponent(details) +
+          '&location=' + encodeURIComponent(LOCATION) +
+          '&startdt=' + encodeURIComponent(start.toISOString()) +
+          '&enddt=' + encodeURIComponent(end.toISOString());
+        document.getElementById('p5-cal-outlook').setAttribute('href', o);
+
+        // Apple / .ics via a Blob download. Revoke any previous URL first.
+        if (icsUrl) { URL.revokeObjectURL(icsUrl); icsUrl = null; }
+        const blob = new Blob([icsContent()], { type: 'text/calendar;charset=utf-8' });
+        icsUrl = URL.createObjectURL(blob);
+        document.getElementById('p5-cal-apple').setAttribute('href', icsUrl);
+        document.getElementById('p5-cal-ics').setAttribute('href', icsUrl);
+      }
+
+      // ---- "Prefer to pick a time?" : lazy, click-to-reveal scheduler ----
+      const calPick = document.getElementById('p5-cal-pick');
+      const calEmbed = document.getElementById('p5-cal-embed');
+      let embedLoaded = false;
+      calPick.addEventListener('click', () => {
+        const open = calEmbed.hidden;
+        if (open && !embedLoaded) {
+          embedLoaded = true;
+          const frame = document.createElement('iframe');
+          frame.title = 'Schedule a call';
+          frame.loading = 'lazy';
+          frame.className = 'p5-cal__iframe';
+          frame.setAttribute('frameborder', '0');
+          // TODO: Temporary live Google Calendar appointment schedule (swap the /schedules/<id> to change it)
+          frame.src = 'https://calendar.google.com/calendar/appointments/schedules/AcZssZ2ltBnOZRoXf-MooGc4ac0roHsjC3KkkGEzDKPkL80oZ5SGT6YvkgFM3HLlPUU3z-nmL9WKShdc?gv=true';
+          calEmbed.append(frame);
+        }
+        calEmbed.hidden = !open;
+        calPick.setAttribute('aria-expanded', String(open));
+        calPick.textContent = open ? 'Hide the scheduler' : 'Prefer to pick a time?';
+        if (open) announce('Scheduler opened.');
+      });
+      function buildMailto() {
+        const subject = 'Event inquiry: ' + (state.occasionLabel || 'Celebration') +
+          (state.space ? ' at ' + nameFor(state.space) : '');
+        const lines = [];
+        lines.push('Hello Citron events team,');
+        lines.push('');
+        lines.push('I planned this through your concierge and would love to talk it through:');
+        lines.push('');
+        summaryRows().forEach(([k, v]) => { if (v) lines.push(k + ': ' + v); });
+        lines.push('');
+        lines.push('Please give me a call or reply with next steps. Thank you!');
+        return 'mailto:' + EMAIL +
+          '?subject=' + encodeURIComponent(subject) +
+          '&body=' + encodeURIComponent(lines.join('\n'));
+      }
+
+      // ---- NAV ----
+      function goNext() {
+        if (!stepValid(state.step)) return;
+        if (state.step === 2) applySuggestions();
+        const next = state.step === 6 ? 7 : state.step + 1;
+        if (state.step === 3) applySuggestions();
+        showStep(next, 'fwd');
+      }
+      function goBack() {
+        if (state.step <= 1) return;
+        showStep(state.step - 1, 'back');
+      }
+      nextBtn.addEventListener('click', goNext);
+      backBtn.addEventListener('click', goBack);
+
+      // keyboard: Enter advances when valid (except inside textarea-like inputs it still helps)
+      document.getElementById('p5-card').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && state.step <= 6) {
+          const tag = (e.target.tagName || '').toLowerCase();
+          if (tag === 'button' && !e.target.classList.contains('p5-next') && !e.target.classList.contains('p5-back')) return;
+          if (tag === 'a') return;
+          e.preventDefault();
+          if (!nextBtn.disabled) goNext();
+        }
+      });
+
+      document.getElementById('p5-restart').addEventListener('click', () => {
+        location.reload();
+      });
+
+      // init
+      updateGuests();
+      applySuggestions();
+      showStep(1, 'fwd');
+    })();
+  </script>
+
+  <style>
+    /* ============ PORTAL 5 : The Guided Concierge ============ */
+    .p5{ background:
+        radial-gradient(1200px 700px at 78% -8%, rgba(107,122,0,.16), transparent 60%),
+        radial-gradient(900px 620px at 8% 108%, rgba(176,141,62,.10), transparent 58%),
+        var(--abyss);
+      min-height:100vh; }
+
+    .p5-sr{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
+
+    /* ---- NAV ---- */
+    .p5-nav{ position:sticky; top:0; z-index:40; backdrop-filter:blur(10px);
+      background:linear-gradient(180deg, rgba(11,18,16,.86), rgba(11,18,16,.5));
+      border-bottom:1px solid var(--hair); }
+    .p5-nav__in{ max-width:var(--maxw); margin:0 auto; padding:0.7rem var(--gutter);
+      display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+    .p5-nav__logo{ display:inline-flex; }
+    .p5-nav__logo-img{ height:34px; width:auto; }
+    .p5-nav__links{ display:flex; align-items:center; gap:clamp(0.9rem, 0.5rem + 1.4vw, 1.8rem); }
+    .p5-nav__link{ font-family:var(--sans); font-size:var(--step--1); letter-spacing:.02em; color:var(--mist);
+      text-decoration:none; transition:color var(--t-fast) var(--ease); }
+    .p5-nav__link:hover{ color:var(--cream); }
+    .p5-nav__cta{ font-family:var(--sans); font-weight:700; font-size:var(--step--1);
+      letter-spacing:.12em; text-transform:uppercase; color:var(--abyss); background:var(--citron);
+      text-decoration:none; padding:.6em 1.1em; border-radius:2px;
+      transition:transform var(--t-fast) var(--ease), box-shadow var(--t-med) var(--ease); }
+    .p5-nav__cta:hover{ transform:translateY(-2px); box-shadow:0 10px 30px -12px color-mix(in oklab, var(--citron) 70%, transparent); }
+
+    /* ---- HERO ---- */
+    .p5-hero{ position:relative; overflow:hidden; padding:clamp(3.2rem, 2rem + 6vw, 6rem) var(--gutter) clamp(2rem, 1rem + 3vw, 3rem); }
+    .p5-hero__bg{ position:absolute; inset:0; z-index:0; }
+    .p5-hero__img{ width:100%; height:100%; object-fit:cover; opacity:.5; }
+    .p5-hero__scrim{ position:absolute; inset:0;
+      background:linear-gradient(180deg, rgba(11,18,16,.55) 0%, rgba(11,18,16,.82) 62%, var(--abyss) 100%); }
+    .p5-hero__in{ position:relative; z-index:1; max-width:var(--maxw); margin:0 auto; text-align:center; }
+    .p5-hero__title{ font-size:var(--step-4); line-height:1.02; margin:.34em auto .5em; max-width:15ch; }
+    .p5-hero__lede{ font-family:var(--sans); color:var(--mist); font-size:var(--step-1);
+      line-height:1.55; max-width:52ch; margin:0 auto; }
+
+    /* ---- STAGE / CARD ---- */
+    .p5-stage{ padding:0 var(--gutter) clamp(3rem, 2rem + 4vw, 5.5rem); }
+    .p5-card{ position:relative; max-width:860px; margin:0 auto;
+      background:linear-gradient(180deg, var(--night) 0%, var(--abyss-2) 100%);
+      border:1px solid var(--hair-strong); border-radius:8px;
+      box-shadow:0 40px 120px -40px rgba(0,0,0,.75);
+      padding:clamp(1.5rem, 1rem + 3vw, 3rem);
+      margin-top:calc(-1 * clamp(1rem, 0.5rem + 2vw, 2.4rem)); }
+
+    /* ---- PROGRESS ---- */
+    .p5-progress{ margin-bottom:clamp(1.4rem, 1rem + 2vw, 2.2rem); }
+    .p5-progress__bar{ height:3px; border-radius:3px; background:var(--hair); overflow:hidden; }
+    .p5-progress__fill{ display:block; height:100%; width:0;
+      background:linear-gradient(90deg, var(--olive), var(--citron));
+      transition:width var(--t-slow) var(--ease); }
+    .p5-progress__label{ margin:.7em 0 0; font-family:var(--sans); font-size:var(--step--1);
+      letter-spacing:.2em; text-transform:uppercase; color:var(--brass-light); }
+
+    /* ---- STEPS ---- */
+    .p5-steps{ position:relative; }
+    .p5-step[hidden]{ display:none; }
+    .p5-step{ }
+    .p5-step:not(.is-active){ opacity:0; }
+    .p5-step.is-active{ opacity:1; transform:none;
+      transition:opacity var(--t-med) var(--ease), transform var(--t-med) var(--ease); }
+    .p5-step.enter-fwd{ opacity:0; transform:translateX(26px); }
+    .p5-step.enter-back{ opacity:0; transform:translateX(-26px); }
+
+    .p5-step__eyebrow{ font-family:var(--sans); font-weight:700; font-size:var(--step--1);
+      letter-spacing:.28em; text-transform:uppercase; color:var(--citron); margin:0 0 .5em; }
+    .p5-step__q{ font-size:var(--step-3); line-height:1.04; margin:0 0 .3em; outline:none; }
+    .p5-step__q:focus-visible{ outline:2px solid var(--citron); outline-offset:6px; border-radius:2px; }
+    .p5-step__hint{ font-family:var(--sans); color:var(--mist-dim); font-size:var(--step-0);
+      line-height:1.55; max-width:52ch; margin:0 0 clamp(1.4rem, 1rem + 2vw, 2rem); }
+
+    /* ---- CHIPS ---- */
+    .p5-chips{ display:flex; flex-wrap:wrap; gap:.7rem; }
+    .p5-chip{ font-family:var(--sans); font-size:var(--step-0); color:var(--mist);
+      background:rgba(255,255,255,.02); border:1px solid var(--hair-strong); border-radius:100px;
+      padding:.7em 1.2em; cursor:pointer;
+      transition:border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease), color var(--t-fast) var(--ease), transform var(--t-fast) var(--ease); }
+    .p5-chip:hover{ border-color:var(--citron); color:var(--cream); transform:translateY(-2px); }
+    .p5-chip.is-on{ background:var(--citron); border-color:var(--citron); color:var(--abyss); font-weight:700; }
+
+    /* ---- GUESTS ---- */
+    .p5-guests{ max-width:560px; }
+    .p5-guests__read{ display:flex; align-items:baseline; gap:.5rem; margin-bottom:1rem; }
+    .p5-guests__num{ font-family:var(--serif); font-size:var(--step-4); line-height:1; color:var(--cream); }
+    .p5-guests__unit{ font-family:var(--sans); font-size:var(--step-1); color:var(--mist-dim); }
+    .p5-range{ -webkit-appearance:none; appearance:none; width:100%; height:6px; border-radius:6px;
+      background:linear-gradient(90deg, var(--olive), var(--citron)); outline:none; cursor:pointer; }
+    .p5-range::-webkit-slider-thumb{ -webkit-appearance:none; appearance:none; width:26px; height:26px;
+      border-radius:50%; background:var(--cream); border:3px solid var(--citron);
+      box-shadow:0 4px 14px -4px rgba(0,0,0,.6); cursor:pointer; transition:transform var(--t-fast) var(--ease); }
+    .p5-range::-webkit-slider-thumb:hover{ transform:scale(1.12); }
+    .p5-range::-moz-range-thumb{ width:26px; height:26px; border-radius:50%; background:var(--cream);
+      border:3px solid var(--citron); box-shadow:0 4px 14px -4px rgba(0,0,0,.6); cursor:pointer; }
+    .p5-range:focus-visible{ outline:2px solid var(--citron); outline-offset:6px; }
+    .p5-guests__scale{ display:flex; justify-content:space-between; margin-top:.6rem;
+      font-family:var(--sans); font-size:var(--step--1); color:var(--mist-dim); }
+    .p5-guests__suggest{ margin-top:1.4rem; font-family:var(--sans); font-size:var(--step-1);
+      color:var(--mist); }
+    .p5-guests__suggest strong{ color:var(--brass-light); font-weight:700; }
+
+    /* ---- ROOMS ---- */
+    .p5-rooms{ display:grid; grid-template-columns:repeat(auto-fill, minmax(230px, 1fr)); gap:1rem;
+      margin-bottom:1.4rem; }
+    .p5-room[hidden]{ display:none; }
+    .p5-room{ grid-column:span 1; }
+    .p5-room.is-picked{ grid-column:1 / -1; }
+    .p5-room__pick{ display:flex; flex-direction:column; width:100%; text-align:left; cursor:pointer;
+      background:rgba(255,255,255,.015); border:1px solid var(--hair-strong); border-radius:6px; overflow:hidden;
+      color:inherit; padding:0;
+      transition:border-color var(--t-med) var(--ease), transform var(--t-fast) var(--ease), box-shadow var(--t-med) var(--ease); }
+    .p5-room__pick:hover{ border-color:var(--citron); transform:translateY(-3px);
+      box-shadow:0 18px 40px -24px rgba(0,0,0,.7); }
+    .p5-room.is-picked .p5-room__pick{ border-color:var(--brass); flex-direction:row; align-items:stretch; }
+    .p5-room__media{ position:relative; display:block; aspect-ratio:16 / 10; overflow:hidden; }
+    .p5-room.is-picked .p5-room__media{ flex:0 0 40%; aspect-ratio:auto; }
+    .p5-room__img{ width:100%; height:100%; object-fit:cover; display:block;
+      transition:transform var(--t-slow) var(--ease); }
+    .p5-room__pick:hover .p5-room__img{ transform:scale(1.05); }
+    .p5-room__cap{ position:absolute; left:10px; bottom:10px; font-family:var(--sans); font-weight:700;
+      font-size:var(--step--1); letter-spacing:.04em; color:var(--abyss); background:var(--citron);
+      padding:.28em .7em; border-radius:2px; }
+    .p5-room__body{ display:flex; flex-direction:column; gap:.25rem; padding:.9rem 1rem 1.1rem; flex:1; }
+    .p5-room__name{ font-family:var(--serif); font-size:var(--step-1); color:var(--cream); line-height:1.1; }
+    .p5-room__best{ font-family:var(--sans); font-size:var(--step--1); color:var(--mist-dim); line-height:1.45; }
+    .p5-room__check{ position:absolute; top:10px; right:10px; width:30px; height:30px; display:grid;
+      place-items:center; border-radius:50%; background:var(--brass); color:var(--abyss);
+      opacity:0; transform:scale(.6); transition:opacity var(--t-fast) var(--ease), transform var(--t-fast) var(--ease); }
+    .p5-room__pick{ position:relative; }
+    .p5-room.is-picked .p5-room__check{ opacity:1; transform:none; }
+
+    .p5-room__q{ padding:1.1rem 0 .2rem; border-top:1px solid var(--hair); margin-top:1rem; }
+    .p5-room__q[hidden]{ display:none; }
+    .p5-room__q-head{ font-family:var(--sans); font-weight:700; font-size:var(--step--1);
+      letter-spacing:.14em; text-transform:uppercase; color:var(--brass-light); margin:0 0 1rem; }
+
+    .p5-seeall{ font-family:var(--sans); font-size:var(--step-0); color:var(--citron);
+      background:none; border:none; border-bottom:1px solid color-mix(in oklab, var(--citron) 50%, transparent);
+      padding:.2em 0; cursor:pointer; transition:color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease); }
+    .p5-seeall:hover{ color:var(--cream); border-color:var(--cream); }
+
+    /* ---- FIELDS ---- */
+    .p5-field{ margin-bottom:1.1rem; }
+    .p5-field:last-child{ margin-bottom:0; }
+    .p5-field__label{ display:block; font-family:var(--sans); font-size:var(--step--1);
+      letter-spacing:.02em; color:var(--mist); margin-bottom:.5em; }
+    .p5-input{ width:100%; font-family:var(--sans); font-size:var(--step-0); color:var(--cream);
+      background:rgba(255,255,255,.02); border:1px solid var(--hair-strong); border-radius:4px;
+      padding:.8em 1em; transition:border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease); }
+    .p5-input::placeholder{ color:var(--mist-dim); }
+    .p5-input:focus{ outline:none; border-color:var(--citron); background:rgba(199,224,75,.05); }
+    .p5-input:focus-visible{ outline:2px solid var(--citron); outline-offset:2px; }
+    .p5-input--date{ max-width:280px; color-scheme:dark; }
+
+    .p5-datewrap{ max-width:420px; }
+    .p5-flex-note{ display:flex; align-items:center; gap:.55rem; margin-top:1.1rem;
+      font-family:var(--sans); font-size:var(--step-0); color:var(--mist); }
+    .p5-check{ width:20px; height:20px; accent-color:var(--citron); cursor:pointer; }
+    .p5-flex-note label{ cursor:pointer; }
+
+    .p5-contact{ max-width:460px; }
+
+    /* ---- SERVICES ---- */
+    .p5-services{ display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:.8rem; }
+    .p5-service{ display:flex; flex-direction:column; gap:.25rem; text-align:left; cursor:pointer;
+      background:rgba(255,255,255,.015); border:1px solid var(--hair-strong); border-radius:6px;
+      padding:1rem 1.1rem; color:inherit;
+      transition:border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease); }
+    .p5-service:hover{ border-color:var(--citron); transform:translateY(-2px); }
+    .p5-service.is-on{ border-color:var(--citron); background:rgba(199,224,75,.08); }
+    .p5-service__name{ font-family:var(--serif); font-size:var(--step-1); color:var(--cream); line-height:1.1; }
+    .p5-service__note{ font-family:var(--sans); font-size:var(--step--1); color:var(--mist-dim); }
+    .p5-service.is-on .p5-service__name{ color:var(--citron); }
+
+    /* ---- SUMMARY ---- */
+    .p5-recap{ display:grid; grid-template-columns:auto 1fr; gap:.55rem 1.4rem;
+      margin:0 0 clamp(1.6rem, 1rem + 2vw, 2.4rem); }
+    .p5-recap dt{ font-family:var(--sans); font-weight:700; font-size:var(--step--1);
+      letter-spacing:.06em; text-transform:uppercase; color:var(--brass-light); align-self:baseline; }
+    .p5-recap dd{ margin:0; font-family:var(--sans); font-size:var(--step-0); color:var(--cream); line-height:1.5; }
+    .p5-summary__cta{ display:flex; flex-wrap:wrap; align-items:center; gap:1.2rem; }
+    .p5-book{ text-decoration:none; }
+    .p5-restart{ font-family:var(--sans); font-size:var(--step-0); color:var(--mist-dim);
+      background:none; border:none; cursor:pointer; text-decoration:underline; text-underline-offset:3px;
+      transition:color var(--t-fast) var(--ease); }
+    .p5-restart:hover{ color:var(--cream); }
+
+    /* ---- ADD-TO-CALENDAR ---- */
+    .p5-cal{ margin:0 0 clamp(1.6rem, 1rem + 2vw, 2.4rem); padding:clamp(1.2rem, 0.8rem + 2vw, 1.8rem);
+      background:rgba(255,255,255,.015); border:1px solid var(--hair-strong); border-radius:6px; }
+    .p5-cal__eyebrow{ font-family:var(--sans); font-weight:700; font-size:var(--step--1);
+      letter-spacing:.2em; text-transform:uppercase; color:var(--brass-light); margin:0 0 .5em; }
+    .p5-cal__lede{ font-family:var(--sans); font-size:var(--step-0); color:var(--mist-dim);
+      line-height:1.55; max-width:52ch; margin:0 0 1.2rem; }
+    .p5-cal__btns{ display:flex; flex-wrap:wrap; gap:.7rem; }
+    .p5-calbtn{ display:inline-flex; align-items:center; gap:.55rem; font-family:var(--sans);
+      font-weight:700; font-size:var(--step--1); letter-spacing:.02em; color:var(--cream);
+      text-decoration:none; background:rgba(255,255,255,.03); border:1px solid var(--hair-strong);
+      border-radius:4px; padding:.7em 1.05em; cursor:pointer;
+      transition:border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease), color var(--t-fast) var(--ease); }
+    .p5-calbtn__ico{ display:inline-flex; color:var(--citron); }
+    .p5-calbtn:hover{ border-color:var(--citron); background:rgba(199,224,75,.06); transform:translateY(-2px); }
+    .p5-calbtn:focus-visible{ outline:2px solid var(--citron); outline-offset:3px; }
+    .p5-calbtn--ghost{ color:var(--mist); background:none; }
+    .p5-calbtn--ghost .p5-calbtn__ico{ color:var(--brass-light); }
+
+    .p5-cal__pick{ display:inline-block; margin-top:1.2rem; font-family:var(--sans); font-size:var(--step-0);
+      color:var(--citron); background:none; border:none;
+      border-bottom:1px solid color-mix(in oklab, var(--citron) 50%, transparent);
+      padding:.2em 0; cursor:pointer;
+      transition:color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease); }
+    .p5-cal__pick:hover{ color:var(--cream); border-color:var(--cream); }
+    .p5-cal__pick:focus-visible{ outline:2px solid var(--citron); outline-offset:3px; }
+    .p5-cal__embed{ margin-top:1.2rem; }
+    .p5-cal__embed[hidden]{ display:none; }
+    .p5-cal__iframe{ width:100%; height:min(620px, 70vh); border:1px solid var(--hair-strong);
+      border-radius:6px; background:var(--night); color-scheme:light; }
+
+    /* ---- CONTROLS ---- */
+    .p5-controls{ display:flex; align-items:center; justify-content:space-between; gap:1rem;
+      margin-top:clamp(1.8rem, 1.2rem + 2.5vw, 2.8rem);
+      padding-top:clamp(1.4rem, 1rem + 2vw, 2rem); border-top:1px solid var(--hair); }
+    .p5-back{ font-family:var(--sans); font-size:var(--step-0); color:var(--mist);
+      background:none; border:none; cursor:pointer; padding:.6em .2em;
+      transition:color var(--t-fast) var(--ease); }
+    .p5-back:hover{ color:var(--cream); }
+    .p5-back[hidden]{ display:none; }
+    .p5-next{ margin-left:auto; font-family:var(--sans); font-weight:700; font-size:var(--step--1);
+      letter-spacing:.12em; text-transform:uppercase; color:var(--abyss); background:var(--citron);
+      border:none; border-radius:2px; padding:.9em 1.6em; cursor:pointer;
+      transition:transform var(--t-fast) var(--ease), box-shadow var(--t-med) var(--ease), opacity var(--t-fast); }
+    .p5-next:hover{ transform:translateY(-2px); box-shadow:0 12px 34px -12px color-mix(in oklab, var(--citron) 70%, transparent); }
+    .p5-next:disabled{ opacity:.4; cursor:not-allowed; transform:none; box-shadow:none; }
+
+    /* ---- FOOTER ---- */
+    .p5-foot{ border-top:1px solid var(--hair); padding:clamp(2.2rem, 1.4rem + 3vw, 3.4rem) var(--gutter); }
+    .p5-foot__in{ max-width:var(--maxw); margin:0 auto; display:grid; gap:1.4rem;
+      grid-template-columns:1fr auto; align-items:start; }
+    .p5-foot__name{ font-family:var(--serif); font-size:var(--step-1); color:var(--cream); margin:0 0 .4em; }
+    .p5-foot__meta{ font-family:var(--sans); font-size:var(--step--1); color:var(--mist-dim); margin:.2em 0; }
+    .p5-foot__meta a{ color:var(--mist); text-decoration:none; }
+    .p5-foot__meta a:hover{ color:var(--citron); }
+    .p5-foot__links{ display:flex; flex-direction:column; gap:.5rem; text-align:right; }
+    .p5-foot__links a{ font-family:var(--sans); font-size:var(--step--1); color:var(--mist);
+      text-decoration:none; transition:color var(--t-fast) var(--ease); }
+    .p5-foot__links a:hover{ color:var(--citron); }
+    .p5-foot__fine{ grid-column:1 / -1; font-family:var(--sans); font-size:var(--step--1);
+      color:var(--mist-dim); margin:1rem 0 0; padding-top:1rem; border-top:1px solid var(--hair); }
+
+    /* ---- RESPONSIVE ---- */
+    @media (max-width:640px){
+      .p5-room.is-picked .p5-room__pick{ flex-direction:column; }
+      .p5-room.is-picked .p5-room__media{ flex:none; aspect-ratio:16 / 10; }
+      .p5-foot__in{ grid-template-columns:1fr; }
+      .p5-foot__links{ text-align:left; }
+      .p5-recap{ grid-template-columns:1fr; gap:.2rem 0; }
+      .p5-recap dd{ margin-bottom:.7rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .p5-step, .p5-step.is-active, .p5-progress__fill, .p5-room__img,
+      .p5-chip, .p5-service, .p5-next, .p5-room__pick, .p5-calbtn, .p5-range::-webkit-slider-thumb{ transition:none !important; }
+      .p5-step.enter-fwd, .p5-step.enter-back{ transform:none; }
+      html{ scroll-behavior:auto; }
+    }
+  </style>
+</body>
+</html>

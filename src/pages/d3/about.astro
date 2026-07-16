@@ -1,0 +1,245 @@
+---
+import D3Base from '../../layouts/D3Base.astro';
+import { Image } from 'astro:assets';
+import couple from '../../assets/img/charles-susan.jpg';
+import exterior from '../../assets/img/exterior.jpg';
+import mainEntry from '../../assets/img/main-entry.jpg';
+import wine from '../../assets/img/wine.jpg';
+import charles from '../../assets/img/charles.jpg';
+
+const awards = [
+  { k: 'Wine Spectator', v: 'Award of Excellence, every year 2019–2025' },
+  { k: 'Best of Baltimore', v: 'A city favorite on the water' },
+  { k: "OpenTable Diner's Choice", v: 'Voted by the guests themselves' },
+  { k: 'Restaurateur of the Year', v: 'Charles Levine, nominee &middot; 2018' },
+];
+
+const timeline = [
+  { t: '1980s–2016', h: 'A catering heritage', b: 'Charles Levine founds his off-premise catering company and spends four decades setting Baltimore, DC, and Northern Virginia tables.' },
+  { t: 'Nov 2016', h: 'Citron & The Cove open', b: 'A 300-seat waterfront restaurant and event venue rises on Quarry Lake, a permanent home for the standard.' },
+  { t: '2018', h: 'Restaurateur of the Year', b: 'One of five restaurateurs nominated by the Restaurant Association of Maryland at the Stars of the Industry Gala.' },
+  { t: '2019–2025', h: 'Wine Spectator, seven times', b: 'The wine program earns the Award of Excellence every single year, without a gap.' },
+  { t: 'Nov 2026', h: 'Ten years on the water', b: 'A decade of dinners, weddings, and celebrations at the lake, and counting.' },
+];
+---
+<D3Base
+  title="Our Story, Citron Baltimore"
+  description="How Charles and Susan Levine built a waterfront restaurant and event venue at Quarry Lake, four decades in the making."
+>
+  <!-- ===== HERO ===== -->
+  <header class="d3-ahero">
+    <div class="d3-ahero__media" aria-hidden="true">
+      <Image src={couple} alt="" widths={[900, 1300, 1500]} sizes="100vw" loading="eager" fetchpriority="high" format="avif" quality={55} class="d3-ahero__img" />
+      <div class="d3-ahero__scrim"></div>
+    </div>
+    <div class="d3-wrap d3-ahero__inner">
+      <p class="d3-eyebrow">Est. 2016 &middot; Quarry Lake</p>
+      <h1 class="d3-ahero__title">Four decades,<br/>one standard.</h1>
+      <p class="d3-ahero__deck d3-measure">Charles and Susan Levine spent a lifetime perfecting hospitality in other people’s rooms. In 2016 they built one of their own, on the water, and gave Baltimore a place to come back to.</p>
+    </div>
+  </header>
+
+  <!-- ===== STORY ===== -->
+  <section class="d3-section d3-story">
+    <div class="d3-wrap d3-story__grid">
+      <div class="d3-story__lead">
+        <p class="d3-eyebrow d3-reveal">The story</p>
+        <p class="d3-story__drop d3-reveal" data-delay="1">
+          <span class="d3-dropcap">C</span>harles Levine learned hospitality the old-fashioned way, on the floor of the old Pimlico Hotel, where a room full of guests was a promise to keep. What he took from those years he turned into a calling: his own off-premise catering company, formerly Charles Levine Caterers, built one event at a time.
+        </p>
+        <p class="d3-story__p d3-reveal" data-delay="2">
+          Over forty years the company served something close to fourteen thousand events across Baltimore, Washington, and Northern Virginia. The guest list read like the century itself, five U.S. presidents, the NFL, the Rolling Stones, Oprah. The rooms changed every night; the standard never did.
+        </p>
+      </div>
+      <figure class="d3-story__figure d3-reveal" data-delay="2">
+        <Image src={exterior} alt="Citron Baltimore at the edge of Quarry Lake" widths={[500, 760, 900]} sizes="(max-width:860px) 90vw, 42vw" loading="lazy" format="avif" quality={55} class="d3-story__img" />
+        <figcaption class="d3-story__cap">Citron Restaurant &amp; Bar, on Quarry Lake.</figcaption>
+      </figure>
+    </div>
+
+    <div class="d3-wrap d3-story__second d3-reveal">
+      <p class="d3-story__p d3-story__wide">
+        In November of 2016, Charles and Susan Levine opened Citron Restaurant &amp; Bar and The Cove at Quarry Lake, a 300-seat waterfront restaurant and event venue, to stand alongside the catering business that made it possible. For the first time, the standard had a permanent address on the water. Two years later, the industry took note: in 2018 Charles was one of five restaurateurs nominated by the Restaurant Association of Maryland for Restaurateur of the Year at the Stars of the Industry Gala.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== KITCHEN ===== -->
+  <section class="d3-section d3-kitchen">
+    <div class="d3-wrap d3-kitchen__grid">
+      <div class="d3-kitchen__media d3-reveal">
+        <Image src={mainEntry} alt="The entrance to Citron Baltimore" widths={[500, 760, 900]} sizes="(max-width:860px) 90vw, 45vw" loading="lazy" format="avif" quality={55} class="d3-kitchen__img" />
+      </div>
+      <div class="d3-kitchen__copy d3-reveal" data-delay="1">
+        <p class="d3-eyebrow">In the kitchen</p>
+        <h2 class="d3-kitchen__title">A seasonal, scratch kitchen, led with intent.</h2>
+        <p class="d3-measure">Executive Chef Mary Hersh runs a Modern American kitchen that cooks with the seasons and from scratch, Chesapeake dishes drawn from the bay, prime steaks, day-boat seafood, house-made pastas and desserts. A full sushi bar rounds out the room, built to stand on its own.</p>
+        <ul class="d3-kitchen__chips">
+          <li>Modern American</li>
+          <li>Chesapeake &amp; the bay</li>
+          <li>Prime steaks</li>
+          <li>Day-boat seafood</li>
+          <li>House-made pastas &amp; desserts</li>
+          <li>Full sushi bar</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== WINE ===== -->
+  <section class="d3-section d3-wine">
+    <div class="d3-wrap d3-wine__grid">
+      <div class="d3-wine__copy d3-reveal">
+        <p class="d3-eyebrow d3-eyebrow--citron">Wine &amp; spirits</p>
+        <h2 class="d3-wine__title">An award-winning list, and a top shelf to match.</h2>
+        <p class="d3-measure">The cellar has earned the Wine Spectator Award of Excellence every year since 2019, through 2025, a list built to travel with the menu rather than sit apart from it. Alongside it runs an extensive selection of top-shelf spirits, poured for the celebration the night calls for.</p>
+        <p class="d3-wine__mark">Wine Spectator Award of Excellence &middot; 2019–2025</p>
+      </div>
+      <figure class="d3-wine__figure d3-reveal" data-delay="1">
+        <Image src={wine} alt="A glass of red wine on the bar at Citron" widths={[440, 680, 820]} sizes="(max-width:860px) 80vw, 40vw" loading="lazy" format="avif" quality={56} class="d3-wine__img" />
+      </figure>
+    </div>
+  </section>
+
+  <!-- ===== AWARDS ===== -->
+  <section class="d3-section d3-awards">
+    <div class="d3-wrap">
+      <header class="d3-awards__head d3-reveal">
+        <p class="d3-eyebrow">Recognition</p>
+        <h2 class="d3-awards__title">A decade of standing out.</h2>
+      </header>
+      <ul class="d3-awards__grid">
+        {awards.map((a, i) => (
+          <li class="d3-award d3-reveal" data-delay={String((i % 3) + 1)}>
+            <span class="d3-award__k">{a.k}</span>
+            <span class="d3-award__v" set:html={a.v}></span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===== TIMELINE ===== -->
+  <section class="d3-section d3-timeline">
+    <div class="d3-wrap">
+      <header class="d3-timeline__head d3-reveal">
+        <p class="d3-eyebrow">The long story short</p>
+        <h2 class="d3-timeline__title">Four decades, told in five moments.</h2>
+      </header>
+      <ol class="d3-timeline__list">
+        {timeline.map((e, i) => (
+          <li class="d3-tl d3-reveal" data-delay={String((i % 3) + 1)}>
+            <span class="d3-tl__dot" aria-hidden="true"></span>
+            <span class="d3-tl__t">{e.t}</span>
+            <h3 class="d3-tl__h">{e.h}</h3>
+            <p class="d3-tl__b">{e.b}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- ===== CHARM ===== -->
+  <section class="d3-section d3-acharm">
+    <div class="d3-wrap d3-acharm__grid">
+      <figure class="d3-acharm__media d3-reveal">
+        <Image src={charles} alt="Charles Levine, founder of Citron Baltimore" widths={[420, 640, 820]} sizes="(max-width:820px) 80vw, 38vw" loading="lazy" format="avif" quality={58} class="d3-acharm__img" />
+      </figure>
+      <div class="d3-acharm__copy d3-reveal" data-delay="1">
+        <p class="d3-eyebrow">Charm City, on the water</p>
+        <h2 class="d3-acharm__title">Baltimore raised us. Pimlico taught us. Quarry Lake is home.</h2>
+        <p class="d3-measure">The roots run through the old Pimlico Hotel and four decades of Maryland celebrations, Preakness weeks, blue-crab summers, and the kind of hospitality a city only trusts to its own. We are proud to be Baltimore’s table.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FINAL CTA ===== -->
+  <section class="d3-section d3-afinal">
+    <div class="d3-wrap d3-afinal__inner d3-reveal">
+      <p class="d3-eyebrow">Come see for yourself</p>
+      <h2 class="d3-afinal__title">Ten years in, the welcome is the same.</h2>
+      <button class="d3-btn d3-afinal__btn" data-cta>Reserve &middot; Pick-Up &middot; Events</button>
+    </div>
+  </section>
+
+  <style>
+    /* hero */
+    .d3-ahero{ position:relative; min-height:clamp(62vh, 40vh + 18rem, 82vh); display:flex; align-items:flex-end; overflow:hidden; }
+    .d3-ahero__media{ position:absolute; inset:0; }
+    .d3-ahero__img{ width:100%; height:100%; object-fit:cover; }
+    .d3-ahero__scrim{ position:absolute; inset:0; background:linear-gradient(180deg, rgba(16,21,28,.55) 0%, rgba(16,21,28,.28) 42%, rgba(16,21,28,.92) 100%); }
+    .d3-ahero__inner{ position:relative; z-index:2; padding-block:clamp(3rem, 2rem + 6vw, 6rem); }
+    .d3-ahero__title{ font-size:var(--d3-s-4); color:var(--d3-cream); line-height:1.02; margin-top:0; }
+    .d3-ahero__deck{ color:var(--d3-cream-dim); font-size:var(--d3-s-1); margin-top:1.1rem; }
+
+    /* story */
+    .d3-story__grid{ display:grid; grid-template-columns:1.15fr .85fr; gap:clamp(2rem, 1rem + 4vw, 5rem); align-items:start; }
+    .d3-story__drop{ font-family:var(--d3-display); font-size:var(--d3-s-1); line-height:1.55; color:var(--d3-cream); }
+    .d3-dropcap{ float:left; font-family:var(--d3-display); font-size:3.4em; line-height:.72; padding:.06em .1em 0 0; margin-left:-.02em; color:var(--d3-amber); }
+    .d3-story__p{ color:var(--d3-mist); margin-top:1.4rem; }
+    .d3-story__figure{ margin:0; position:sticky; top:2rem; }
+    .d3-story__img{ width:100%; aspect-ratio:4/5; object-fit:cover; border-radius:var(--d3-radius-md); }
+    .d3-story__cap{ margin-top:.7rem; font-size:var(--d3-s--1); color:var(--d3-mist-dim); }
+    .d3-story__second{ margin-top:clamp(2.4rem, 1.5rem + 3vw, 4rem); }
+    .d3-story__wide{ max-width:74ch; }
+    @media (max-width:860px){
+      .d3-story__grid{ grid-template-columns:1fr; }
+      .d3-story__figure{ position:static; order:-1; }
+      .d3-story__img{ aspect-ratio:16/10; }
+    }
+
+    /* kitchen */
+    .d3-kitchen{ background:var(--d3-bg-2); }
+    .d3-kitchen__grid{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(2rem, 1rem + 4vw, 5rem); align-items:center; }
+    .d3-kitchen__img{ width:100%; aspect-ratio:4/5; object-fit:cover; border-radius:var(--d3-radius-md); }
+    .d3-kitchen__title{ font-size:var(--d3-s-2); margin:0 0 .6em; line-height:1.12; }
+    .d3-kitchen__copy p{ color:var(--d3-mist); }
+    .d3-kitchen__chips{ display:flex; flex-wrap:wrap; gap:10px; margin-top:2em; }
+    .d3-kitchen__chips li{ font-size:.72rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--d3-amber-soft); border:1px solid color-mix(in oklab, var(--d3-amber) 40%, transparent); border-radius:40px; padding:8px 14px; }
+    @media (max-width:820px){ .d3-kitchen__grid{ grid-template-columns:1fr; } .d3-kitchen__media{ order:-1; } .d3-kitchen__img{ aspect-ratio:16/10; } }
+
+    /* wine */
+    .d3-wine__grid{ display:grid; grid-template-columns:1fr .8fr; gap:clamp(2rem, 1rem + 4vw, 5rem); align-items:center; }
+    .d3-wine__title{ font-size:var(--d3-s-2); margin:0 0 .6em; line-height:1.12; }
+    .d3-wine__copy p{ color:var(--d3-mist); }
+    .d3-wine__mark{ margin-top:1.8rem; font-size:.78rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--d3-amber-soft); }
+    .d3-wine__figure{ margin:0; }
+    .d3-wine__img{ width:100%; aspect-ratio:3/4; object-fit:cover; border-radius:var(--d3-radius-md); }
+    @media (max-width:860px){ .d3-wine__grid{ grid-template-columns:1fr; } .d3-wine__figure{ order:-1; } .d3-wine__img{ aspect-ratio:16/10; } }
+
+    /* awards */
+    .d3-awards{ background:var(--d3-bg-2); }
+    .d3-awards__head{ max-width:34ch; margin-bottom:clamp(2rem, 1rem + 3vw, 3.2rem); }
+    .d3-awards__title{ font-size:var(--d3-s-2); }
+    .d3-awards__grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:clamp(1.4rem, .8rem + 2vw, 2.4rem); }
+    .d3-award{ display:flex; flex-direction:column; gap:.4rem; padding-top:1.4rem; border-top:1px solid color-mix(in oklab, var(--d3-amber) 28%, transparent); }
+    .d3-award__k{ font-family:var(--d3-display); font-size:var(--d3-s-1); color:var(--d3-cream); }
+    .d3-award__v{ font-size:var(--d3-s-0); color:var(--d3-mist); line-height:1.5; }
+    @media (max-width:640px){ .d3-awards__grid{ grid-template-columns:1fr; } }
+
+    /* timeline */
+    .d3-timeline__head{ max-width:34ch; margin-bottom:clamp(2.4rem, 1.5rem + 3vw, 3.6rem); }
+    .d3-timeline__title{ font-size:var(--d3-s-2); }
+    .d3-timeline__list{ position:relative; display:grid; gap:clamp(1.8rem, 1rem + 2vw, 2.8rem); padding-left:2rem; }
+    .d3-timeline__list::before{ content:''; position:absolute; left:5px; top:.5rem; bottom:.5rem; width:1px; background:var(--d3-hair-2); }
+    .d3-tl{ position:relative; }
+    .d3-tl__dot{ position:absolute; left:-2rem; top:.35rem; width:11px; height:11px; border-radius:50%; background:var(--d3-amber); box-shadow:0 0 0 4px var(--d3-bg); }
+    .d3-tl__t{ display:block; font-size:.76rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--d3-amber-soft); }
+    .d3-tl__h{ font-size:var(--d3-s-1); color:var(--d3-cream); margin:.35rem 0 .5rem; }
+    .d3-tl__b{ color:var(--d3-mist); max-width:60ch; margin:0; }
+
+    /* charm */
+    .d3-acharm{ background:var(--d3-bg-2); }
+    .d3-acharm__grid{ display:grid; grid-template-columns:.8fr 1fr; gap:clamp(2rem, 1rem + 4vw, 5rem); align-items:center; }
+    .d3-acharm__media{ margin:0; }
+    .d3-acharm__img{ width:100%; aspect-ratio:4/5; object-fit:cover; border-radius:var(--d3-radius-md); }
+    .d3-acharm__title{ font-size:var(--d3-s-2); margin:0 0 .6em; line-height:1.12; }
+    .d3-acharm__copy p{ color:var(--d3-mist); }
+    @media (max-width:820px){ .d3-acharm__grid{ grid-template-columns:1fr; } .d3-acharm__media{ order:-1; max-width:420px; } .d3-acharm__img{ aspect-ratio:16/10; } }
+
+    /* final */
+    .d3-afinal{ text-align:center; background:radial-gradient(120% 150% at 50% 0%, var(--d3-bg-3) 0%, var(--d3-bg) 60%); }
+    .d3-afinal__title{ font-size:var(--d3-s-3); max-width:18ch; margin:0 auto .85em; line-height:1.1; }
+    .d3-afinal__btn{ min-height:58px; font-size:var(--d3-s-0); }
+  </style>
+</D3Base>

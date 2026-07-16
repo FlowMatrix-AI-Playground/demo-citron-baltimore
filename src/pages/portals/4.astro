@@ -1,0 +1,843 @@
+---
+// ============================================================================
+// PORTAL 4: "The Configurator"
+// A standalone, front-end-only build-your-event builder for Citron Baltimore.
+// Two panels: live controls (left) assemble a running order (right), which
+// updates instantly and exports a prefilled mailto plan.
+// ============================================================================
+import '../../styles/global.css';
+import { Image } from 'astro:assets';
+import { SPACES, VENDORS, bookCall } from '../../data/spaces.js';
+import { SITE } from '../../data/site.js';
+
+// Resolve the nine room photos through a glob so we can key by space.img.
+const roomImgs = import.meta.glob('../../assets/img/*.jpg', { eager: true });
+const imgFor = (file) => roomImgs['../../assets/img/' + file].default;
+
+// Event occasions (front-end demo intake).
+const EVENT_TYPES = [
+  'Wedding', 'Corporate', 'Celebration',
+  'Rehearsal Dinner', 'Cocktail Reception', 'Off-Premise',
+];
+
+// Catering service styles.
+const CATERING = [
+  { v: 'Plated', d: 'Seated, multi-course service' },
+  { v: 'Stations', d: 'Grazing stations, guests roam' },
+  { v: 'Buffet', d: 'Classic buffet line' },
+];
+
+// Numeric capacity for the fit logic (off-premise is uncapped).
+const capNum = (c) => (c === '∞' ? Infinity : Number(c));
+
+// Serialisable copy of the data for the client script (functions can't cross).
+const spacesData = SPACES.map((s) => ({
+  key: s.key,
+  name: s.name,
+  cap: s.cap,
+  capNum: capNum(s.cap),
+  best: s.best,
+  layout: s.layout,
+  cater: s.cater,
+  q: s.q,
+  book: bookCall(s.name),
+}));
+const vendorsData = VENDORS.map((v) => ({ name: v.name, note: v.note }));
+
+const canonical = new URL('/portals/4', Astro.site);
+const title = 'The Configurator, Build Your Event, Citron Baltimore';
+const description = 'Build your Citron Baltimore event in real time: choose a space, guest count, date, catering style, and add-ons, then send your plan to our team.';
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <meta name="theme-color" content="#0B1210" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:site_name" content="Citron Baltimore" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org", "@type": "Restaurant",
+    "name": "Citron Baltimore", "servesCuisine": "Modern American",
+    "priceRange": "$$$", "telephone": SITE.phone,
+    "address": { "@type": "PostalAddress", "streetAddress": "2605 Quarry Lake Dr", "addressLocality": "Baltimore", "addressRegion": "MD", "postalCode": "21209" },
+    "url": "https://citronbaltimore.com", "acceptsReservations": "True"
+  })} />
+</head>
+<body class="cfg-body">
+  <a class="skip" href="#build">Skip to the builder</a>
+
+  <!-- ===== SLIM NAV ===== -->
+  <header class="cfg-nav">
+    <div class="cfg-nav__in">
+      <a class="cfg-brand" href="/">
+        <span class="cfg-brand__mark" aria-hidden="true"></span>
+        <span class="cfg-brand__word">Citron</span>
+        <span class="cfg-brand__sub">Configurator</span>
+      </a>
+      <nav class="cfg-nav__links" aria-label="Portal">
+        <a class="cfg-nav__back" href="/">
+          <span aria-hidden="true">←</span> Back to site
+        </a>
+        <a class="cfg-nav__cta" href={SITE.reserveUrl} target="_blank" rel="noopener">Reserve</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- ===== INTRO ===== -->
+    <section class="cfg-intro">
+      <div class="cfg-intro__in">
+        <p class="eyebrow reveal">The Configurator</p>
+        <h1 class="cfg-intro__title reveal" data-delay="1">Build your night <em>on the water.</em></h1>
+        <p class="cfg-intro__lede measure reveal" data-delay="2">
+          Assemble the event piece by piece. Every choice updates your running plan on the right, in real time. Nothing is booked until you hear back from a Citron planner.
+        </p>
+      </div>
+    </section>
+
+    <!-- ===== BUILDER (two panels) ===== -->
+    <section class="cfg-build" id="build">
+      <div class="cfg-build__in">
+
+        <!-- ---------- CONTROLS ---------- -->
+        <form class="cfg-controls" id="cfgForm" novalidate>
+
+          <!-- 1. Event type -->
+          <fieldset class="cfg-field">
+            <legend class="cfg-label"><span class="cfg-label__n">01</span> What are we hosting?</legend>
+            <div class="cfg-chips" role="radiogroup" aria-label="Event type">
+              {EVENT_TYPES.map((t, i) => (
+                <label class="cfg-chip">
+                  <input type="radio" name="etype" value={t} checked={i === 0} />
+                  <span>{t}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+
+          <!-- 2. Guest count -->
+          <div class="cfg-field">
+            <label class="cfg-label" for="guests"><span class="cfg-label__n">02</span> How many guests?</label>
+            <div class="cfg-slider">
+              <input type="range" id="guests" name="guests" min="10" max="500" step="5" value="120" aria-describedby="guestHint" />
+              <div class="cfg-slider__ticks" aria-hidden="true"><span>10</span><span>125</span><span>250</span><span>375</span><span>500</span></div>
+            </div>
+            <p class="cfg-guesthint" id="guestHint" aria-live="polite">
+              <strong id="guestVal">120</strong> guests
+              <span class="cfg-guesthint__fit" id="fitCount"></span>
+            </p>
+          </div>
+
+          <!-- 3. Space -->
+          <div class="cfg-field">
+            <span class="cfg-label"><span class="cfg-label__n">03</span> Choose your space</span>
+            <p class="cfg-hintline">Cards that fit your guest count stay lit; the tightest fit is flagged <em>Suggested</em>.</p>
+            <div class="cfg-spaces" role="radiogroup" aria-label="Event space">
+              {spacesData.map((s, i) => (
+                <label class="cfg-space" data-key={s.key} data-cap={String(s.capNum)}>
+                  <input type="radio" name="space" value={s.key} checked={i === 4} />
+                  <span class="cfg-space__card">
+                    <span class="cfg-space__media">
+                      <Image src={imgFor(SPACES[i].img)} alt={`${s.name} set for a private event at Citron Baltimore`} widths={[200, 400]} sizes="(max-width:960px) 45vw, 200px" loading="lazy" format="avif" quality={52} class="cfg-space__img" />
+                      <span class="cfg-space__badge" aria-hidden="true">Suggested</span>
+                    </span>
+                    <span class="cfg-space__body">
+                      <span class="cfg-space__top">
+                        <span class="cfg-space__name">{s.name}</span>
+                        <span class="cfg-space__cap">{s.cap === '∞' ? 'Any scale' : 'Up to ' + s.cap}</span>
+                      </span>
+                      <span class="cfg-space__best">{s.best}</span>
+                      <span class="cfg-space__meta">
+                        <span><b>Layout:</b> {s.layout}</span>
+                        <span><b>Catering:</b> {s.cater}</span>
+                      </span>
+                    </span>
+                    <span class="cfg-space__check" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M5 12.5l4.2 4.2L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </span>
+                  </span>
+                </label>
+              ))}
+            </div>
+
+            <!-- questions surfaced for the selected space -->
+            <div class="cfg-questions" id="spaceQs" aria-live="polite">
+              <p class="cfg-questions__head">A few things your planner will ask about <strong id="qsName">the space</strong>:</p>
+              <ul class="cfg-questions__list" id="qsList"></ul>
+              <a class="cfg-questions__call" id="qsCall" href="#">Talk to a planner about this space <span aria-hidden="true">→</span></a>
+            </div>
+          </div>
+
+          <!-- 4. Date -->
+          <div class="cfg-field">
+            <label class="cfg-label" for="edate"><span class="cfg-label__n">04</span> Preferred date <span class="cfg-opt">(optional)</span></label>
+            <input class="cfg-input" type="date" id="edate" name="edate" />
+          </div>
+
+          <!-- 5. Catering style -->
+          <fieldset class="cfg-field">
+            <legend class="cfg-label"><span class="cfg-label__n">05</span> Catering style</legend>
+            <div class="cfg-chips cfg-chips--cater" role="radiogroup" aria-label="Catering style">
+              {CATERING.map((c, i) => (
+                <label class="cfg-chip cfg-chip--stack">
+                  <input type="radio" name="cater" value={c.v} checked={i === 0} />
+                  <span><b>{c.v}</b><em>{c.d}</em></span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+
+          <!-- 6. Vendors / add-ons -->
+          <fieldset class="cfg-field">
+            <legend class="cfg-label"><span class="cfg-label__n">06</span> Add-ons <span class="cfg-opt">(toggle any)</span></legend>
+            <div class="cfg-addons">
+              {vendorsData.map((v) => (
+                <label class="cfg-addon">
+                  <input type="checkbox" name="vendor" value={v.name} data-note={v.note} />
+                  <span class="cfg-addon__box" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none"><path d="M5 12.5l4.2 4.2L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
+                  <span class="cfg-addon__body">
+                    <span class="cfg-addon__name">{v.name}</span>
+                    <span class="cfg-addon__note">{v.note}</span>
+                  </span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+        </form>
+
+        <!-- ---------- LIVE SUMMARY ---------- -->
+        <aside class="cfg-summary" id="summary" aria-labelledby="sumTitle">
+          <button class="cfg-summary__toggle" id="sumToggle" type="button" aria-expanded="false" aria-controls="sumBody">
+            <span class="cfg-summary__toggleL">Your plan</span>
+            <span class="cfg-summary__toggleR" id="sumMini">120 guests</span>
+            <span class="cfg-summary__chev" aria-hidden="true">▲</span>
+          </button>
+
+          <div class="cfg-summary__body" id="sumBody">
+            <div class="cfg-summary__head">
+              <p class="eyebrow eyebrow--brass" id="sumTitle">Your running order</p>
+              <p class="cfg-summary__sub">Live, and updating as you build.</p>
+            </div>
+
+            <dl class="cfg-order" id="orderList" aria-live="polite">
+              <div class="cfg-order__row"><dt>Event</dt><dd id="oType">Wedding</dd></div>
+              <div class="cfg-order__row"><dt>Guests</dt><dd id="oGuests">120</dd></div>
+              <div class="cfg-order__row"><dt>Space</dt><dd id="oSpace">The Citron Bar</dd></div>
+              <div class="cfg-order__row"><dt>Capacity</dt><dd id="oCap">Up to 125</dd></div>
+              <div class="cfg-order__row"><dt>Date</dt><dd id="oDate">Flexible</dd></div>
+              <div class="cfg-order__row"><dt>Catering</dt><dd id="oCater">Plated</dd></div>
+            </dl>
+
+            <div class="cfg-order__addons">
+              <p class="cfg-order__addonsHead">Add-ons</p>
+              <ul class="cfg-order__addonsList" id="oAddons" aria-live="polite">
+                <li class="cfg-order__none" id="oAddonsNone">None selected yet</li>
+              </ul>
+            </div>
+
+            <p class="cfg-order__fit" id="oFit" aria-live="polite"></p>
+
+            <div class="cfg-summary__actions">
+              <button class="btn cfg-send" type="button" id="sendPlan">Send My Plan</button>
+              <a class="cfg-bookline" id="oBook" href="#">Or email a planner directly <span aria-hidden="true">→</span></a>
+            </div>
+            <p class="cfg-note">A demo builder. Sending opens your email with the plan prefilled, nothing is booked automatically.</p>
+          </div>
+        </aside>
+
+      </div>
+    </section>
+
+    <!-- ===== FULL-WIDTH SCHEDULER EMBED ===== -->
+    <!-- A dedicated, framed "book your planning call" section. This is a large
+         standalone full-width iframe embed, distinct from the builder/summary.
+         The third-party Google Calendar iframe is gated so it does NOT load on
+         initial page paint: a "Load the scheduler" button swaps in the iframe. -->
+    <section class="cfg-sched" id="schedule" aria-labelledby="schedTitle">
+      <div class="cfg-sched__in">
+        <div class="cfg-sched__head">
+          <p class="eyebrow eyebrow--brass reveal">Final step</p>
+          <h2 class="cfg-sched__title reveal" data-delay="1" id="schedTitle">Lock in a planning call.</h2>
+          <p class="cfg-sched__lede measure reveal" data-delay="2">
+            You have shaped the night. Now pick a time with a Citron planner to walk through your plan, availability, and the finer details. Prefer email? Send your built plan instead and we will reach out.
+          </p>
+        </div>
+
+        <div class="cfg-sched__frame">
+          <!-- Skeleton / click-to-load state. Replaced by the iframe on demand. -->
+          <div class="cfg-sched__load" id="schedLoad">
+            <div class="cfg-sched__skeleton" aria-hidden="true">
+              <span class="cfg-sched__skelRow"></span>
+              <span class="cfg-sched__skelRow"></span>
+              <span class="cfg-sched__skelGrid">
+                <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+              </span>
+            </div>
+            <div class="cfg-sched__loadInner">
+              <p class="cfg-sched__loadTitle">Book your planning call</p>
+              <p class="cfg-sched__loadSub">The live scheduler loads on request to keep this page fast.</p>
+              <button class="btn cfg-sched__btn" type="button" id="schedLoadBtn">Load the scheduler</button>
+              <a class="cfg-sched__alt" id="schedMail" href={'mailto:' + SITE.email}>Or send your built plan by email instead <span aria-hidden="true">→</span></a>
+            </div>
+          </div>
+
+          <!-- Mount point: the iframe is injected here on click / when visible. -->
+          <!-- TODO: Temporary live Google Calendar appointment schedule (swap the /schedules/<id> to change it) -->
+          <div class="cfg-sched__mount" id="schedMount" hidden></div>
+
+          <template id="schedTpl">
+            <iframe title="Schedule a call with Citron events" loading="lazy" style="border:0;width:100%;height:640px;border-radius:8px" src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ2ltBnOZRoXf-MooGc4ac0roHsjC3KkkGEzDKPkL80oZ5SGT6YvkgFM3HLlPUU3z-nmL9WKShdc?gv=true"></iframe>
+          </template>
+        </div>
+
+        <p class="cfg-sched__note">
+          Demo scheduler. The embed above is a placeholder and books nothing until a real Citron appointment schedule is connected.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="cfg-foot">
+    <div class="cfg-foot__in">
+      <div class="cfg-foot__brand">
+        <span class="cfg-foot__word">Citron Baltimore</span>
+        <p class="cfg-foot__addr">{SITE.address}</p>
+      </div>
+      <div class="cfg-foot__links">
+        <a href="/">Back to main site</a>
+        <a href={SITE.reserveUrl} target="_blank" rel="noopener">Reserve a table</a>
+        <a href={SITE.phoneHref}>{SITE.phone}</a>
+        <a href={'mailto:' + SITE.email}>{SITE.email}</a>
+      </div>
+    </div>
+    <p class="cfg-foot__fine">Waterfront dining, catering &amp; events at Quarry Lake. Est. 2016.</p>
+  </footer>
+
+  <script define:vars={{ email: SITE.email, spacesData, reserveUrl: SITE.reserveUrl }}>
+    (() => {
+      const form = document.getElementById('cfgForm');
+      if (!form) return;
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const byKey = Object.fromEntries(spacesData.map((s) => [s.key, s]));
+
+      // ----- element refs -----
+      const range = document.getElementById('guests');
+      const guestVal = document.getElementById('guestVal');
+      const fitCount = document.getElementById('fitCount');
+      const spaceCards = [...document.querySelectorAll('.cfg-space')];
+      const qsName = document.getElementById('qsName');
+      const qsList = document.getElementById('qsList');
+      const qsCall = document.getElementById('qsCall');
+      const dateEl = document.getElementById('edate');
+
+      const oType = document.getElementById('oType');
+      const oGuests = document.getElementById('oGuests');
+      const oSpace = document.getElementById('oSpace');
+      const oCap = document.getElementById('oCap');
+      const oDate = document.getElementById('oDate');
+      const oCater = document.getElementById('oCater');
+      const oAddons = document.getElementById('oAddons');
+      const oAddonsNone = document.getElementById('oAddonsNone');
+      const oFit = document.getElementById('oFit');
+      const oBook = document.getElementById('oBook');
+      const sumMini = document.getElementById('sumMini');
+
+      // ----- helpers -----
+      const getRadio = (name) => {
+        const el = form.querySelector(`input[name="${name}"]:checked`);
+        return el ? el.value : '';
+      };
+      const capLabel = (s) => (s.cap === '∞' ? 'Any scale' : 'Up to ' + s.cap);
+      const fmtDate = (v) => {
+        if (!v) return 'Flexible';
+        const d = new Date(v + 'T00:00:00');
+        if (isNaN(d)) return 'Flexible';
+        return d.toLocaleDateString('en-US', { weekday: 'short', month: 'long', day: 'numeric', year: 'numeric' });
+      };
+
+      // ----- guest-count fit logic on the space cards -----
+      const paintFit = () => {
+        const n = Number(range.value);
+        const pct = ((n - range.min) / (range.max - range.min)) * 100;
+        range.style.setProperty('--fill', pct + '%');
+        guestVal.textContent = String(n);
+
+        // fitting = capacity can hold the count
+        let fitTotal = 0;
+        let suggestKey = null;
+        let suggestCap = Infinity;
+        spaceCards.forEach((card) => {
+          const cap = Number(card.dataset.cap);
+          const fits = n <= cap;
+          card.classList.toggle('is-nofit', !fits);
+          card.classList.remove('is-suggested');
+          if (fits) {
+            fitTotal += 1;
+            // tightest on-premise fit (ignore the uncapped off-premise for the flag)
+            if (cap !== Infinity && cap < suggestCap) { suggestCap = cap; suggestKey = card.dataset.key; }
+          }
+        });
+        // if nothing on-premise fits, suggest the largest option
+        if (!suggestKey) suggestKey = 'venue';
+        const sCard = spaceCards.find((c) => c.dataset.key === suggestKey);
+        if (sCard) sCard.classList.add('is-suggested');
+
+        fitCount.textContent = fitTotal === 1 ? '1 space fits' : fitTotal + ' spaces fit';
+        return { n, suggestKey };
+      };
+
+      // ----- surface the selected space questions -----
+      const paintQuestions = (key) => {
+        const s = byKey[key];
+        if (!s) return;
+        qsName.textContent = s.name;
+        qsList.innerHTML = '';
+        s.q.forEach((q) => {
+          const li = document.createElement('li');
+          li.textContent = q;
+          qsList.appendChild(li);
+        });
+        qsCall.setAttribute('href', s.book);
+      };
+
+      // ----- assemble the running order -----
+      const paintOrder = () => {
+        const info = paintFit();
+        const etype = getRadio('etype');
+        const key = getRadio('space');
+        const s = byKey[key];
+        const cater = getRadio('cater');
+        const n = info.n;
+
+        oType.textContent = etype;
+        oGuests.textContent = n + (n === 1 ? ' guest' : ' guests');
+        oCater.textContent = cater;
+        oDate.textContent = fmtDate(dateEl.value);
+        sumMini.textContent = n + ' guests';
+
+        if (s) {
+          oSpace.textContent = s.name;
+          oCap.textContent = capLabel(s);
+          oBook.setAttribute('href', s.book);
+          const fits = s.capNum === Infinity || n <= s.capNum;
+          if (fits) {
+            oFit.textContent = s.name + ' comfortably holds your ' + n + '.';
+            oFit.classList.remove('is-warn');
+          } else {
+            const better = byKey[info.suggestKey];
+            oFit.textContent = 'Heads up: ' + n + ' is over ' + s.name + '’s capacity. ' + (better ? better.name + ' is a better fit.' : '');
+            oFit.classList.add('is-warn');
+          }
+        }
+
+        // add-ons as line items
+        const vendors = [...form.querySelectorAll('input[name="vendor"]:checked')];
+        oAddons.querySelectorAll('.cfg-order__item').forEach((el) => el.remove());
+        oAddonsNone.hidden = vendors.length > 0;
+        vendors.forEach((v) => {
+          const li = document.createElement('li');
+          li.className = 'cfg-order__item';
+          li.innerHTML = '<span class="cfg-order__itemName"></span><span class="cfg-order__itemNote"></span>';
+          li.querySelector('.cfg-order__itemName').textContent = v.value;
+          li.querySelector('.cfg-order__itemNote').textContent = v.dataset.note || '';
+          oAddons.appendChild(li);
+        });
+      };
+
+      // ----- build the mailto plan -----
+      const sendPlan = () => {
+        const etype = getRadio('etype');
+        const n = range.value;
+        const key = getRadio('space');
+        const s = byKey[key];
+        const cater = getRadio('cater');
+        const date = fmtDate(dateEl.value);
+        const vendors = [...form.querySelectorAll('input[name="vendor"]:checked')].map((v) => v.value);
+
+        const lines = [
+          'MY CITRON EVENT PLAN',
+          '',
+          'Event type: ' + etype,
+          'Guest count: ' + n,
+          'Space: ' + (s ? s.name + ' (' + capLabel(s) + ')' : 'To be advised'),
+          'Preferred date: ' + date,
+          'Catering style: ' + cater,
+          '',
+          'Add-ons: ' + (vendors.length ? vendors.join(', ') : 'None'),
+          '',
+          'Built with the Citron Baltimore configurator.',
+        ];
+        const subject = 'Event plan: ' + etype + ' for ' + n + ' guests' + (s ? ' at ' + s.name : '');
+        const href = 'mailto:' + email + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(lines.join('\n'));
+        window.location.href = href;
+      };
+
+      // ----- wire it up -----
+      range.addEventListener('input', paintOrder);
+      form.addEventListener('change', (e) => {
+        if (e.target.name === 'space') paintQuestions(e.target.value);
+        paintOrder();
+      });
+      dateEl.addEventListener('input', paintOrder);
+      document.getElementById('sendPlan').addEventListener('click', sendPlan);
+
+      // mobile summary collapse
+      const toggle = document.getElementById('sumToggle');
+      const summary = document.getElementById('summary');
+      toggle.addEventListener('click', () => {
+        const open = summary.classList.toggle('is-open');
+        toggle.setAttribute('aria-expanded', String(open));
+      });
+
+      // init
+      paintQuestions(getRadio('space'));
+      paintOrder();
+
+      // ----- scheduler embed: gate the third-party iframe off initial paint -----
+      // The Google Calendar iframe is only injected on click (or once the
+      // section scrolls into view), so it never loads on first paint.
+      const schedTpl = document.getElementById('schedTpl');
+      const schedMount = document.getElementById('schedMount');
+      const schedLoad = document.getElementById('schedLoad');
+      const schedBtn = document.getElementById('schedLoadBtn');
+      let schedLoaded = false;
+      const loadScheduler = () => {
+        if (schedLoaded || !schedTpl || !schedMount) return;
+        schedLoaded = true;
+        schedMount.appendChild(schedTpl.content.cloneNode(true));
+        schedMount.hidden = false;
+        if (schedLoad) schedLoad.hidden = true;
+      };
+      if (schedBtn) schedBtn.addEventListener('click', loadScheduler);
+
+      // Optional convenience: auto-load once the framed section is well in view.
+      // Still never fires on initial paint; only after a deliberate scroll.
+      const schedSection = document.getElementById('schedule');
+      if (schedSection && 'IntersectionObserver' in window) {
+        const sio = new IntersectionObserver((ents) => {
+          ents.forEach((en) => {
+            if (en.isIntersecting) { loadScheduler(); sio.disconnect(); }
+          });
+        }, { threshold: 0.35 });
+        sio.observe(schedSection);
+      }
+
+      // reveal-on-scroll (transform/opacity only, reduced-motion safe)
+      const els = document.querySelectorAll('.reveal');
+      if (els.length) {
+        if (!('IntersectionObserver' in window) || reduce) {
+          els.forEach((el) => el.classList.add('is-in'));
+        } else {
+          const io = new IntersectionObserver((ents) => {
+            ents.forEach((en) => { if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target); } });
+          }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+          els.forEach((el) => io.observe(el));
+        }
+      }
+    })();
+  </script>
+
+  <style>
+    /* ============================ shell ============================ */
+    .cfg-body{ background:
+      radial-gradient(120% 80% at 82% -5%, color-mix(in oklab, var(--olive) 16%, transparent) 0%, transparent 46%),
+      radial-gradient(100% 70% at 0% 100%, color-mix(in oklab, var(--brass) 10%, transparent) 0%, transparent 40%),
+      var(--abyss);
+      min-height:100vh;
+    }
+    main{ display:block; }
+
+    /* ============================ nav ============================ */
+    .cfg-nav{ position:sticky; top:0; z-index:60; background:color-mix(in oklab, var(--abyss) 88%, transparent); backdrop-filter:blur(10px); border-bottom:1px solid var(--hair); }
+    .cfg-nav__in{ max-width:var(--maxw); margin-inline:auto; padding:.85rem var(--gutter); display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+    .cfg-brand{ display:inline-flex; align-items:baseline; gap:.55rem; }
+    .cfg-brand__mark{ width:9px; height:9px; border-radius:50%; background:var(--citron); box-shadow:0 0 14px color-mix(in oklab, var(--citron) 70%, transparent); align-self:center; }
+    .cfg-brand__word{ font-family:var(--serif); font-size:1.5rem; font-weight:600; color:var(--cream); line-height:1; }
+    .cfg-brand__sub{ font-family:var(--sans); font-size:.62rem; font-weight:700; letter-spacing:.28em; text-transform:uppercase; color:var(--brass-light); }
+    .cfg-nav__links{ display:flex; align-items:center; gap:clamp(.8rem, .4rem + 1.4vw, 1.6rem); }
+    .cfg-nav__back{ font-family:var(--sans); font-size:var(--step--1); font-weight:600; letter-spacing:.04em; color:var(--mist); display:inline-flex; gap:.4em; align-items:center; transition:color var(--t-fast); }
+    .cfg-nav__back:hover{ color:var(--citron); }
+    .cfg-nav__cta{
+      display:inline-flex; align-items:center; min-height:42px; padding:0 1.3em;
+      font-family:var(--sans); font-weight:700; font-size:var(--step--1); letter-spacing:.14em; text-transform:uppercase;
+      color:var(--abyss); background:var(--citron); border:1px solid var(--citron); border-radius:40px;
+      transition:transform var(--t-fast) var(--ease), box-shadow var(--t-med) var(--ease);
+    }
+    .cfg-nav__cta:hover{ transform:translateY(-2px); box-shadow:0 10px 26px -10px color-mix(in oklab, var(--citron) 60%, transparent); }
+
+    /* ============================ intro ============================ */
+    .cfg-intro{ max-width:var(--maxw); margin-inline:auto; padding:clamp(2.6rem, 1.6rem + 4vw, 5rem) var(--gutter) clamp(1.4rem, 1rem + 2vw, 2.4rem); }
+    .cfg-intro__title{ font-size:clamp(2.4rem, 1.4rem + 4vw, 4.4rem); font-weight:500; line-height:1.02; margin-top:.12em; }
+    .cfg-intro__title em{ color:var(--citron); font-style:italic; }
+    .cfg-intro__lede{ color:var(--mist); font-size:var(--step-1); margin-top:.9em; }
+
+    /* ============================ builder grid ============================ */
+    .cfg-build__in{
+      max-width:var(--maxw); margin-inline:auto; padding:0 var(--gutter) clamp(3rem, 2rem + 4vw, 5rem);
+      display:grid; grid-template-columns:1.5fr 1fr; gap:clamp(1.5rem, 1rem + 2.5vw, 3rem); align-items:start;
+    }
+
+    /* ============================ controls ============================ */
+    .cfg-controls{ display:flex; flex-direction:column; gap:clamp(1.8rem, 1.2rem + 2vw, 2.8rem); min-width:0; }
+    .cfg-field{ border:0; padding:0; margin:0; min-width:0; display:flex; flex-direction:column; gap:1rem; }
+    .cfg-label{ display:flex; align-items:center; gap:.6em; font-family:var(--serif); font-size:var(--step-1); font-weight:600; color:var(--cream); padding:0; }
+    .cfg-label__n{ font-family:var(--sans); font-size:.66rem; font-weight:700; letter-spacing:.16em; color:var(--abyss); background:var(--brass-light); border-radius:3px; padding:.28em .5em; line-height:1; }
+    .cfg-opt{ font-family:var(--sans); font-size:.72rem; font-weight:500; letter-spacing:.04em; color:var(--mist-dim); text-transform:none; }
+    .cfg-hintline{ margin:-.3rem 0 0; font-size:var(--step--1); color:var(--mist-dim); }
+    .cfg-hintline em{ color:var(--brass-light); font-style:normal; font-weight:700; }
+
+    /* chips */
+    .cfg-chips{ display:flex; flex-wrap:wrap; gap:10px; }
+    .cfg-chip{ position:relative; cursor:pointer; }
+    .cfg-chip input{ position:absolute; opacity:0; inset:0; width:100%; height:100%; margin:0; cursor:pointer; }
+    .cfg-chip > span{
+      display:inline-flex; align-items:center; min-height:46px; padding:0 1.15em;
+      border:1px solid var(--hair-strong); border-radius:40px; background:rgba(255,255,255,.015);
+      font-family:var(--sans); font-size:var(--step--1); font-weight:600; color:var(--mist);
+      transition:border-color var(--t-med), background var(--t-med), color var(--t-med), transform var(--t-fast) var(--ease);
+    }
+    .cfg-chip:hover > span{ transform:translateY(-2px); border-color:color-mix(in oklab, var(--citron) 55%, transparent); }
+    .cfg-chip input:checked + span{ background:var(--citron); border-color:var(--citron); color:var(--abyss); font-weight:700; }
+    .cfg-chip input:focus-visible + span{ outline:2px solid var(--citron); outline-offset:3px; }
+    .cfg-chip--stack > span{ flex-direction:column; align-items:flex-start; gap:.15em; padding:.7em 1.15em; min-height:auto; }
+    .cfg-chip--stack em{ font-style:normal; font-weight:500; font-size:.72rem; color:var(--mist-dim); }
+    .cfg-chip--stack input:checked + span em{ color:color-mix(in oklab, var(--abyss) 78%, transparent); }
+    .cfg-chips--cater{ gap:12px; }
+
+    /* slider */
+    .cfg-slider{ padding-top:.2rem; }
+    .cfg-slider__ticks{ display:flex; justify-content:space-between; margin-top:.7rem; font-size:.7rem; letter-spacing:.05em; color:var(--mist-dim); }
+    input[type="range"]{
+      --fill:23%;
+      -webkit-appearance:none; appearance:none; width:100%; height:6px; margin:0;
+      background:linear-gradient(to right, var(--citron) var(--fill), var(--hair-strong) var(--fill));
+      border-radius:40px; cursor:pointer; outline-offset:6px;
+    }
+    input[type="range"]::-webkit-slider-thumb{
+      -webkit-appearance:none; appearance:none; width:26px; height:26px; border-radius:50%;
+      background:var(--cream); border:3px solid var(--citron);
+      box-shadow:0 6px 18px -6px rgba(0,0,0,.7); cursor:grab; transition:transform var(--t-fast) var(--ease);
+    }
+    input[type="range"]::-webkit-slider-thumb:active{ cursor:grabbing; transform:scale(1.12); }
+    input[type="range"]::-moz-range-thumb{ width:26px; height:26px; border-radius:50%; background:var(--cream); border:3px solid var(--citron); box-shadow:0 6px 18px -6px rgba(0,0,0,.7); cursor:grab; }
+    input[type="range"]::-moz-range-track{ height:6px; background:var(--hair-strong); border-radius:40px; }
+    input[type="range"]::-moz-range-progress{ height:6px; background:var(--citron); border-radius:40px; }
+    .cfg-guesthint{ display:flex; flex-wrap:wrap; align-items:baseline; gap:.4rem 1.1rem; margin:.5rem 0 0; font-size:var(--step-0); color:var(--mist); }
+    .cfg-guesthint strong{ font-family:var(--serif); font-size:var(--step-2); font-weight:600; color:var(--citron); margin-right:.15em; }
+    .cfg-guesthint__fit{ font-size:var(--step--1); color:var(--brass-light); font-weight:700; letter-spacing:.02em; }
+
+    /* space cards */
+    .cfg-spaces{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .cfg-space{ position:relative; cursor:pointer; min-width:0; }
+    .cfg-space input{ position:absolute; opacity:0; inset:0; width:100%; height:100%; margin:0; cursor:pointer; }
+    .cfg-space__card{
+      position:relative; display:flex; flex-direction:column; height:100%; overflow:hidden;
+      border:1px solid var(--hair-strong); border-radius:8px; background:linear-gradient(180deg, var(--night) 0%, var(--abyss-2) 100%);
+      transition:border-color var(--t-med), transform var(--t-fast) var(--ease), box-shadow var(--t-med) var(--ease), opacity var(--t-med);
+    }
+    .cfg-space:hover .cfg-space__card{ transform:translateY(-3px); border-color:color-mix(in oklab, var(--citron) 45%, transparent); }
+    .cfg-space input:checked + .cfg-space__card{ border-color:var(--citron); box-shadow:0 0 0 1px var(--citron), 0 22px 50px -30px color-mix(in oklab, var(--citron) 60%, transparent); }
+    .cfg-space input:focus-visible + .cfg-space__card{ outline:2px solid var(--citron); outline-offset:3px; }
+    .cfg-space.is-nofit .cfg-space__card{ opacity:.42; }
+    .cfg-space.is-nofit:hover .cfg-space__card{ opacity:.7; }
+
+    .cfg-space__media{ position:relative; aspect-ratio:16/9; overflow:hidden; }
+    .cfg-space__img{ width:100%; height:100%; object-fit:cover; transition:transform var(--t-slow) var(--ease); }
+    .cfg-space:hover .cfg-space__img{ transform:scale(1.05); }
+    .cfg-space__badge{
+      position:absolute; top:8px; left:8px; opacity:0; transform:translateY(-4px);
+      font-family:var(--sans); font-size:.6rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+      color:var(--abyss); background:var(--brass-light); padding:.35em .6em; border-radius:3px;
+      transition:opacity var(--t-med), transform var(--t-med) var(--ease);
+    }
+    .cfg-space.is-suggested .cfg-space__badge{ opacity:1; transform:none; }
+
+    .cfg-space__body{ display:flex; flex-direction:column; gap:.5rem; padding:.9rem 1rem 1rem; flex:1; }
+    .cfg-space__top{ display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:.3rem .6rem; }
+    .cfg-space__name{ font-family:var(--serif); font-size:var(--step-1); font-weight:600; color:var(--cream); line-height:1.05; }
+    .cfg-space__cap{ font-size:.66rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--citron); white-space:nowrap; }
+    .cfg-space__best{ font-size:var(--step--1); color:var(--mist); line-height:1.4; }
+    .cfg-space__meta{ display:flex; flex-direction:column; gap:.15rem; margin-top:auto; font-size:.72rem; color:var(--mist-dim); line-height:1.35; }
+    .cfg-space__meta b{ color:var(--brass-light); font-weight:700; }
+    .cfg-space__check{ position:absolute; top:10px; right:10px; width:30px; height:30px; display:grid; place-items:center; border-radius:50%; background:var(--citron); color:var(--abyss); opacity:0; transform:scale(.7); transition:opacity var(--t-fast), transform var(--t-fast) var(--ease); }
+    .cfg-space input:checked ~ .cfg-space__check,
+    .cfg-space input:checked + .cfg-space__card .cfg-space__check{ opacity:1; transform:none; }
+
+    /* questions surfaced on selection */
+    .cfg-questions{
+      margin-top:.4rem; padding:1.1rem 1.3rem; border-radius:8px;
+      border:1px solid color-mix(in oklab, var(--brass) 34%, transparent);
+      background:linear-gradient(180deg, color-mix(in oklab, var(--brass) 8%, transparent) 0%, transparent 100%);
+    }
+    .cfg-questions__head{ margin:0 0 .7rem; font-size:var(--step--1); color:var(--mist); }
+    .cfg-questions__head strong{ font-family:var(--serif); font-size:var(--step-0); color:var(--brass-light); font-weight:600; }
+    .cfg-questions__list{ margin:0 0 .9rem; padding:0; list-style:none; display:flex; flex-direction:column; gap:.5rem; }
+    .cfg-questions__list li{ position:relative; padding-left:1.4em; font-size:var(--step--1); color:var(--mist); line-height:1.4; }
+    .cfg-questions__list li::before{ content:''; position:absolute; left:0; top:.5em; width:7px; height:7px; border-radius:50%; background:var(--citron); }
+    .cfg-questions__call{ display:inline-flex; gap:.45em; font-size:var(--step--1); font-weight:700; letter-spacing:.04em; color:var(--citron); }
+    .cfg-questions__call span{ transition:transform var(--t-fast) var(--ease); }
+    .cfg-questions__call:hover span{ transform:translateX(4px); }
+
+    /* text input */
+    .cfg-input{
+      width:100%; min-height:52px; padding:0 1rem; color-scheme:dark;
+      background:rgba(255,255,255,.03); color:var(--cream);
+      border:1px solid var(--hair-strong); border-radius:var(--radius);
+      font-family:var(--sans); font-size:var(--step-0);
+      transition:border-color var(--t-med), background var(--t-med);
+    }
+    .cfg-input:hover{ border-color:color-mix(in oklab, var(--citron) 40%, var(--hair-strong)); }
+    .cfg-input:focus{ outline:none; border-color:var(--citron); background:rgba(199,224,75,.05); }
+    .cfg-input:focus-visible{ outline:2px solid var(--citron); outline-offset:3px; }
+
+    /* add-ons */
+    .cfg-addons{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .cfg-addon{ display:flex; align-items:flex-start; gap:.75rem; padding:.85rem 1rem; border:1px solid var(--hair-strong); border-radius:6px; background:rgba(255,255,255,.015); cursor:pointer; transition:border-color var(--t-med), background var(--t-med); }
+    .cfg-addon:hover{ border-color:color-mix(in oklab, var(--citron) 45%, transparent); }
+    .cfg-addon input{ position:absolute; opacity:0; width:1px; height:1px; }
+    .cfg-addon__box{ flex:none; width:22px; height:22px; margin-top:1px; display:grid; place-items:center; border:1px solid var(--hair-strong); border-radius:5px; color:transparent; transition:background var(--t-fast), border-color var(--t-fast), color var(--t-fast); }
+    .cfg-addon input:checked + .cfg-addon__box{ background:var(--citron); border-color:var(--citron); color:var(--abyss); }
+    .cfg-addon input:focus-visible + .cfg-addon__box{ outline:2px solid var(--citron); outline-offset:3px; }
+    .cfg-addon__body{ display:flex; flex-direction:column; gap:.1rem; min-width:0; }
+    .cfg-addon__name{ font-family:var(--sans); font-weight:700; font-size:var(--step--1); color:var(--cream); }
+    .cfg-addon__note{ font-size:.72rem; color:var(--mist-dim); line-height:1.3; }
+
+    /* ============================ summary ============================ */
+    .cfg-summary{ position:sticky; top:5.2rem; }
+    .cfg-summary__toggle{ display:none; }
+    .cfg-summary__body{
+      border:1px solid var(--hair-strong); border-radius:12px; overflow:hidden;
+      background:linear-gradient(180deg, var(--night) 0%, var(--abyss-2) 100%);
+      box-shadow:0 40px 120px -50px rgba(0,0,0,.8);
+    }
+    .cfg-summary__head{ padding:clamp(1.2rem, .9rem + 1vw, 1.6rem) clamp(1.3rem, 1rem + 1vw, 1.8rem) 0; }
+    .cfg-summary__sub{ margin:.35rem 0 0; font-size:var(--step--1); color:var(--mist-dim); }
+
+    .cfg-order{ margin:1.1rem 0 0; padding:0 clamp(1.3rem, 1rem + 1vw, 1.8rem); display:flex; flex-direction:column; }
+    .cfg-order__row{ display:flex; align-items:baseline; justify-content:space-between; gap:1rem; padding:.7rem 0; border-top:1px solid var(--hair); }
+    .cfg-order__row:first-child{ border-top:0; }
+    .cfg-order__row dt{ font-family:var(--sans); font-size:.68rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--mist-dim); }
+    .cfg-order__row dd{ margin:0; text-align:right; font-family:var(--serif); font-size:var(--step-1); font-weight:600; color:var(--cream); line-height:1.15; }
+
+    .cfg-order__addons{ padding:1rem clamp(1.3rem, 1rem + 1vw, 1.8rem) 0; border-top:1px solid var(--hair); margin-top:.4rem; }
+    .cfg-order__addonsHead{ margin:0 0 .6rem; font-family:var(--sans); font-size:.68rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--mist-dim); }
+    .cfg-order__addonsList{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.55rem; }
+    .cfg-order__none{ font-size:var(--step--1); color:var(--mist-dim); font-style:italic; }
+    .cfg-order__item{ display:flex; align-items:baseline; justify-content:space-between; gap:.8rem; }
+    .cfg-order__itemName{ position:relative; padding-left:1.1em; font-family:var(--sans); font-weight:600; font-size:var(--step--1); color:var(--mist); }
+    .cfg-order__itemName::before{ content:'+'; position:absolute; left:0; color:var(--citron); font-weight:700; }
+    .cfg-order__itemNote{ font-size:.68rem; color:var(--mist-dim); text-align:right; }
+
+    .cfg-order__fit{ margin:1rem clamp(1.3rem, 1rem + 1vw, 1.8rem) 0; padding:.7rem .9rem; border-radius:6px; font-size:var(--step--1); line-height:1.4; color:var(--mist); background:rgba(199,224,75,.07); border:1px solid color-mix(in oklab, var(--citron) 32%, transparent); }
+    .cfg-order__fit.is-warn{ color:var(--cream); background:color-mix(in oklab, var(--brass) 14%, transparent); border-color:color-mix(in oklab, var(--brass) 50%, transparent); }
+
+    .cfg-summary__actions{ padding:1.2rem clamp(1.3rem, 1rem + 1vw, 1.8rem) 0; display:flex; flex-direction:column; gap:.9rem; }
+    .cfg-send{ width:100%; min-height:56px; font-size:var(--step-0); }
+    .cfg-bookline{ display:inline-flex; align-self:center; gap:.45em; font-size:var(--step--1); font-weight:600; color:var(--brass-light); }
+    .cfg-bookline span{ transition:transform var(--t-fast) var(--ease); }
+    .cfg-bookline:hover span{ transform:translateX(4px); }
+    .cfg-note{ margin:0; padding:1rem clamp(1.3rem, 1rem + 1vw, 1.8rem) 1.3rem; font-size:.7rem; line-height:1.5; color:var(--mist-dim); }
+
+    /* ============================ scheduler embed ============================ */
+    .cfg-sched{ border-top:1px solid var(--hair); background:
+      radial-gradient(120% 90% at 50% -10%, color-mix(in oklab, var(--olive) 14%, transparent) 0%, transparent 55%),
+      color-mix(in oklab, var(--abyss) 96%, transparent);
+    }
+    .cfg-sched__in{ max-width:var(--maxw); margin-inline:auto; padding:clamp(3rem, 2rem + 4vw, 5.5rem) var(--gutter) clamp(2.4rem, 1.6rem + 3vw, 4rem); }
+    .cfg-sched__head{ max-width:62ch; }
+    .cfg-sched__title{ font-family:var(--serif); font-size:clamp(2rem, 1.3rem + 3vw, 3.4rem); font-weight:500; line-height:1.04; margin:.15em 0 0; color:var(--cream); }
+    .cfg-sched__lede{ margin:.9em 0 0; color:var(--mist); font-size:var(--step-1); }
+
+    .cfg-sched__frame{
+      position:relative; margin-top:clamp(1.6rem, 1rem + 2vw, 2.6rem);
+      border:1px solid color-mix(in oklab, var(--brass) 34%, var(--hair-strong));
+      border-radius:14px; padding:clamp(.7rem, .4rem + 1vw, 1.1rem);
+      background:linear-gradient(180deg, var(--night) 0%, var(--abyss-2) 100%);
+      box-shadow:0 50px 130px -60px rgba(0,0,0,.85);
+    }
+
+    /* click-to-load / skeleton state */
+    .cfg-sched__load{ position:relative; border-radius:8px; overflow:hidden; min-height:min(640px, 74vh); display:grid; }
+    .cfg-sched__skeleton{ position:absolute; inset:0; padding:clamp(1.2rem, .8rem + 2vw, 2.4rem); display:flex; flex-direction:column; gap:1rem; opacity:.5; }
+    .cfg-sched__skelRow{ height:16px; width:48%; border-radius:6px; background:var(--hair-strong); }
+    .cfg-sched__skelRow:nth-child(2){ width:30%; }
+    .cfg-sched__skelGrid{ margin-top:1rem; display:grid; grid-template-columns:repeat(7, 1fr); gap:10px; flex:1; }
+    .cfg-sched__skelGrid i{ border-radius:6px; background:var(--hair-strong); min-height:34px; }
+    .cfg-sched__skelRow, .cfg-sched__skelGrid i{ animation:cfgShimmer 1.8s ease-in-out infinite; }
+
+    .cfg-sched__loadInner{
+      position:relative; z-index:1; place-self:center; text-align:center;
+      display:flex; flex-direction:column; align-items:center; gap:.6rem;
+      padding:clamp(1.6rem, 1rem + 3vw, 3rem); max-width:44ch;
+      background:radial-gradient(120% 120% at 50% 0%, color-mix(in oklab, var(--abyss) 78%, transparent) 0%, color-mix(in oklab, var(--abyss) 55%, transparent) 70%, transparent 100%);
+      border-radius:12px;
+    }
+    .cfg-sched__loadTitle{ font-family:var(--serif); font-size:var(--step-2); font-weight:600; color:var(--cream); margin:0; }
+    .cfg-sched__loadSub{ margin:0; font-size:var(--step--1); color:var(--mist-dim); }
+    .cfg-sched__btn{ min-height:52px; margin-top:.5rem; padding:0 1.8em; }
+    .cfg-sched__alt{ display:inline-flex; gap:.45em; font-size:var(--step--1); font-weight:600; color:var(--brass-light); }
+    .cfg-sched__alt span{ transition:transform var(--t-fast) var(--ease); }
+    .cfg-sched__alt:hover span{ transform:translateX(4px); }
+
+    .cfg-sched__mount{ display:block; }
+    .cfg-sched__mount iframe{ display:block; }
+    .cfg-sched__note{ margin:1rem 0 0; font-size:.72rem; color:var(--mist-dim); line-height:1.5; }
+
+    @keyframes cfgShimmer{ 0%,100%{ opacity:.35; } 50%{ opacity:.7; } }
+
+    /* ============================ footer ============================ */
+    .cfg-foot{ border-top:1px solid var(--hair); margin-top:auto; }
+    .cfg-foot__in{ max-width:var(--maxw); margin-inline:auto; padding:clamp(2rem, 1.4rem + 2vw, 3rem) var(--gutter) 1.4rem; display:flex; flex-wrap:wrap; align-items:flex-start; justify-content:space-between; gap:1.6rem; }
+    .cfg-foot__word{ font-family:var(--serif); font-size:var(--step-2); font-weight:600; color:var(--cream); }
+    .cfg-foot__addr{ margin:.5rem 0 0; font-size:var(--step--1); color:var(--mist-dim); }
+    .cfg-foot__links{ display:flex; flex-wrap:wrap; gap:.6rem 1.6rem; }
+    .cfg-foot__links a{ font-size:var(--step--1); font-weight:600; color:var(--mist); transition:color var(--t-fast); }
+    .cfg-foot__links a:hover{ color:var(--citron); }
+    .cfg-foot__fine{ max-width:var(--maxw); margin:0 auto; padding:0 var(--gutter) 2rem; font-size:.72rem; color:var(--mist-dim); }
+
+    /* ============================ responsive ============================ */
+    @media(max-width:960px){
+      .cfg-build__in{ grid-template-columns:1fr; }
+      .cfg-summary{ position:fixed; inset:auto 0 0 0; top:auto; z-index:70; border-top:1px solid var(--hair-strong); background:color-mix(in oklab, var(--abyss) 94%, transparent); backdrop-filter:blur(10px); }
+      .cfg-summary__toggle{
+        display:flex; align-items:center; gap:.7rem; width:100%; padding:1rem var(--gutter);
+        background:none; border:0; cursor:pointer; color:var(--cream); text-align:left;
+      }
+      .cfg-summary__toggleL{ font-family:var(--serif); font-size:var(--step-1); font-weight:600; }
+      .cfg-summary__toggleR{ margin-left:auto; font-size:var(--step--1); font-weight:700; letter-spacing:.04em; color:var(--citron); }
+      .cfg-summary__chev{ font-size:.7rem; color:var(--mist-dim); transition:transform var(--t-med) var(--ease); }
+      .cfg-summary.is-open .cfg-summary__chev{ transform:rotate(180deg); }
+      .cfg-summary__body{
+        border:0; border-radius:0; box-shadow:none; background:transparent;
+        max-height:0; overflow:hidden; transition:max-height var(--t-med) var(--ease);
+      }
+      .cfg-summary.is-open .cfg-summary__body{ max-height:82vh; overflow-y:auto; }
+      .cfg-build{ padding-bottom:5rem; }
+      .cfg-note{ padding-bottom:1.6rem; }
+    }
+    @media(max-width:560px){
+      .cfg-spaces{ grid-template-columns:1fr; }
+      .cfg-addons{ grid-template-columns:1fr; }
+      .cfg-brand__sub{ display:none; }
+    }
+    @media(prefers-reduced-motion:reduce){
+      *{ scroll-behavior:auto !important; }
+      .cfg-space__img, .cfg-space__card, .cfg-nav__cta, .cfg-summary__chev{ transition:none !important; }
+      .cfg-space:hover .cfg-space__img{ transform:none; }
+      .cfg-space:hover .cfg-space__card{ transform:none; }
+      .cfg-sched__skelRow, .cfg-sched__skelGrid i{ animation:none !important; }
+    }
+  </style>
+</body>
+</html>

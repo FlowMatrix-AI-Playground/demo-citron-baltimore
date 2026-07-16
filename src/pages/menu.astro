@@ -1,0 +1,270 @@
+---
+import Base from '../layouts/Base.astro';
+import { Image } from 'astro:assets';
+import { MENU, MENU_NOTES } from '../data/menu.js';
+import { SITE } from '../data/site.js';
+import hero from '../assets/img/dining-room.jpg';
+import wine from '../assets/img/wine.jpg';
+
+// Which sections read best as two tidy columns on desktop.
+const twoCol = new Set(['sushi', 'add-ons', 'sides']);
+---
+<Base
+  title="Menu, Citron Baltimore"
+  description="Seasonal Modern American, a full sushi bar, prime steaks and day-boat seafood at Quarry Lake."
+>
+  <!-- ===== HERO (compact) ===== -->
+  <section class="menu-hero">
+    <div class="menu-hero__media" aria-hidden="true">
+      <Image
+        src={hero}
+        alt=""
+        widths={[900, 1300, 1600]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+        format="avif"
+        quality={55}
+        class="menu-hero__img"
+      />
+      <div class="menu-hero__scrim"></div>
+    </div>
+    <div class="wrap menu-hero__inner cluster">
+      <p class="eyebrow">Dinner &middot; Quarry Lake</p>
+      <h1 class="menu-hero__title">The Menu</h1>
+      <p class="menu-hero__lede measure">
+        A seasonal Modern American kitchen and a full sushi bar, prime center-cut steaks,
+        day-boat seafood, and a Wine Spectator&ndash;honored list, all against the water.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== MENU ===== -->
+  <div class="menu-body">
+    <div class="wrap">
+      {MENU.map((sec, i) => (
+        <section
+          class:list={["mcourse reveal", { 'mcourse--sushi': sec.id === 'sushi' }]}
+          data-delay={String((i % 3) + 1)}
+          aria-labelledby={`sec-${sec.id}`}
+        >
+          <header class="mcourse__head">
+            <p class="eyebrow mcourse__eyebrow">{sec.id === 'sushi' ? 'The Sushi Bar' : 'Course'}</p>
+            <div class="mcourse__titlerow">
+              <h2 class="mcourse__title" id={`sec-${sec.id}`}>{sec.title}</h2>
+              <span class="mcourse__rule" aria-hidden="true"></span>
+              {sec.note && <span class="mcourse__note">{sec.note}</span>}
+            </div>
+          </header>
+
+          <ul class:list={["mlist", { 'mlist--two': twoCol.has(sec.id) }]}>
+            {sec.items.map((it) => (
+              <li class="mitem">
+                <div class="mitem__row">
+                  <span class="mitem__name">{it.name}</span>
+                  {!sec.note && <span class="mitem__lead" aria-hidden="true"></span>}
+                  {!sec.note && it.price != null && (
+                    <span class="mitem__price">{it.price}</span>
+                  )}
+                  <a
+                    class="mitem__cart"
+                    href={SITE.pickupUrl}
+                    target="_blank"
+                    rel="noopener"
+                    aria-label={`Add ${it.name} to pick-up order`}
+                  >
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                      <circle cx="9" cy="20" r="1"></circle>
+                      <circle cx="18" cy="20" r="1"></circle>
+                      <path d="M2.5 3.5h2.2l2.3 11.1a1.5 1.5 0 0 0 1.5 1.2h8.4a1.5 1.5 0 0 0 1.5-1.15L21 7.5H6"></path>
+                    </svg>
+                  </a>
+                </div>
+                {it.desc && <p class="mitem__desc">{it.desc}</p>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+
+      <!-- fine print -->
+      <div class="menu-notes reveal" data-delay="1">
+        {MENU_NOTES.map((n) => (
+          <p class="menu-notes__line">{n}</p>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CTA BAND ===== -->
+  <section class="menu-cta">
+    <div class="menu-cta__media" aria-hidden="true">
+      <Image
+        src={wine}
+        alt=""
+        widths={[900, 1300]}
+        sizes="100vw"
+        loading="lazy"
+        format="avif"
+        quality={45}
+        class="menu-cta__img"
+      />
+      <div class="menu-cta__scrim"></div>
+    </div>
+    <div class="wrap menu-cta__inner reveal cluster">
+      <p class="eyebrow eyebrow--brass">Pull up a chair</p>
+      <h2 class="menu-cta__title">Reserve a table or order pick-up.</h2>
+      <p class="measure menu-cta__lede">
+        Dinner Wednesday through Sunday from 4 PM, or take the kitchen to go. Planning something larger?
+        Our private dining spaces host from twenty to five hundred.
+      </p>
+      <div class="cluster-cta">
+        <button class="btn menu-cta__btn" data-cta data-magnetic>Reserve &middot; Pick-Up &middot; Events</button>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* ===== compact hero ===== */
+  .menu-hero{
+    position:relative; overflow:hidden;
+    min-height:clamp(46vh, 30vh + 12rem, 62vh);
+    display:flex; align-items:flex-end;
+    padding-block:clamp(3.4rem, 2rem + 8vw, 7rem);
+  }
+  .menu-hero__media{ position:absolute; inset:0; }
+  .menu-hero__img{ width:100%; height:100%; object-fit:cover; }
+  .menu-hero__scrim{
+    position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(8,12,10,.62) 0%, rgba(8,12,10,.28) 40%, rgba(8,12,10,.82) 100%),
+      linear-gradient(90deg, rgba(8,12,10,.68) 0%, rgba(8,12,10,.14) 70%);
+  }
+  .menu-hero__inner{ position:relative; z-index:2; max-width:720px; }
+  .menu-hero__title{ font-size:var(--step-4); font-weight:500; line-height:.98; }
+  .menu-hero__lede{ color:var(--mist); font-size:var(--step-1); }
+
+  /* ===== menu body ===== */
+  .menu-body{
+    background:linear-gradient(180deg, var(--abyss) 0%, var(--abyss-2) 100%);
+    padding-block: clamp(4rem, 2.6rem + 7vw, 8rem);
+  }
+  .menu-body > .wrap{ max-width:1080px; }
+
+  .mcourse{ padding-block:clamp(2.2rem, 1.4rem + 3vw, 3.6rem); }
+  .mcourse + .mcourse{ border-top:1px solid var(--hair); }
+
+  .mcourse__head{ margin-bottom:clamp(1.6rem, 1rem + 2vw, 2.6rem); }
+  .mcourse__eyebrow{ color:var(--olive-dark); margin-bottom:.85rem; }
+  .mcourse--sushi .mcourse__eyebrow{ color:var(--brass-light); }
+  .mcourse__titlerow{ display:flex; align-items:baseline; gap:clamp(1rem, .6rem + 1.6vw, 1.6rem); }
+  .mcourse__title{ font-size:var(--step-3); font-weight:500; flex:none; }
+  .mcourse__rule{ flex:1; height:1px; background:var(--hair-strong); transform:translateY(-.28em); }
+  .mcourse__note{
+    flex:none; font-family:var(--sans); font-weight:700;
+    font-size:var(--step--1); letter-spacing:.14em; text-transform:uppercase;
+    color:var(--brass-light);
+    border:1px solid color-mix(in oklab, var(--brass) 46%, transparent);
+    border-radius:40px; padding:6px 15px; transform:translateY(-.2em);
+    white-space:nowrap;
+  }
+
+  /* item lists */
+  .mlist{ display:grid; grid-template-columns:1fr; gap:clamp(1.4rem, 1rem + 1.2vw, 2rem); }
+  .mlist--two{ grid-template-columns:1fr 1fr; column-gap:clamp(2rem, 1rem + 4vw, 4.5rem); }
+
+  .mitem{ break-inside:avoid; }
+  .mitem__row{ display:flex; align-items:baseline; gap:.35rem; }
+  .mitem__name{
+    font-family:var(--serif); font-weight:600; font-size:var(--step-1);
+    color:var(--cream); line-height:1.15; flex:0 1 auto;
+  }
+  .mitem__lead{
+    flex:1 1 auto; min-width:1.5rem; align-self:flex-end;
+    border-bottom:1px dotted var(--hair-strong);
+    transform:translateY(-.34em); margin:0 .15rem;
+  }
+  .mitem__price{
+    flex:none; font-family:var(--serif); font-size:var(--step-1);
+    color:var(--citron); font-variant-numeric:tabular-nums;
+    font-feature-settings:"tnum" 1; letter-spacing:.01em;
+  }
+  .mitem__desc{
+    margin:.35em 0 0; color:var(--mist-dim);
+    font-size:var(--step--1); line-height:1.55; max-width:52ch;
+  }
+
+  /* subtle add-to-pick-up cart button */
+  .mitem__cart{
+    flex:none; align-self:center; margin-inline-start:auto;
+    display:inline-flex; align-items:center; justify-content:center;
+    width:32px; height:32px; margin-block:-7px;
+    border-radius:999px; text-decoration:none;
+    color:var(--mist-dim); opacity:.38;
+    transition:opacity .2s ease, color .2s ease, background-color .2s ease;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .mitem__cart svg{ display:block; width:16px; height:16px; }
+  .mitem__cart:hover,
+  .mitem__cart:focus-visible{
+    opacity:1; color:var(--citron);
+    background-color:color-mix(in oklab, var(--citron) 12%, transparent);
+  }
+  .mitem__cart:focus-visible{
+    outline:2px solid var(--citron); outline-offset:2px;
+  }
+  .mcourse--sushi .mitem__cart:hover,
+  .mcourse--sushi .mitem__cart:focus-visible{ color:var(--brass-light); }
+  .mcourse--sushi .mitem__cart:focus-visible{ outline-color:var(--brass-light); }
+
+  /* ===== sushi highlight ===== */
+  .mcourse--sushi{
+    position:relative;
+    margin-block:clamp(1rem, .5rem + 1.5vw, 2rem);
+    padding-inline:clamp(1.4rem, .8rem + 2.5vw, 3rem);
+    background:
+      radial-gradient(120% 90% at 100% 0%, color-mix(in oklab, var(--brass) 10%, transparent) 0%, transparent 55%),
+      linear-gradient(180deg, color-mix(in oklab, var(--night) 60%, transparent) 0%, rgba(11,18,16,.2) 100%);
+    border:1px solid color-mix(in oklab, var(--brass) 22%, var(--hair));
+    border-radius:6px;
+  }
+  .mcourse--sushi + .mcourse{ border-top:0; }
+  .mcourse--sushi .mitem__price{ color:var(--brass-light); }
+  .mcourse--sushi .mcourse__rule{ background:color-mix(in oklab, var(--brass) 40%, transparent); }
+
+  /* ===== fine print ===== */
+  .menu-notes{
+    margin-top:clamp(2.6rem, 1.6rem + 3vw, 4rem);
+    padding-top:2rem; border-top:1px solid var(--hair);
+    display:grid; gap:.5rem;
+  }
+  .menu-notes__line{
+    margin:0; color:var(--mist-dim);
+    font-size:var(--step--1); line-height:1.5; max-width:74ch;
+  }
+
+  /* ===== cta band ===== */
+  .menu-cta{
+    position:relative; overflow:hidden; color:var(--cream); text-align:left;
+    padding-block:clamp(4.5rem, 3rem + 8vw, 8rem);
+  }
+  .menu-cta__media{ position:absolute; inset:0; }
+  .menu-cta__img{ width:100%; height:100%; object-fit:cover; }
+  .menu-cta__scrim{
+    position:absolute; inset:0;
+    background:linear-gradient(90deg, rgba(8,12,10,.94) 8%, rgba(8,12,10,.72) 52%, rgba(8,12,10,.4) 100%);
+  }
+  .menu-cta__inner{ position:relative; z-index:2; max-width:640px; }
+  .menu-cta__title{ font-size:var(--step-3); font-weight:500; line-height:1.02; }
+  .menu-cta__lede{ color:var(--mist); font-size:var(--step-0); }
+  .menu-cta__btn{ min-height:58px; font-size:var(--step-0); }
+
+  /* ===== responsive ===== */
+  @media(max-width:680px){
+    .mlist--two{ grid-template-columns:1fr; gap:clamp(1.4rem,1rem + 1.2vw,2rem); }
+    .mcourse__titlerow{ flex-wrap:wrap; gap:.6rem 1rem; }
+    .mcourse__rule{ display:none; }
+    .mcourse__note{ transform:none; }
+  }
+</style>

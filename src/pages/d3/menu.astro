@@ -1,0 +1,166 @@
+---
+import D3Base from '../../layouts/D3Base.astro';
+import { Image } from 'astro:assets';
+import { MENU, MENU_NOTES } from '../../data/menu.js';
+import { SITE } from '../../data/site.js';
+import hero from '../../assets/img/decor-food.jpg';
+import wine from '../../assets/img/wine.jpg';
+
+const twoCol = new Set(['sushi', 'add-ons', 'sides']);
+---
+<D3Base
+  title="Menu, Citron Baltimore"
+  description="Seasonal Modern American, a full sushi bar, prime steaks and day-boat seafood at Quarry Lake, Baltimore."
+>
+  <!-- ===== HERO ===== -->
+  <section class="d3-mhero">
+    <div class="d3-mhero__media" aria-hidden="true">
+      <Image src={hero} alt="" widths={[900, 1300, 1500]} sizes="100vw" loading="eager" fetchpriority="high" format="avif" quality={55} class="d3-mhero__img" />
+      <div class="d3-mhero__scrim"></div>
+    </div>
+    <div class="d3-wrap d3-mhero__inner">
+      <p class="d3-eyebrow">Dinner &middot; Quarry Lake</p>
+      <h1 class="d3-mhero__title">The Menu</h1>
+      <p class="d3-mhero__lede d3-measure">A seasonal Modern American kitchen and a full sushi bar, prime center-cut steaks, day-boat seafood, and a Wine Spectator honored list, all against the water.</p>
+    </div>
+  </section>
+
+  <!-- ===== MENU BODY ===== -->
+  <div class="d3-mbody">
+    <div class="d3-wrap">
+      {MENU.map((sec, i) => (
+        <section class:list={["d3-course d3-reveal", { 'd3-course--sushi': sec.id === 'sushi' }]} data-delay={String((i % 3) + 1)} aria-labelledby={`d3-sec-${sec.id}`}>
+          <header class="d3-course__head">
+            <p class="d3-eyebrow d3-course__eyebrow">{sec.id === 'sushi' ? 'The Sushi Bar' : 'Course'}</p>
+            <div class="d3-course__titlerow">
+              <h2 class="d3-course__title" id={`d3-sec-${sec.id}`}>{sec.title}</h2>
+              <span class="d3-course__rule" aria-hidden="true"></span>
+              {sec.note && <span class="d3-course__note">{sec.note}</span>}
+            </div>
+          </header>
+
+          <ul class:list={["d3-mlist", { 'd3-mlist--two': twoCol.has(sec.id) }]}>
+            {sec.items.map((it) => (
+              <li class="d3-mitem">
+                <div class="d3-mitem__row">
+                  <span class="d3-mitem__name">{it.name}</span>
+                  {!sec.note && <span class="d3-mitem__lead" aria-hidden="true"></span>}
+                  {!sec.note && it.price != null && (<span class="d3-mitem__price">{it.price}</span>)}
+                  <a
+                    class="d3-mitem__cart"
+                    href={SITE.pickupUrl}
+                    target="_blank"
+                    rel="noopener"
+                    aria-label={`Add ${it.name} to pick-up order`}
+                  >
+                    <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                      <circle cx="9" cy="20" r="1.15" />
+                      <circle cx="18" cy="20" r="1.15" />
+                      <path d="M2.5 3.6h2.3l2.2 11.1a1.6 1.6 0 0 0 1.57 1.29h8.2a1.6 1.6 0 0 0 1.57-1.26l1.36-6.94H6.2" />
+                    </svg>
+                  </a>
+                </div>
+                {it.desc && <p class="d3-mitem__desc">{it.desc}</p>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+
+      <div class="d3-mnotes d3-reveal" data-delay="1">
+        {MENU_NOTES.map((n) => (<p class="d3-mnotes__line">{n}</p>))}
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CTA BAND ===== -->
+  <section class="d3-mcta">
+    <div class="d3-mcta__media" aria-hidden="true">
+      <Image src={wine} alt="" widths={[900, 1300]} sizes="100vw" loading="lazy" format="avif" quality={45} class="d3-mcta__img" />
+      <div class="d3-mcta__scrim"></div>
+    </div>
+    <div class="d3-wrap d3-mcta__inner d3-reveal">
+      <p class="d3-eyebrow d3-eyebrow--citron">Pull up a chair</p>
+      <h2 class="d3-mcta__title">Reserve a table or order pick-up.</h2>
+      <p class="d3-measure d3-mcta__lede">Dinner Wednesday through Sunday from 4 PM, or take the kitchen to go. Planning something larger? Our private dining spaces host from twenty to five hundred.</p>
+      <div class="d3-mcta__cta">
+        <button class="d3-btn d3-mcta__btn" data-cta>Reserve &middot; Pick-Up &middot; Events</button>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    /* ===== HERO ===== */
+    .d3-mhero{ position:relative; overflow:hidden; min-height:clamp(46vh, 30vh + 12rem, 62vh); display:flex; align-items:flex-end; padding-block:clamp(3.4rem, 2rem + 8vw, 7rem); }
+    .d3-mhero__media{ position:absolute; inset:0; }
+    .d3-mhero__img{ width:100%; height:100%; object-fit:cover; }
+    .d3-mhero__scrim{ position:absolute; inset:0; background:
+      linear-gradient(180deg, rgba(16,21,28,.6) 0%, rgba(16,21,28,.28) 40%, rgba(16,21,28,.9) 100%),
+      linear-gradient(90deg, rgba(16,21,28,.68) 0%, rgba(16,21,28,.1) 70%); }
+    .d3-mhero__inner{ position:relative; z-index:2; max-width:740px; }
+    .d3-mhero__title{ font-size:var(--d3-s-4); line-height:1; }
+    .d3-mhero__lede{ color:var(--d3-cream-dim); font-size:var(--d3-s-1); margin-top:1.2rem; }
+
+    /* ===== BODY ===== */
+    .d3-mbody{ background:linear-gradient(180deg, var(--d3-bg) 0%, var(--d3-bg-2) 100%); padding-block:clamp(4rem, 2.6rem + 7vw, 8rem); }
+    .d3-mbody > .d3-wrap{ max-width:1080px; }
+    .d3-course{ padding-block:clamp(2.2rem, 1.4rem + 3vw, 3.6rem); }
+    .d3-course + .d3-course{ border-top:1px solid var(--d3-hair); }
+    .d3-course__head{ margin-bottom:clamp(1.6rem, 1rem + 2vw, 2.6rem); }
+    .d3-course__eyebrow{ color:var(--d3-amber); margin-bottom:.85rem; }
+    .d3-course--sushi .d3-course__eyebrow{ color:var(--d3-citron); }
+    .d3-course__titlerow{ display:flex; align-items:baseline; gap:clamp(1rem, .6rem + 1.6vw, 1.6rem); }
+    .d3-course__title{ font-size:var(--d3-s-3); flex:none; }
+    .d3-course__rule{ flex:1; height:1px; background:var(--d3-hair-2); transform:translateY(-.28em); }
+    .d3-course__note{ flex:none; font-family:var(--d3-body); font-weight:700; font-size:var(--d3-s--1); letter-spacing:.14em; text-transform:uppercase; color:var(--d3-amber-soft); border:1px solid color-mix(in oklab, var(--d3-amber) 46%, transparent); border-radius:40px; padding:6px 15px; transform:translateY(-.2em); white-space:nowrap; }
+
+    .d3-mlist{ display:grid; grid-template-columns:1fr; gap:clamp(1.4rem, 1rem + 1.2vw, 2rem); }
+    .d3-mlist--two{ grid-template-columns:1fr 1fr; column-gap:clamp(2rem, 1rem + 4vw, 4.5rem); }
+    .d3-mitem{ break-inside:avoid; }
+    .d3-mitem__row{ display:flex; align-items:baseline; gap:.35rem; }
+    .d3-mitem__name{ font-family:var(--d3-display); font-size:var(--d3-s-1); color:var(--d3-cream); line-height:1.2; flex:0 1 auto; }
+    .d3-mitem__lead{ flex:1 1 auto; min-width:1.5rem; align-self:flex-end; border-bottom:1px dotted var(--d3-hair-2); transform:translateY(-.34em); margin:0 .15rem; }
+    .d3-mitem__price{ flex:none; font-family:var(--d3-display); font-size:var(--d3-s-1); color:var(--d3-amber); font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1; }
+    .d3-mitem__desc{ margin:.35em 0 0; color:var(--d3-mist-dim); font-size:var(--d3-s--1); line-height:1.55; max-width:52ch; }
+
+    /* subtle pick-up cart, aligned with the price, never grows the row */
+    .d3-mitem__cart{ flex:none; align-self:center; margin-inline-start:auto; margin-block:-8px; display:inline-grid; place-items:center; inline-size:32px; block-size:32px; color:var(--d3-mist-dim); opacity:.7; border-radius:9px; -webkit-tap-highlight-color:transparent; transition:color .2s ease, opacity .2s ease, background-color .2s ease; }
+    .d3-mitem__cart svg{ display:block; }
+    .d3-mitem__cart:hover, .d3-mitem__cart:focus-visible{ color:var(--d3-amber); opacity:1; background-color:color-mix(in oklab, var(--d3-amber) 12%, transparent); }
+    .d3-mitem__cart:focus-visible{ outline:2px solid color-mix(in oklab, var(--d3-amber) 70%, transparent); outline-offset:2px; }
+    .d3-course--sushi .d3-mitem__cart:hover, .d3-course--sushi .d3-mitem__cart:focus-visible{ color:var(--d3-citron); background-color:color-mix(in oklab, var(--d3-citron) 12%, transparent); }
+    .d3-course--sushi .d3-mitem__cart:focus-visible{ outline-color:color-mix(in oklab, var(--d3-citron) 70%, transparent); }
+
+    /* sushi highlight */
+    .d3-course--sushi{ position:relative; margin-block:clamp(1rem, .5rem + 1.5vw, 2rem); padding-inline:clamp(1.4rem, .8rem + 2.5vw, 3rem);
+      background:
+        radial-gradient(120% 90% at 100% 0%, color-mix(in oklab, var(--d3-citron) 9%, transparent) 0%, transparent 55%),
+        linear-gradient(180deg, color-mix(in oklab, var(--d3-bg-3) 70%, transparent) 0%, rgba(21,28,38,.2) 100%);
+      border:1px solid color-mix(in oklab, var(--d3-citron) 20%, var(--d3-hair)); border-radius:var(--d3-radius-lg); }
+    .d3-course--sushi + .d3-course{ border-top:0; }
+    .d3-course--sushi .d3-mitem__price{ color:var(--d3-citron); }
+    .d3-course--sushi .d3-course__rule{ background:color-mix(in oklab, var(--d3-citron) 40%, transparent); }
+
+    /* fine print */
+    .d3-mnotes{ margin-top:clamp(2.6rem, 1.6rem + 3vw, 4rem); padding-top:2rem; border-top:1px solid var(--d3-hair); display:grid; gap:.5rem; }
+    .d3-mnotes__line{ margin:0; color:var(--d3-mist-dim); font-size:var(--d3-s--1); line-height:1.5; max-width:74ch; }
+
+    /* cta */
+    .d3-mcta{ position:relative; overflow:hidden; color:var(--d3-cream); padding-block:clamp(4.5rem, 3rem + 8vw, 8rem); }
+    .d3-mcta__media{ position:absolute; inset:0; }
+    .d3-mcta__img{ width:100%; height:100%; object-fit:cover; }
+    .d3-mcta__scrim{ position:absolute; inset:0; background:linear-gradient(90deg, rgba(8,11,16,.95) 8%, rgba(8,11,16,.72) 52%, rgba(8,11,16,.42) 100%); }
+    .d3-mcta__inner{ position:relative; z-index:2; max-width:640px; }
+    .d3-mcta__title{ font-size:var(--d3-s-3); line-height:1.06; }
+    .d3-mcta__lede{ color:var(--d3-mist); font-size:var(--d3-s-0); margin-top:1rem; }
+    .d3-mcta__cta{ margin-top:2rem; }
+    .d3-mcta__btn{ min-height:58px; font-size:var(--d3-s-0); }
+
+    @media (max-width:680px){
+      .d3-mlist--two{ grid-template-columns:1fr; gap:clamp(1.4rem, 1rem + 1.2vw, 2rem); }
+      .d3-course__titlerow{ flex-wrap:wrap; gap:.6rem 1rem; }
+      .d3-course__rule{ display:none; }
+      .d3-course__note{ transform:none; }
+    }
+  </style>
+</D3Base>
